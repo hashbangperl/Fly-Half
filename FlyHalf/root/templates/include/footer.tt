@@ -1,0 +1,11 @@
+
+<div class="footer">
+[% IF c.user %]
+ Logged in as [% c.user.username %] [% c.user.firstname %] [% c.user.surname %] : <a href="[%  c.uri_for( '/user', 'logout')%]">logout</a>
+[% ELSE %]
+ Not logged in
+[% END %]
+</div>
+
+</body>
+</html>
