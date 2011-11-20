@@ -1,0 +1,12 @@
+[% INCLUDE "includes/header.tt" %]
+<div id="container">
+
+        [%- IF error_msg  %]<div class="alert-message error" >[% error_msg  %]</div>[% END %]
+        [%- IF status_msg %]<div class="alert-message info">[% status_msg %]</div>[% END %]
+
+        <h1> [% meta.title %] </h1>
+
+        [%- content %]
+
+</div>
+[% INCLUDE "includes/footer.tt" %]
