@@ -2,7 +2,7 @@ package FlyHalf::Model::Authorisation;
 use Moose;
 use namespace::autoclean;
 
-extends 'Catalyst::Model';
+extends 'FlyHalf::Model::Base';
 
 =head1 NAME
 

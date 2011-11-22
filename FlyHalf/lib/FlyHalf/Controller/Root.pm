@@ -45,6 +45,47 @@ sub default :Path {
     $c->response->status(404);
 }
 
+
+=head2 login
+
+Forward to the user-facing login
+
+=cut
+
+sub login : Path( 'login' ) : Args( 0 ) {
+    my ( $self, $c ) = @_;
+
+    # Redirect to user login
+    $c->go( 'User', 'login' );
+}
+
+
+=head2 logout
+
+Forward to the logout handler
+
+=cut
+
+sub logout : Path( 'logout' ) : Args( 0 ) {
+    my ( $self, $c ) = @_;
+
+    # Redirect to user logout
+    $c->go( 'User', 'logout' );
+}
+
+sub auto : Private {
+    my ( $self, $c ) = @_;
+    # Bounce if user isn't logged in and this isn't login page
+    unless ( $c->user_exists
+             or $c->action->private_path =~ m{user/log(out|in)} )  {
+        $c->stash->{ errors } = "You must be logged in to access this site.";
+        $c->stash->{redirect} = $c->action->private_path;
+        $c->forward( 'user', 'login' );
+        return 0;
+    }
+    return 1;
+}
+
 =head2 end
 
 Attempt to render a view, if needed.
