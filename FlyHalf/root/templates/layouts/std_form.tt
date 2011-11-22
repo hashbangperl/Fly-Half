@@ -1,0 +1,18 @@
+[% WRAPPER 'std-container.tt' %]
+
+<form name="[% form.name %]">
+    <fieldset>
+        <legend>[% form_legend %]</legend>
+        <em>(your fields go here)</em>
+	[% FOREACH field IN form.fields %]
+	<div class="clearfix[% IF field.error; ' error'; END %]">
+    	<label>Lorem ipsum</label>
+    	<div class="input">
+             <input class="error" type="text" />
+             [% IF field.error %]<span class="help-inline">[% field.error %]</span>[% END %]
+    	</div>
+	</div>
+    </fieldset>
+</form>
+
+[% END %]

@@ -1,12 +1,32 @@
 [% INCLUDE "includes/header.tt" %]
-<div id="container">
+  <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Project name</a>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <form action="" class="pull-right">
+            <input class="input-small" type="text" placeholder="Username">
+            <input class="input-small" type="password" placeholder="Password">
+            <button class="btn" type="submit">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
-        [%- IF error_msg  %]<div class="alert-message error" >[% error_msg  %]</div>[% END %]
-        [%- IF status_msg %]<div class="alert-message info">[% status_msg %]</div>[% END %]
+    <div class="container">
+    [%- content %]
+    </div>
+    <!-- /container -->
 
-        <h1> [% meta.title %] </h1>
+    <footer>
+        <p>&copy; Aaron Trevena 2011</p>
+    </footer>
 
-        [%- content %]
+
 
 </div>
 [% INCLUDE "includes/footer.tt" %]

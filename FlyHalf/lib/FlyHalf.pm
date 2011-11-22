@@ -4,18 +4,16 @@ use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 
-# Set flags and add plugins for the application
-#
-#         -Debug: activates the debug mode for very useful log messages
-#   ConfigLoader: will load the configuration from a Config::General file in the
-#                 application's home directory
-# Static::Simple: will serve static files from the application's root
-#                 directory
-
 use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+
+    Authentication
+
+    Session
+    Session::Store::FastMmap
+    Session::State::Cookie
 /;
 
 extends 'Catalyst';
@@ -23,20 +21,36 @@ extends 'Catalyst';
 our $VERSION = '0.01';
 $VERSION = eval $VERSION;
 
-# Configure the application.
-#
-# Note that settings in flyhalf.conf (or other external
-# configuration file that you set up manually) take precedence
-# over this when using ConfigLoader. Thus configuration
-# details given here can function as a default configuration,
-# with an external configuration file acting as an override for
-# local deployment.
-
 __PACKAGE__->config(
     name => 'FlyHalf',
-    # Disable deprecated behavior needed by old applications
+
+    default_view => 'Web',
+    # Configure DB sessions
+    'Plugin::Session' => {
+        # dbic_class => 'DB::Session',
+        expires => 3600,
+        storage => '/tmp/session',
+        # Stick the flash in the stash
+        flash_to_stash => 1,
+    },
+
     disable_component_resolution_regex_fallback => 1,
 );
+
+
+# Configure SimpleDB Authentication
+# Passwords in this case are saved in plain text, change password_type
+# to provide your own hashing/crypto or use an off the shelf option/plugin
+__PACKAGE__->config->{ 'Plugin::Authentication' } = {
+    default => {
+        class => 'SimpleDB',
+        user_model => 'DBIC::User',
+        password_type   => 'clear',
+        # password_type => 'self_check',
+        use_userdata_from_session => 1,
+    },
+};
+
 
 # Start the application
 __PACKAGE__->setup();
@@ -52,7 +66,7 @@ FlyHalf - Catalyst based application
 
 =head1 DESCRIPTION
 
-[enter your description here]
+A simple Agile Project tool with DWIM
 
 =head1 SEE ALSO
 
