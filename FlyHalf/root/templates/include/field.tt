@@ -1,0 +1,52 @@
+<!-- widget : [% field.widget %] -->
+[%- IF field.has_errors; SET error_class = 'error'; END; %]
+<div class="clearfix [% error_class %]">
+[% IF field.widget == "radiobox" %]
+  <label for="[% field.id %]">[% field.label %]</label>
+  <div class="input">
+  <ul class="inputs-list">
+  [% FOR option IN field.options %]
+    <li>
+     <label>
+     <input type="radio" value="[% option.value %]"
+        name="[% field.name %]"
+     [% IF option.value == field.fif %]
+        checked="checked"
+     [% END %]>
+     [% option.label %]
+        <span>[% option.label %]</span>
+      </label>
+    </li>
+   [% END %]
+   </ul>
+   </div>
+[% ELSE %]
+  <label for="[% field.id %]">[% field.label %]</label>
+   <div class="input">
+  [% SWITCH field.widget %]
+  [% CASE 'text' %]
+  <input type="text" name="[% field.html_name %]" id="[% field.id %]" value="[% field.fif %]" class="[%error_class%]"/>
+  [% CASE 'select' %]
+  <select name="[% field.html_name %]" class="medium" id="[% field.id %]" class="[%error_class%]">
+     [% FOR option IN field.options %]
+       <option value="[% option.value %]"
+       [% IF option.value == field.fif %]
+          selected="selected"
+       [% END %]>
+       [% option.label %]
+       </option>
+     [% END %]
+   </select>
+  [% CASE 'checkbox' %]
+  <input type="checkbox" name="[% field.html_name %]" id="[% field.id %]" value="1" class="[%error_class%]" />
+  [% CASE 'textarea' %]
+  <textarea name="[% field.html_name %]" id="[% field.id %]" class="xlarge [% error_class %]"
+        rows="[% field.rows %]" cols="[% field.cols %]">[% field.fif %]</textarea>
+  [% CASE 'hidden' %]
+  <input type="hidden" name="[% field.html_name %]" id="[% field.id %]"
+       value="[% field.fif %]" />
+  [% END %]
+  </div>
+[% END %]
+[% IF field.error %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
+</div>
