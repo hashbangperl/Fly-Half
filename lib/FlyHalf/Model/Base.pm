@@ -1,4 +1,4 @@
-package Flyhalf::Model::Base;
+package FlyHalf::Model::Base;
 use Moose;
 use namespace::clean -except => 'meta';
 
