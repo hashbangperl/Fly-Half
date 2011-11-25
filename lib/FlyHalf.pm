@@ -58,7 +58,7 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-FlyHalf - Catalyst based application
+FlyHalf - Simple DWIM Agile Tool
 
 =head1 SYNOPSIS
 

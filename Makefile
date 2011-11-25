@@ -10,7 +10,7 @@
 #
 #   MakeMaker Parameters:
 
-#     ABSTRACT => q[Catalyst based application]
+#     ABSTRACT => q[Simple DWIM Agile Tool]
 #     AUTHOR => q[Aaron Trevena]
 #     DIR => []
 #     DISTNAME => q[FlyHalf]
@@ -18,11 +18,11 @@
 #     NAME => q[FlyHalf]
 #     NO_META => q[1]
 #     PL_FILES => {  }
-#     PREREQ_PM => { namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], ExtUtils::MakeMaker=>q[6.42], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], Config::General=>q[0], Catalyst::Runtime=>q[5.80032], Moose=>q[0] }
+#     PREREQ_PM => { Catalyst::Plugin::ConfigLoader=>q[0], HTML::Restrict=>q[0], Catalyst::Plugin::Session::State::Cookie=>q[0], Catalyst::Plugin::Authorization::Roles=>q[0], Config::General=>q[0], Text::CSV::Simple=>q[0], DBIx::Class::EncodedColumn=>q[0], XML::Feed=>q[0], Method::Signatures::Simple=>q[0], ExtUtils::MakeMaker=>q[6.42], Captcha::reCAPTCHA=>q[0], Catalyst::TraitFor::Request::BrowserDetect=>q[0], Catalyst::Plugin::Session=>q[0], Test::More=>q[0.88], Net::Domain::TLD=>q[0], Catalyst::Authentication::Realm::SimpleDB=>q[0], File::Pid=>q[0], Email::Sender=>q[0.102360], Email::Valid=>q[0], CatalystX::RoleApplicator=>q[0], MooseX::NonMoose=>q[0], Catalyst::Plugin::Session::Store::DBIC=>q[0], DBIx::Class::Schema::Loader=>q[0], Moose=>q[0], namespace::autoclean=>q[0], Catalyst::View::Email=>q[0], Catalyst::Plugin::Static::Simple=>q[0], DBIx::Class::TimeStamp=>q[0], Catalyst::Action::RenderView=>q[0], Catalyst::Plugin::Authentication=>q[0], DBIx::Class::InflateColumn::FS=>q[0], Catalyst::Runtime=>q[5.80032] }
 #     VERSION => q[0.01]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/view_TT.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -170,7 +170,12 @@ MAN1PODS = script/flyhalf_cgi.pl \
 	script/flyhalf_server.pl \
 	script/flyhalf_test.pl
 MAN3PODS = lib/FlyHalf.pm \
-	lib/FlyHalf/Controller/Root.pm
+	lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Controller/User.pm \
+	lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/Model/Base.pm \
+	lib/FlyHalf/View/TT.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIB)$(DFSEP)Config.pm $(PERL_INC)$(DFSEP)config.h
@@ -193,12 +198,27 @@ PERL_ARCHIVE_AFTER =
 
 
 TO_INST_PM = lib/FlyHalf.pm \
-	lib/FlyHalf/Controller/Root.pm
+	lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Controller/User.pm \
+	lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/Model/Base.pm \
+	lib/FlyHalf/View/TT.pm
 
-PM_TO_BLIB = lib/FlyHalf/Controller/Root.pm \
+PM_TO_BLIB = lib/FlyHalf/Model/Authorisation.pm \
+	blib/lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/View/TT.pm \
+	blib/lib/FlyHalf/View/TT.pm \
+	lib/FlyHalf/Controller/Root.pm \
 	blib/lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Controller/Project.pm \
+	blib/lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Controller/User.pm \
+	blib/lib/FlyHalf/Controller/User.pm \
 	lib/FlyHalf.pm \
-	blib/lib/FlyHalf.pm
+	blib/lib/FlyHalf.pm \
+	lib/FlyHalf/Model/Base.pm \
+	blib/lib/FlyHalf/Model/Base.pm
 
 
 # --- MakeMaker platform_constants section:
@@ -425,8 +445,13 @@ manifypods : pure_all  \
 	script/flyhalf_server.pl \
 	script/flyhalf_create.pl \
 	script/flyhalf_cgi.pl \
+	lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/View/TT.pm \
 	lib/FlyHalf/Controller/Root.pm \
-	lib/FlyHalf.pm
+	lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Controller/User.pm \
+	lib/FlyHalf.pm \
+	lib/FlyHalf/Model/Base.pm
 	$(NOECHO) $(POD2MAN) --section=1 --perm_rw=$(PERM_RW) \
 	  script/flyhalf_fastcgi.pl $(INST_MAN1DIR)/flyhalf_fastcgi.pl.$(MAN1EXT) \
 	  script/flyhalf_test.pl $(INST_MAN1DIR)/flyhalf_test.pl.$(MAN1EXT) \
@@ -434,8 +459,13 @@ manifypods : pure_all  \
 	  script/flyhalf_create.pl $(INST_MAN1DIR)/flyhalf_create.pl.$(MAN1EXT) \
 	  script/flyhalf_cgi.pl $(INST_MAN1DIR)/flyhalf_cgi.pl.$(MAN1EXT) 
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
+	  lib/FlyHalf/Model/Authorisation.pm $(INST_MAN3DIR)/FlyHalf::Model::Authorisation.$(MAN3EXT) \
+	  lib/FlyHalf/View/TT.pm $(INST_MAN3DIR)/FlyHalf::View::TT.$(MAN3EXT) \
 	  lib/FlyHalf/Controller/Root.pm $(INST_MAN3DIR)/FlyHalf::Controller::Root.$(MAN3EXT) \
-	  lib/FlyHalf.pm $(INST_MAN3DIR)/FlyHalf.$(MAN3EXT) 
+	  lib/FlyHalf/Controller/Project.pm $(INST_MAN3DIR)/FlyHalf::Controller::Project.$(MAN3EXT) \
+	  lib/FlyHalf/Controller/User.pm $(INST_MAN3DIR)/FlyHalf::Controller::User.$(MAN3EXT) \
+	  lib/FlyHalf.pm $(INST_MAN3DIR)/FlyHalf.$(MAN3EXT) \
+	  lib/FlyHalf/Model/Base.pm $(INST_MAN3DIR)/FlyHalf::Model::Base.$(MAN3EXT) 
 
 
 
@@ -804,7 +834,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/view_TT.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -831,17 +861,40 @@ testdb_static :: testdb_dynamic
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
 	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="0.01">' > $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '    <ABSTRACT>Catalyst based application</ABSTRACT>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '    <ABSTRACT>Simple DWIM Agile Tool</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Aaron Trevena</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Captcha::reCAPTCHA" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Action::RenderView" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Authentication::Realm::SimpleDB" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authentication" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authorization::Roles" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::ConfigLoader" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::State::Cookie" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::Store::DBIC" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Static::Simple" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Runtime" VERSION="5.80032" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::TraitFor::Request::BrowserDetect" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::View::Email" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="CatalystX::RoleApplicator" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Config::General" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::EncodedColumn" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::InflateColumn::FS" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::Schema::Loader" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::TimeStamp" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Email::Sender" VERSION="0.10236" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Email::Valid" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="ExtUtils::MakeMaker" VERSION="6.42" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="File::Pid" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="HTML::Restrict" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Method::Signatures::Simple" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moose::" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="MooseX::NonMoose" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Net::Domain::TLD" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::More" VERSION="0.88" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Text::CSV::Simple" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="XML::Feed" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="namespace::autoclean" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-5.10" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
@@ -853,8 +906,13 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/FlyHalf/Model/Authorisation.pm blib/lib/FlyHalf/Model/Authorisation.pm \
+	  lib/FlyHalf/View/TT.pm blib/lib/FlyHalf/View/TT.pm \
 	  lib/FlyHalf/Controller/Root.pm blib/lib/FlyHalf/Controller/Root.pm \
-	  lib/FlyHalf.pm blib/lib/FlyHalf.pm 
+	  lib/FlyHalf/Controller/Project.pm blib/lib/FlyHalf/Controller/Project.pm \
+	  lib/FlyHalf/Controller/User.pm blib/lib/FlyHalf/Controller/User.pm \
+	  lib/FlyHalf.pm blib/lib/FlyHalf.pm \
+	  lib/FlyHalf/Model/Base.pm blib/lib/FlyHalf/Model/Base.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 
@@ -896,5 +954,5 @@ checkdeps ::
 	$(PERL) Makefile.PL --checkdeps
 
 installdeps ::
-	$(NOECHO) $(NOOP)
+	$(PERL) Makefile.PL --config= --installdeps=DBIx::Class::InflateColumn::FS,0
 
