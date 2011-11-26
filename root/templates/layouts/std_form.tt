@@ -3,7 +3,7 @@
 <form name="[% form.name %]">
     <fieldset>
         <legend>[% form_legend %]</legend>
-	[% FOREACH field IN form.fields %]
+	[% FOREACH field IN form.sorted_fields %]
 
 	     [% PROCESS 'include/field.tt' %]
 	[% END %]
