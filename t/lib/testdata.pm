@@ -1,9 +1,9 @@
 package testdata;
 use strict;
 
-use DocumentSharing::Schema;
+use FlyHalf::Schema;
 
-my $schema = DocumentSharing::Schema->connect(
+my $schema = FlyHalf::Schema->connect(
     "dbi:mysql:dbname=flyhalf",
     'flyhalfuser','scrumta4stic'
 );
@@ -15,8 +15,18 @@ sub populate_db {
     return;
 }
 
+sub cleandown_db {
+    $schema->resultset('Team')->delete;
+    $schema->resultset('User')->delete;
+    $schema->resultset('Sprint')->delete;
+    $schema->resultset('EstimateUnit')->delete;
+}
+
+
+######################
+
 sub _add_capacity_units {
-    my $unit = $schema->resultset('estimate_unit')->create({ name => "hours", abbreviation => 'h' });
+    my $unit = $schema->resultset('EstimateUnit')->create({ name => "hours", abbreviation => 'h' });
     return $unit;
 }
 
@@ -34,7 +44,7 @@ sub _add_users_teams {
 						    })
 		];
 
-    my $users_rs = $schema->resultset('users');
+    my $users_rs = $schema->resultset('User');
 
     my $users = [
 		 $users_rs->create({
@@ -105,6 +115,17 @@ sub _add_users_teams {
 
 sub _add_sprints {
     my ($teams, $users) = @_;
+    my $sprint = $schema->resultset('sprint')->create({
+						       name => 'initial prototype',
+						       description => 'initial prototype of flyhalf',
+						       team_id => $teams[0]->id,
+						       start_date => \'now()',
+						       created_by => $users[0]->id,
+						       created_date => \'now()',
+						      });
+
+
+    return [$sprint];
 }
 
 1;
