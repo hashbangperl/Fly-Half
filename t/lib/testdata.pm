@@ -9,7 +9,7 @@ my $schema = FlyHalf::Schema->connect(
 );
 
 sub populate_db {
-    my $unit = _add_capacity_units;
+    my $unit = _add_capacity_units();
     my ($teams,$users) = _add_users_teams($unit);
     my $sprints = _add_sprints($teams, $users);
     return;
@@ -32,7 +32,7 @@ sub _add_capacity_units {
 
 sub _add_users_teams {
     my ($unit) = @_;
-    my $default_args = { daily_developer_capacity_units => $unit->id }
+    my $default_args = { daily_developer_capacity_units => $unit->id };
 
     # Add teams and roles
     my $teams = [
@@ -55,7 +55,7 @@ sub _add_users_teams {
 				   firstname => 'Test',
 				   surname  => 'User',
 				   active => 1,
-				   team => $team1->id
+				   team => $teams->[0]->id
 				  }),
 
 		 $users_rs->create({
@@ -66,7 +66,7 @@ sub _add_users_teams {
 				   firstname => 'Anne-Other',
 				   surname  => 'User',
 				   active => 1,
-				   team => $team1->id
+				   team => $teams->[0]->id
 				   }),
 		 $users_rs->create({
 				   username => 'test_user3',
@@ -76,7 +76,7 @@ sub _add_users_teams {
 				   firstname => 'Aaron-Other',
 				   surname  => 'User',
 				   active => 1,
-				   team => $team1->id
+				   team => $teams->[0]->id
 				  }),
 		 $users_rs->create({
 				   username => 'test1',
@@ -86,7 +86,7 @@ sub _add_users_teams {
 				   firstname => 'Fred',
 				   surname  => 'Ubbba',
 				   active => 1,
-				   team => $team2->id
+				   team => $teams->[1]->id
 				  }),
 		 $users_rs->create({
 				   username => 'test2',
@@ -96,7 +96,7 @@ sub _add_users_teams {
 				   firstname => 'Irma',
 				   surname  => 'Wanna',
 				   active => 1,
-				   team => $team2->id
+				   team => $teams->[1]->id
 				  }),
 		 $users_rs->create({
 				   username => 'test3',
@@ -106,7 +106,7 @@ sub _add_users_teams {
 				   firstname => 'Ian',
 				   surname  => 'Drury',
 				   active => 1,
-				   team => $team2->id
+				   team => $teams->[1]->id
 				  })
 		];
 
@@ -115,12 +115,12 @@ sub _add_users_teams {
 
 sub _add_sprints {
     my ($teams, $users) = @_;
-    my $sprint = $schema->resultset('sprint')->create({
+    my $sprint = $schema->resultset('Sprint')->create({
 						       name => 'initial prototype',
 						       description => 'initial prototype of flyhalf',
-						       team_id => $teams[0]->id,
+						       team_id => $teams->[0]->id,
 						       start_date => \'now()',
-						       created_by => $users[0]->id,
+						       created_by => $users->[0]->id,
 						       created_date => \'now()',
 						      });
 
