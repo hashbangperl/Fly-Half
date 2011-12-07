@@ -5,7 +5,7 @@ create table if not exists team (
         name	varchar(100),
 	description text,
         unique  key name ( name ),
-	current_sprint int not null references sprint(id),
+	current_sprint int references sprint(id),
 	daily_developer_capacity int default 5,
 	daily_developer_capacity_units int references estimate_unit(id),
         primary key ( id )
@@ -39,8 +39,8 @@ create table if not exists users (
 )  ENGINE=InnoDB;
 
 create table if not exists user_assigned_tasks (
-       project_id int not null references project(id),
-       sprint_id int not null references sprint(id),
+       user_id int not null references users(id),
+       task_id int not null references task(id),
        primary key ( user_id, task_id )
 )  ENGINE=InnoDB;
 
@@ -91,10 +91,10 @@ create table if not exists sprint_unavailability (
 
 create table if not exists story (
   id                              int                             not null auto_increment,
-  sprint int not null references sprint(id),
-  priority int not null default 100,
-  estimate int,
-  estimate_unit int references estimate_unit(id)
+  sprint 			  int not null references sprint(id),
+  priority 			  int not null default 100,
+  estimate 			  int,
+  estimate_unit 		  int references estimate_unit(id),
   name				  varchar(200) not null,
   summary			  text,  
   description			  text,
@@ -106,10 +106,10 @@ create table if not exists story (
 
 create table if not exists task (
   id                              int                             not null auto_increment,
-  estimate int,
-  estimate_unit int references estimate_unit(id),
-  story_id int references story(id),
-  reviewed_by references users(id),
+  estimate 			  int,
+  estimate_unit 		  int references estimate_unit(id),
+  story_id 			  int references story(id),
+  reviewed_by 			  int references users(id),
   name				  varchar(200) not null,
   summary			  text,  
   description			  text,
@@ -120,25 +120,25 @@ create table if not exists task (
 )  ENGINE=InnoDB;
 
 create table if not exists task_dependancies ( 
-   task int not null references task(id),
-   block_state tinyint(1),
-   blocking_task int not null references task(id),
+   task      	    	   int not null references task(id),
+   block_state 	    	   tinyint(1),
+   blocking_task    	   int not null references task(id),
    primary key(task, blocking_task)
 )  ENGINE=InnoDB;
 
 create table if not exists task_assigned_to (
    id                              int                             not null auto_increment,
-   assigned_from_date timestamp not null,
-   assigned_to_date timestamp,
-   user_id int not null references users(id),
-   task_id int not null references task(id),
+   assigned_from_date 		   timestamp not null,
+   assigned_to_date 		   timestamp,
+   user_id 			   int not null references users(id),
+   task_id 			   int not null references task(id),
    key (user_id, task_id),
    primary key ( id )                
 )  ENGINE=InnoDB;
 
 
 create table if not exists state (
-   id                              int                             not null auto_increment,
+   id                             int                             not null auto_increment,
    name				  varchar(200) not null,
    description			  text,
    next_state			  int references state(id),
@@ -148,7 +148,7 @@ create table if not exists state (
 
 
 create table if not exists state_transitions (
-   id                              int                             not null auto_increment,
+   id                             int                             not null auto_increment,
    name				  varchar(200) not null,
    primary key ( id )                       
 ) ENGINE=InnoDB;
@@ -156,6 +156,7 @@ create table if not exists state_transitions (
 create table if not exists estimate_unit (
    id                              int                             not null auto_increment,
    name				   varchar(20) not null,
+   abbreviation			   varchar(4),
    primary key ( id )
 )  ENGINE=InnoDB;
 
