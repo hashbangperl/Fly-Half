@@ -1,0 +1,134 @@
+FlyHalf Entities and relations
+==============================
+
+team
+ - has many users
+ - has many sprints
+ - has a current sprint
+
+user
+ - has a role
+ - belongs to a current team
+ - has many previous teams
+ - has many notifications
+ - has many assigned tasks
+ - has many historical tasks (i.e. touched, may have been reassigned after)
+
+notification
+
+role
+ - has many users
+
+project
+ - relates to 0 or more systems
+ - relates to 0 or more components
+ - has a current state
+ - has many defects
+ - has many requirements
+ - has many fixmes
+ - has many files
+ - has many stories (searchable by sprint, status, etc)
+ - has many requirements
+
+sprints
+ - have many stories
+ - may have many projects
+ - has a team
+
+story
+ - belongs to a sprint
+ - has a priority
+ - estimate
+ - estimate_currency
+ - has a customer/product owner
+ - has many tasks
+ - has acceptance criteria
+ - name
+ - summary
+ - description
+ - has a state
+ - started date
+ - sign off
+ - planned length
+
+estimate_currencies
+ - points/hours/days/etc
+
+sign off
+ - date
+ - who
+ - proof/email/etc
+ - comments
+ - digital sig?
+ - might have a story
+ - might have a project
+
+task
+ - started date
+ - reviewed by
+ - name
+ - summary
+ - description
+ - comments
+ - state
+ - completed date
+ - has many assigned to
+ 
+checklist
+checklist_items
+
+system
+ - has many projects
+ - has many components
+ - has many documents
+
+component
+ - belongs to a system
+ - may belong to a project
+ - has many documents
+
+states (task, sprint, story, project)
+ - name
+ - description
+ - has a next_state
+ - next state transition requirement
+ - has many other_transitions
+
+defects
+
+changes
+
+requirements
+
+comment/feedback
+
+sign off
+
+availability
+unavailability
+
+impediments
+successess/free-lunches
+blocks
+questions
+dependancies
+
+priorities
+
+acceptance criteria
+
+tech debt/codesmells/fixmes/todos
+
+repeating stories/tasks
+
+swimlane
+
+Files/Documents
+
+estimate_currencies
+ - points/hours/days/etc
+
+task
+checklist
+checklist_items
+

@@ -5,7 +5,14 @@ create table if not exists team (
         name	varchar(100),
 	description text,
         unique  key name ( name ),
+	current_sprint int not null references sprint(id),
         primary key ( id )
+) ENGINE=InnoDB;
+
+create table if not exists team_sprints (
+       team_id int not null references team(id),
+       sprint_id int not null references sprint(id),
+       primary key (team_id, sprint_id)
 ) ENGINE=InnoDB;
 
 create table if not exists user (
@@ -29,15 +36,78 @@ create table if not exists user (
         primary key ( id )
 )  ENGINE=InnoDB;
 
-create table if not exists project (
-
+create table if not exists user_assigned_tasks (
+       project_id int not null references project(id),
+       sprint_id int not null references sprint(id),
+       primary key ( user_id, task_id )
 )  ENGINE=InnoDB;
 
-create table if not exists story (
+create table if not exists project (
+  id                              int                             not null auto_increment,
+  state_id			  int not null references states(id),
+  name				  varchar(200) not null,
+  description			  text,
+  start_date			  timestamp,
+  projected_end_date		  timestamp,
+  end_date			  timestamp,
+  created_by			  int references user(id),
+  created_date			  timestamp,
+  archived			  tinyint(0),
+  primary key ( id )  
+)  ENGINE=InnoDB;
 
+create table if not exists project_sprints (
+       project_id int not null references project(id),
+       sprint_id int not null references sprint(id),
+       primary key (project_id, sprint_id)
+)  ENGINE=InnoDB;
+
+
+create table if not exists sprint (
+  id                              int                             not null auto_increment,
+  name				  varchar(200) not null,
+  description			  text,
+  team_id			  int references team(id),
+  start_date			  timestamp,
+  end_date			  timestamp,
+  created_by			  int references user(id),
+  created_date			  timestamp,
+  archived			  tinyint(0),
+  primary key ( id )  
+)  ENGINE=InnoDB;
+
+
+create table if not exists story (
+  id                              int                             not null auto_increment,
+  sprint int not null references sprint(id),
+  priority int not null default 100,
+  estimate int,
+  estimate_unit int references estimate_unit(id)
+  name				  varchar(200) not null,
+  summary			  text,  
+  description			  text,
+  start_date			  timestamp,
+  end_date			  timestamp,
+  primary key ( id )  
 )  ENGINE=InnoDB;
 
 create table if not exists task (
+  id                              int                             not null auto_increment,
+  estimate int,
+  estimate_unit int references estimate_unit(id)
+  primary key ( id )                
+)  ENGINE=InnoDB;
+
+create table if not exists task_dependancies ( 
+   task int not null references task(id),
+   block_state tinyint(1),
+   blocking_task int not null references task(id),
+   primary key(task, blocking_task)
+)  ENGINE=InnoDB;
+
+
+
+create table if not exists estimate_unit (
 
 )  ENGINE=InnoDB;
 
