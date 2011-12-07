@@ -6,6 +6,8 @@ create table if not exists team (
 	description text,
         unique  key name ( name ),
 	current_sprint int not null references sprint(id),
+	daily_developer_capacity int default 5,
+	daily_developer_capacity_units int references estimate_unit(id),
         primary key ( id )
 ) ENGINE=InnoDB;
 
@@ -15,10 +17,10 @@ create table if not exists team_sprints (
        primary key (team_id, sprint_id)
 ) ENGINE=InnoDB;
 
-create table if not exists user (
-        id                              int                             not null auto_increment,
-        username                varchar(50)             not null,
-        password                varchar(74)             not null,
+create table if not exists users (
+        id                      int             not null auto_increment,
+        username                varchar(50)     not null,
+        password                varchar(74)     not null,
         email                   varchar(200)    not null,
 
         firstname               varchar(50)             ,
@@ -50,7 +52,7 @@ create table if not exists project (
   start_date			  timestamp,
   projected_end_date		  timestamp,
   end_date			  timestamp,
-  created_by			  int references user(id),
+  created_by			  int references users(id),
   created_date			  timestamp,
   archived			  tinyint(0),
   primary key ( id )  
@@ -69,13 +71,23 @@ create table if not exists sprint (
   description			  text,
   team_id			  int references team(id),
   start_date			  timestamp,
+  sprint_length			  int not null default 14,
   end_date			  timestamp,
-  created_by			  int references user(id),
+  created_by			  int references users(id),
   created_date			  timestamp,
   archived			  tinyint(0),
   primary key ( id )  
 )  ENGINE=InnoDB;
 
+create table if not exists sprint_unavailability (
+  id                              int                             not null auto_increment,
+  user_id			  int references users(id),
+  start_date			  timestamp,
+  start_half_day		  tinyint(1),
+  end_date			  timestamp,
+  end_half_day		  	  tinyint(1),
+  primary key ( id )  
+)  ENGINE=InnoDB;
 
 create table if not exists story (
   id                              int                             not null auto_increment,
@@ -88,13 +100,22 @@ create table if not exists story (
   description			  text,
   start_date			  timestamp,
   end_date			  timestamp,
+  state_id			  int not null references state(id),
   primary key ( id )  
 )  ENGINE=InnoDB;
 
 create table if not exists task (
   id                              int                             not null auto_increment,
   estimate int,
-  estimate_unit int references estimate_unit(id)
+  estimate_unit int references estimate_unit(id),
+  story_id int references story(id),
+  reviewed_by references users(id),
+  name				  varchar(200) not null,
+  summary			  text,  
+  description			  text,
+  start_date			  timestamp,
+  end_date			  timestamp,
+  state_id			  int not null references state(id),
   primary key ( id )                
 )  ENGINE=InnoDB;
 
@@ -105,16 +126,49 @@ create table if not exists task_dependancies (
    primary key(task, blocking_task)
 )  ENGINE=InnoDB;
 
+create table if not exists task_assigned_to (
+   id                              int                             not null auto_increment,
+   assigned_from_date timestamp not null,
+   assigned_to_date timestamp,
+   user_id int not null references users(id),
+   task_id int not null references task(id),
+   key (user_id, task_id),
+   primary key ( id )                
+)  ENGINE=InnoDB;
 
+
+create table if not exists state (
+   id                              int                             not null auto_increment,
+   name				  varchar(200) not null,
+   description			  text,
+   next_state			  int references state(id),
+   next_state_requirement	  text,
+   primary key ( id )                
+)  ENGINE=InnoDB;
+
+
+create table if not exists state_transitions (
+   id                              int                             not null auto_increment,
+   name				  varchar(200) not null,
+   primary key ( id )                       
+) ENGINE=InnoDB;
 
 create table if not exists estimate_unit (
-
+   id                              int                             not null auto_increment,
+   name				   varchar(20) not null,
+   primary key ( id )
 )  ENGINE=InnoDB;
 
 create table if not exists checklist (
-
+   id                              int                             not null auto_increment,
+   name				   varchar(200) not null,
+   task				   int references task(id), 
+   primary key ( id )
 )  ENGINE=InnoDB;
 
 create table if not exists checklist_items (
-
+   id                              int                             not null auto_increment,
+   name				   varchar(200) not null,
+   checklist			   int references checklist(id),
+   primary key ( id )
 )  ENGINE=InnoDB;
