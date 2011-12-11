@@ -1,3 +1,4 @@
+use utf8;
 package FlyHalf::Schema;
 
 # Created by DBIx::Class::Schema::Loader
@@ -11,8 +12,8 @@ use base 'DBIx::Class::Schema';
 __PACKAGE__->load_namespaces;
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2011-12-07 21:10:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CCw4DQaxGXvqWHFhE3NesQ
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-08 21:21:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IPUm4l+qK627GgCMXmdEuw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

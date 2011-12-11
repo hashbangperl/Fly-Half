@@ -1,18 +1,33 @@
+use utf8;
 package FlyHalf::Schema::Result::Team;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+FlyHalf::Schema::Result::Team
+
+=cut
 
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
+
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-FlyHalf::Schema::Result::Team
+=head1 TABLE: C<team>
 
 =cut
 
@@ -40,7 +55,7 @@ __PACKAGE__->table("team");
 =head2 current_sprint
 
   data_type: 'integer'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 daily_developer_capacity
 
@@ -51,6 +66,7 @@ __PACKAGE__->table("team");
 =head2 daily_developer_capacity_units
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =cut
@@ -63,19 +79,95 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "text", is_nullable => 1 },
   "current_sprint",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
   "daily_developer_capacity",
   { data_type => "integer", default_value => 5, is_nullable => 1 },
   "daily_developer_capacity_units",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<name>
+
+=over 4
+
+=item * L</name>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("name", ["name"]);
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2011-12-07 21:10:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/TmGDZ1FeIXTeV4KnVzGZw
+=head2 daily_developer_capacity_unit
+
+Type: belongs_to
+
+Related object: L<FlyHalf::Schema::Result::EstimateUnit>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "daily_developer_capacity_unit",
+  "FlyHalf::Schema::Result::EstimateUnit",
+  { id => "daily_developer_capacity_units" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 sprints
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::Sprint>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sprints",
+  "FlyHalf::Schema::Result::Sprint",
+  { "foreign.team_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 users
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::User>
+
+=cut
+
+__PACKAGE__->has_many(
+  "users",
+  "FlyHalf::Schema::Result::User",
+  { "foreign.team" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UZjVl7F8+JPU0Q/QtClqhQ
+
+
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

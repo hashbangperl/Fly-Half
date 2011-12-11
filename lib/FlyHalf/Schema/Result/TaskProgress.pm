@@ -1,12 +1,12 @@
 use utf8;
-package FlyHalf::Schema::Result::ProjectSprint;
+package FlyHalf::Schema::Result::TaskProgress;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-FlyHalf::Schema::Result::ProjectSprint
+FlyHalf::Schema::Result::TaskProgress
 
 =cut
 
@@ -27,84 +27,82 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 TABLE: C<project_sprints>
+=head1 TABLE: C<task_progress>
 
 =cut
 
-__PACKAGE__->table("project_sprints");
+__PACKAGE__->table("task_progress");
 
 =head1 ACCESSORS
 
-=head2 project_id
+=head2 task_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 sprint_id
+=head2 remaining_work
 
   data_type: 'integer'
-  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 progress_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  default_value: '0000-00-00 00:00:00'
   is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
-  "project_id",
+  "task_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "sprint_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "remaining_work",
+  { data_type => "integer", is_nullable => 0 },
+  "progress_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    default_value => "0000-00-00 00:00:00",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</project_id>
+=item * L</task_id>
 
-=item * L</sprint_id>
+=item * L</progress_date>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("project_id", "sprint_id");
+__PACKAGE__->set_primary_key("task_id", "progress_date");
 
 =head1 RELATIONS
 
-=head2 project
+=head2 task
 
 Type: belongs_to
 
-Related object: L<FlyHalf::Schema::Result::Project>
+Related object: L<FlyHalf::Schema::Result::Task>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "project",
-  "FlyHalf::Schema::Result::Project",
-  { id => "project_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 sprint
-
-Type: belongs_to
-
-Related object: L<FlyHalf::Schema::Result::Sprint>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "sprint",
-  "FlyHalf::Schema::Result::Sprint",
-  { id => "sprint_id" },
+  "task",
+  "FlyHalf::Schema::Result::Task",
+  { id => "task_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
 # Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rx+hZAwLGmAf5nolqxqmIQ
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OLM5GO4CCz8bxHeUhnawvQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
