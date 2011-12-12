@@ -16,9 +16,9 @@ sub populate_db {
 }
 
 sub cleandown_db {
-    $schema->resultset('Team')->delete;
-    $schema->resultset('User')->delete;
     $schema->resultset('Sprint')->delete;
+    $schema->resultset('User')->delete;
+    $schema->resultset('Team')->delete;
     $schema->resultset('EstimateUnit')->delete;
 }
 
@@ -27,6 +27,7 @@ sub cleandown_db {
 
 sub _add_capacity_units {
     my $unit = $schema->resultset('EstimateUnit')->create({ name => "hours", abbreviation => 'h' });
+    my $other = $schema->resultset('EstimateUnit')->create({ name => "points", abbreviation => 'p' });
     return $unit;
 }
 
@@ -115,17 +116,26 @@ sub _add_users_teams {
 
 sub _add_sprints {
     my ($teams, $users) = @_;
-    my $sprint = $schema->resultset('Sprint')->create({
+    my $sprint1 = $schema->resultset('Sprint')->create({
 						       name => 'initial prototype',
 						       description => 'initial prototype of flyhalf',
 						       team_id => $teams->[0]->id,
-						       start_date => \'now()',
+						       start_date => \q{now()},
 						       created_by => $users->[0]->id,
-						       created_date => \'now()',
 						      });
 
 
-    return [$sprint];
+    my $sprint2 = $schema->resultset('Sprint')->create({
+						       name => 'Research stuff',
+						       description => 'research stuff for other projects',
+						       team_id => $teams->[1]->id,
+						       start_date => \q{now()},
+						       created_by => $users->[4]->id,
+						      });
+
+
+
+    return [$sprint1, $sprint2];
 }
 
 1;
