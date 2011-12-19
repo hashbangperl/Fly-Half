@@ -16,6 +16,8 @@ create table if not exists team (
 	current_sprint int references sprint(id),
 	daily_developer_capacity int default 5,
 	daily_developer_capacity_units int,
+	created_date			  datetime,
+  	updated_date			  datetime,
 	foreign key (daily_developer_capacity_units) references estimate_unit(id),
         primary key ( id )
 ) ENGINE=InnoDB;
@@ -57,6 +59,7 @@ create table if not exists project (
   end_date			  datetime,
   created_by			  int,
   created_date			  datetime,
+  updated_date			  datetime,
   archived			  tinyint(0),
   foreign key (state_id) references state(id),
   foreign key (created_by) references users(id),
@@ -74,6 +77,7 @@ create table if not exists sprint (
   end_date			  datetime,
   created_by			  int,
   created_date			  datetime,
+  updated_date			  datetime,
   archived			  tinyint(0),
   foreign key (created_by) references users(id),
   foreign key (team_id) references team(id),
@@ -83,6 +87,9 @@ create table if not exists sprint (
 create table if not exists team_sprints (
        team_id int not null references team(id),
        sprint_id int not null references sprint(id),
+       created_by			  int,
+       created_date			  datetime,
+       foreign key (created_by) 	  references users(id),
        primary key (team_id, sprint_id)
 ) ENGINE=InnoDB;
 
@@ -90,8 +97,11 @@ create table if not exists team_sprints (
 create table if not exists project_sprints (
        project_id int not null,
        sprint_id int not null,
+       created_by			  int,
+       created_date			  datetime,
        foreign key (project_id) references project(id),
        foreign key (sprint_id) references sprint(id),
+       foreign key (created_by) 	  references users(id),
        primary key (project_id, sprint_id)
 )  ENGINE=InnoDB;
 
@@ -103,7 +113,11 @@ create table if not exists sprint_unavailability (
   start_half_day		  tinyint(1),
   end_date			  datetime,
   end_half_day		  	  tinyint(1),
+  created_by			  int,
+  created_date			  datetime,
+  updated_date			  datetime,
   foreign key (user_id) references users(id),
+  foreign key (created_by) 	  references users(id),
   primary key ( id )  
 )  ENGINE=InnoDB;
 
@@ -121,9 +135,13 @@ create table if not exists story (
   start_date			  datetime,
   end_date			  datetime,
   state_id			  int not null,
+  created_by			  int,
+  created_date			  datetime,
+  updated_date			  datetime,
   foreign key (sprint) references sprint(id),
   foreign key (estimate_unit) references estimate_unit(id),
   foreign key (state_id) references state(id),
+  foreign key (created_by) 	  references users(id),
   primary key ( id )  
 )  ENGINE=InnoDB;
 
@@ -131,6 +149,8 @@ create table if not exists task (
   id                              int  not null auto_increment,
   estimate 			  int,
   estimate_unit 		  int,
+  remaining_work		  int,
+  completed_work		  int,
   story_id 			  int,
   reviewed_by 			  int,
   name				  varchar(200) not null,
@@ -139,9 +159,13 @@ create table if not exists task (
   start_date			  datetime,
   end_date			  datetime,
   state_id			  int not null,
+  created_by			  int,
+  created_date			  datetime,
+  updated_date			  datetime,
   foreign key (estimate_unit) 	  references estimate_unit(id),
   foreign key (story_id)	  references story(id),
   foreign key (reviewed_by) 	  references users(id),
+  foreign key (created_by) 	  references users(id),
   foreign key (state_id)	  references state(id),
   primary key ( id )                
 )  ENGINE=InnoDB;
@@ -152,8 +176,11 @@ create table if not exists task_dependancies (
    task      	    	   int not null,
    block_state 	    	   tinyint(1),
    blocking_task    	   int not null,
+   created_by			  int,
+   created_date			  datetime,
    foreign key (task) 	   references task(id),
    foreign key (blocking_task) references task(id),
+   foreign key (created_by) 	  references users(id),
    primary key(task, blocking_task)
 )  ENGINE=InnoDB;
 
@@ -171,12 +198,14 @@ create table if not exists task_assigned_to (
    primary key ( id )                
 )  ENGINE=InnoDB;
 
-create table if not exists task_progress (
-   task_id 			   int not null,
+create table if not exists sprint_progress (
+   sprint_id 			   int not null,
+   story_id			   int not null,
    remaining_work		   int not null,
+   estimated_work		   int not null,
    progress_date		   datetime,
-   foreign key (task_id) 	   references task(id),
-   primary key (task_id, progress_date)                
+   foreign key (sprint_id) 	   references sprint(id),
+   primary key (sprint_id, progress_date)                
 )  ENGINE=InnoDB;
 
 create table if not exists state_transitions (
@@ -189,7 +218,11 @@ create table if not exists checklist (
    id                              int not null auto_increment,
    name				   varchar(200) not null,
    task				   int,
+   created_by			   int,
+   created_date			   datetime,
+   updated_date			   datetime,
    foreign key (task)  		   references task(id), 
+   foreign key (created_by) 	   references users(id),
    primary key ( id )
 )  ENGINE=InnoDB;
 
@@ -197,7 +230,10 @@ create table if not exists checklist_items (
    id                              int not null auto_increment,
    name				   varchar(200) not null,
    checklist			   int,
+   created_by			   int,
+   created_date			   datetime,
    foreign key (checklist) 	   references checklist(id),
+   foreign key (created_by) 	   references users(id),
    primary key ( id )
 )  ENGINE=InnoDB;
 
