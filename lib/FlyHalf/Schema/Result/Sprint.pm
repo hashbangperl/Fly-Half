@@ -21,11 +21,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<sprint>
 
@@ -88,6 +90,12 @@ __PACKAGE__->table("sprint");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 updated_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 archived
 
   data_type: 'tinyint'
@@ -125,6 +133,15 @@ __PACKAGE__->add_columns(
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
+    set_on_create => 1
+  },
+  "updated_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+    set_on_create => 1,
+    set_on_update => 1,
   },
   "archived",
   { data_type => "tinyint", is_nullable => 1 },
@@ -179,6 +196,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sprint_progresses
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::SprintProgress>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sprint_progresses",
+  "FlyHalf::Schema::Result::SprintProgress",
+  { "foreign.sprint_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 stories
 
 Type: has_many
@@ -215,8 +247,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lsaus9+2NI5bDwDQyR+ZXg
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1b9kCnIYndVNdLS7TK/DbQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

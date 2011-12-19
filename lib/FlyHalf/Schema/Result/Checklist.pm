@@ -1,9 +1,6 @@
 use utf8;
 package FlyHalf::Schema::Result::Checklist;
 
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
-
 =head1 NAME
 
 FlyHalf::Schema::Result::Checklist
@@ -21,11 +18,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<checklist>
 
@@ -53,6 +52,24 @@ __PACKAGE__->table("checklist");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 created_by
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 created_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 updated_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -62,6 +79,22 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 200 },
   "task",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "created_by",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "created_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+    set_on_create => 1
+  },
+  "updated_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+    set_on_create => 1, set_on_update => 1
+  },
 );
 
 =head1 PRIMARY KEY
@@ -93,6 +126,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 created_by
+
+Type: belongs_to
+
+Related object: L<FlyHalf::Schema::Result::User>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "created_by",
+  "FlyHalf::Schema::Result::User",
+  { id => "created_by" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 task
 
 Type: belongs_to
@@ -114,9 +167,4 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WHyBjAyxg5/31gOW1pW1Ww
-
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

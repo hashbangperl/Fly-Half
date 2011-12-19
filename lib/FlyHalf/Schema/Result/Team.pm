@@ -21,11 +21,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<team>
 
@@ -69,6 +71,18 @@ __PACKAGE__->table("team");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 created_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 updated_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -84,6 +98,18 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 5, is_nullable => 1 },
   "daily_developer_capacity_units",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "created_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+  },
+  "updated_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -165,8 +191,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UZjVl7F8+JPU0Q/QtClqhQ
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:heeV/fO5H0HJaASVao3d+w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

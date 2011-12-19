@@ -25,7 +25,7 @@ use base 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", 'TimeStamp');
 
 =head1 TABLE: C<task_progress>
 
@@ -64,8 +64,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
-    default_value => "0000-00-00 00:00:00",
-    is_nullable => 0,
+    is_nullable => 0,  set_on_create => 1
   },
 );
 

@@ -21,11 +21,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::InflateColumn::DateTime>
 
+=item * L<DBIx::Class::TimeStamp>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 TABLE: C<state_transitions>
 
@@ -69,8 +71,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-11 06:28:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V+pTyDfTWzcsNIzBD2qb5w
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q4tJOidaGam/kVbqLL3Zhg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
