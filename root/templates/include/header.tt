@@ -4,8 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-[% USE Class File::Assets %]
-[% CALL assets.include("/include/bootstrap.css") %]
+<title> [% meta.title || 'Fly/Half Agile Development' %] </title>
+[% CALL page_assets.include("/css/bootstrap.css") %]
+[% page_assets.export("css") %]
   <style type="text/css">
       /* Override some defaults */
       html, body {
