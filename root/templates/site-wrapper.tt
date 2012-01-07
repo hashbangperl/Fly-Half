@@ -1,32 +1,33 @@
-[% INCLUDE "includes/header.tt" %]
+[% INCLUDE "include/header.tt" %]
   <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Fly/Half Agile Development</a>
           <ul class="nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-          <form action="" class="pull-right">
-            <input class="input-small" type="text" placeholder="Username">
-            <input class="input-small" type="password" placeholder="Password">
-            <button class="btn" type="submit">Sign in</button>
-          </form>
+	  
         </div>
       </div>
     </div>
 
     <div class="container">
     [%- content %]
+    <footer>
+    <p>
+    [% IF c.user %]
+    Logged in as [% c.user.username %] [% c.user.firstname %] [% c.user.surname %] : <a href="[%  c.uri_for( '/user', 'logout')%]">logout</a>
+    [% ELSE %]
+    Not logged in
+    [% END %]
+    </p>
+    <p>&copy; Aaron Trevena 2011</p>
+    </footer>
+
     </div>
     <!-- /container -->
 
-    <footer>
-        <p>&copy; Aaron Trevena 2011</p>
-    </footer>
-
-
-
 </div>
-[% INCLUDE "includes/footer.tt" %]
+[% INCLUDE "include/footer.tt" %]
