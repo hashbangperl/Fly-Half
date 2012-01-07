@@ -5,10 +5,23 @@ use warnings;
 
 use base 'Catalyst::View::TT';
 
+use File::Assets;
+
+our $include_path = FlyHalf->path_to( 'root', 'templates' );
+
+our $assets = File::Assets->new( base => [ '/static' ] );
+
 __PACKAGE__->config(
     TEMPLATE_EXTENSION => '.tt',
     render_die => 1,
-    WRAPPER => 'site-wrapper.tt'
+    WRAPPER => 'site-wrapper.tt',
+    INCLUDE_PATH => [
+        FlyHalf->path_to( 'root', 'templates' ),
+    ],
+    VARIABLES => {
+	page_assets => $assets,
+    }
+
 );
 
 =head1 NAME
