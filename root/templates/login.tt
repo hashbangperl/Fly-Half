@@ -1,0 +1,36 @@
+      <div class="content">
+        <div class="page-header">
+          <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
+        </div>
+        <div class="row">
+          <div class="span14">
+
+    <!-- Login form -->
+    <form method="post" action="/user/login">
+    <fieldset>
+        <legend>Log in</legend>
+    <input type="hidden" name="redirect" value="[% redirect %]"/>
+
+   [%- IF fields.username.has_errors; SET error_class = 'error'; END; %]
+   <div class="clearfix [% error_class %]">
+   <label for="username">Username</label>
+   <div class="input">
+   <input type="text" name="username" id="username" value="" class="[%error_class%]"/>
+   [% IF fields.username.error %]<span class="help-inline">[% fields.username.errors.join(',') %]</span>[% END %]
+   </div>
+   </div>
+   [%- IF fields.password.has_errors; SET error_class = 'error'; END; %]
+   <div class="clearfix [% error_class %]">
+   <label for="password">Password</label>
+   <div class="input">
+   <input type="password" name="password" id="password" value="" class="[%error_class%]"/>
+   [% IF fields.password.error %]<span class="help-inline">[% fields.password.errors.join(',') %]</span>[% END %]
+   </div>
+   </div>
+
+   <input type="submit" value="Login" class="btn primary"/>
+   </fieldset>
+  </form>
+
+          </div>
+        </div>
