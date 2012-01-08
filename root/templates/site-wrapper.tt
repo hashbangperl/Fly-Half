@@ -4,9 +4,14 @@
         <div class="container">
           <a class="brand" href="#">Fly/Half Agile Development</a>
           <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li class="active"><a href="/">Home</a></li>
+	    [% IF c.user %]
+            <li><a href="/user/current_sprint">Current Sprint</a></li>
+            <li><a href="/user/journal">Journal</a></li>
+	    [% ELSE %]
+            <li><a href="/content/about">About</a></li>
+            <li><a href="/content/contact">Contact</a></li>
+	    [% END %]
           </ul>
 	  
         </div>
@@ -18,7 +23,8 @@
     <footer>
     <p>
     [% IF c.user %]
-    Logged in as [% c.user.username %] [% c.user.firstname %] [% c.user.surname %] : <a href="[%  c.uri_for( '/user', 'logout')%]">logout</a>
+    Logged in as [% c.user.username %] (<a href="[%  c.uri_for( '/user', 'profile', c.user.id)%]">[% c.user.firstname %] [% c.user.surname %]</a>)
+    : <a href="[%  c.uri_for( '/user', 'logout')%]">logout</a>
     [% ELSE %]
     Not logged in
     [% END %]
