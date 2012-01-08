@@ -157,7 +157,7 @@ __PACKAGE__->add_unique_constraint("username", ["username"]);
 
 =head1 RELATIONS
 
-=head2 checklist_items
+=head2 created_checklist_items
 
 Type: has_many
 
@@ -166,13 +166,13 @@ Related object: L<FlyHalf::Schema::Result::ChecklistItem>
 =cut
 
 __PACKAGE__->has_many(
-  "checklist_items",
+  "created_checklist_items",
   "FlyHalf::Schema::Result::ChecklistItem",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 checklists
+=head2 created_checklists
 
 Type: has_many
 
@@ -181,13 +181,13 @@ Related object: L<FlyHalf::Schema::Result::Checklist>
 =cut
 
 __PACKAGE__->has_many(
-  "checklists",
+  "created_checklists",
   "FlyHalf::Schema::Result::Checklist",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 project_sprints
+=head2 created_project_sprints
 
 Type: has_many
 
@@ -196,13 +196,13 @@ Related object: L<FlyHalf::Schema::Result::ProjectSprint>
 =cut
 
 __PACKAGE__->has_many(
-  "project_sprints",
+  "created_project_sprints",
   "FlyHalf::Schema::Result::ProjectSprint",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 projects
+=head2 created_projects
 
 Type: has_many
 
@@ -211,7 +211,7 @@ Related object: L<FlyHalf::Schema::Result::Project>
 =cut
 
 __PACKAGE__->has_many(
-  "projects",
+  "created_projects",
   "FlyHalf::Schema::Result::Project",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
@@ -247,7 +247,7 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 sprints
+=head2 created_sprints
 
 Type: has_many
 
@@ -256,13 +256,13 @@ Related object: L<FlyHalf::Schema::Result::Sprint>
 =cut
 
 __PACKAGE__->has_many(
-  "sprints",
+  "created_sprints",
   "FlyHalf::Schema::Result::Sprint",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 stories
+=head2 created_stories
 
 Type: has_many
 
@@ -271,13 +271,13 @@ Related object: L<FlyHalf::Schema::Result::Story>
 =cut
 
 __PACKAGE__->has_many(
-  "stories",
+  "created_stories",
   "FlyHalf::Schema::Result::Story",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 task_dependancies
+=head2 created_task_dependancies
 
 Type: has_many
 
@@ -286,7 +286,7 @@ Related object: L<FlyHalf::Schema::Result::TaskDependancy>
 =cut
 
 __PACKAGE__->has_many(
-  "task_dependancies",
+  "created_task_dependancies",
   "FlyHalf::Schema::Result::TaskDependancy",
   { "foreign.created_by" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
