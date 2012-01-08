@@ -62,7 +62,7 @@ sub login : Local : Args( 0 ) {
                  $c->request->param('redirect') !~ m{user/log(out|in)} ) {
                 $c->response->redirect( $c->request->param( 'redirect' ) );
             } else {
-                $c->forward( '/user/profile' );
+                $c->forward( '/user/dashboard' );
             }
             return;
         } else {
@@ -79,10 +79,35 @@ sub login : Local : Args( 0 ) {
 
 =cut
 
-sub profile : Local : Args( 0 ) {
-    my ($self, $c) = @_;
+sub profile : Local : Args( 1 ) {
+    my ($self, $c, $user_id) = @_;
     $c->stash->{template} = 'user/profile.tt';
+
+    $c->stash->{profile_user} = $c->model( 'DBIC::User' )->search(
+	{'me.id' => $user_id},
+	{ prefetch => 'team'}
+	)->first;
+
+    return 1;
+
 }
+
+=head2 dashboard
+
+=cut
+
+sub dashboard : Local : Args( 0 ) {
+    my ($self, $c, $user_id) = @_;
+    $c->stash->{template} = 'user/dashboard.tt';
+
+    my $this_user = $c->user;
+
+    $c->stash->{dashboard_user} = $c->model( 'DBIC::User' )->find($user_id);
+
+    return 1;
+
+}
+
 
 =head2 logout
 
