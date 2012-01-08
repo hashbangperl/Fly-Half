@@ -16,8 +16,6 @@ Catalyst Controller.
 
 =cut
 
-
-
 use HTML::FormHandler;
 
 =head2 login
@@ -29,12 +27,15 @@ Login logic.
 sub login : Local : Args( 0 ) {
     my ( $self, $c ) = @_;
 
+    warn "in login : \n";
+
     # If we already have a logged-in user, bounce them to their profile
     if ( $c->user_exists ) {
         $c->response->redirect( $c->uri_for( '/user/profile' ) );
         return;
     }
 
+    $c->stash->{template} = 'login.tt';
     # Get the username and password from form
     my $username = $c->request->param( 'username' ) || undef;
     my $password = $c->request->param( 'password' ) || undef;
@@ -47,7 +48,7 @@ sub login : Local : Args( 0 ) {
             $c->stash->{ errors } = ["Bad username or password."];
             return;
         }
-        if ( $check->disabled ) {
+        unless ( $check->active ) {
             $c->stash->{ errors } = ['Account unavailable.'];
             $c->response->redirect( $c->uri_for( '/' ) );
             return;
@@ -70,8 +71,8 @@ sub login : Local : Args( 0 ) {
         }
         $c->stash->{message} = 'Unable to log in, please see error message';
     }
-    # send to the login page if not logged in and redirected
-    $c->stash(template => 'login.tt');
+
+    return 1;
 }
 
 =head2 profile
@@ -80,7 +81,7 @@ sub login : Local : Args( 0 ) {
 
 sub profile : Local : Args( 0 ) {
     my ($self, $c) = @_;
-    $c->stash->{template} = '/user/profile';
+    $c->stash->{template} = 'user/profile.tt';
 }
 
 =head2 logout
