@@ -6,9 +6,31 @@
           <div class="span14">
 
 	  <h2>Profile</h2>
+	  <p>
+	  <b>[% profile_user.firstname %] [% profile_user.surname %]</b>
+	  </p>
+	  <p>
+	  <i>[% profile_user.profile_description %]</i>
+	  </p>
 
-
-	  <p>User profile goes here</p>
+	  <table class="condensed-table">
+          <tbody>
+	  [% FOREACH field IN [ 'location','active','username' ] %]
+          <tr>
+            <th>[% field %]</th>
+            <td>[% profile_user.$field %]</td>
+          </tr>
+          [% END %]
+          <tr>
+            <th>Image</th>
+            <td><img src=""></td>
+          </tr>
+          <tr>
+            <th>Team</th>
+            <td><a href="/team/view/[% profile_user.team.id %]">[% profile_user.team.name %]</a></td>
+          </tr>
+          </tbody>
+      	  </table>
 
 	  </div>
 	</div>
