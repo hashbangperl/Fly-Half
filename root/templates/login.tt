@@ -5,6 +5,20 @@
         <div class="row">
           <div class="span14">
 
+   [% IF errors %]
+   <div class="alert-message warning">
+    <!-- <a class="close" href="#">×</a> -->
+    <p>
+      <strong>Unable to login</strong> please check the following errors and correct them or contact support :
+      <ul>
+      [% FOREACH error IN errors %]
+        <li>[% error %]</li>
+      [% END %]
+      </ul>
+    </p>
+   </div>
+   [% END %]
+
     <!-- Login form -->
     <form method="post" action="/user/login">
     <fieldset>
@@ -15,7 +29,7 @@
    <div class="clearfix [% error_class %]">
    <label for="username">Username</label>
    <div class="input">
-   <input type="text" name="username" id="username" value="" class="[%error_class%]"/>
+   <input type="text" name="username" id="username" value="[% c.request.params.username %]" class="[%error_class%]"/>
    [% IF fields.username.error %]<span class="help-inline">[% fields.username.errors.join(',') %]</span>[% END %]
    </div>
    </div>
@@ -23,7 +37,7 @@
    <div class="clearfix [% error_class %]">
    <label for="password">Password</label>
    <div class="input">
-   <input type="password" name="password" id="password" value="" class="[%error_class%]"/>
+   <input type="password" name="password" id="password" value="[% c.request.params.password %]" class="[%error_class%]"/>
    [% IF fields.password.error %]<span class="help-inline">[% fields.password.errors.join(',') %]</span>[% END %]
    </div>
    </div>
