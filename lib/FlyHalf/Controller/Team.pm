@@ -26,7 +26,7 @@ sub view : Local : Args( 1 ) {
 
     $c->stash->{this_team} = $c->model( 'DBIC::Team' )->search(
 	{'me.id' => $team_id},
-	{ prefetch => { 'team_sprints' => 'sprints' } }
+	{ prefetch => ['sprints'] }
 	)->first;
 
     return 1;
