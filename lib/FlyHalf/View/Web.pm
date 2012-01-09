@@ -9,8 +9,6 @@ use File::Assets;
 
 our $include_path = FlyHalf->path_to( 'root', 'templates' );
 
-our $assets = File::Assets->new( base => [ '/static' ] );
-
 __PACKAGE__->config(
     TEMPLATE_EXTENSION => '.tt',
     render_die => 1,
@@ -18,11 +16,14 @@ __PACKAGE__->config(
     INCLUDE_PATH => [
         FlyHalf->path_to( 'root', 'templates' ),
     ],
-    VARIABLES => {
-	page_assets => $assets,
-    }
+    VARIABLES => { },
+    expose_methods => [qw/get_fresh_file_assets/],
 
 );
+
+sub get_fresh_file_assets {
+    return File::Assets->new( base => [ '/static' ] );
+}
 
 =head1 NAME
 
