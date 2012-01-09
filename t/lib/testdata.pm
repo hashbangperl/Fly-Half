@@ -48,7 +48,6 @@ sub _add_capacity_units {
 sub _add_states {
     my $rs = $schema->resultset('State');
 
-
     my $complete = $rs->create({ name => 'complete', description => 'Story completed and signed off' });
     my $qa = $rs->create({ name => 'quality assurance', description => 'Story is in QA',
 			   next_state => $complete->id, next_state_requirement => 'Story signed off by QA team and Product owner'});
@@ -152,6 +151,7 @@ sub _add_sprints {
 						       team_id => $teams->[0]->id,
 						       start_date => \q{now()},
 						       created_by => $users->[0]->id,
+						       in_progress => 1,
 						      });
 
 
@@ -161,6 +161,7 @@ sub _add_sprints {
 						       team_id => $teams->[1]->id,
 						       start_date => \q{now()},
 						       created_by => $users->[4]->id,
+						       in_progress => 1,
 						      });
 
 

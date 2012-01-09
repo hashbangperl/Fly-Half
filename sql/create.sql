@@ -78,7 +78,8 @@ create table if not exists sprint (
   created_by			  int,
   created_date			  datetime,
   updated_date			  datetime,
-  archived			  tinyint(0),
+  in_progress			  tinyint(1) default 0,
+  archived			  tinyint(1) default 0,
   foreign key (created_by) references users(id),
   foreign key (team_id) references team(id),
   primary key ( id )  

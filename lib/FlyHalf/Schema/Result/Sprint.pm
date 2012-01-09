@@ -99,7 +99,13 @@ __PACKAGE__->table("sprint");
 =head2 archived
 
   data_type: 'tinyint'
-  is_nullable: 1
+  is_nullable: 0
+
+=head2 in_progress
+
+  data_type: 'tinyint'
+  is_nullable: 0
+
 
 =cut
 
@@ -144,7 +150,9 @@ __PACKAGE__->add_columns(
     set_on_update => 1,
   },
   "archived",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", is_nullable => 0 },
+  "in_progress",
+  { data_type => "tinyint", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
