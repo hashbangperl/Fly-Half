@@ -22,6 +22,7 @@ __PACKAGE__->config(
 );
 
 sub get_fresh_file_assets {
+    #TODO use config to get this path
     return File::Assets->new( base => [ '/static' ] );
 }
 
