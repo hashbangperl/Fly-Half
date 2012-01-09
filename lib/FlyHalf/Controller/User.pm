@@ -58,9 +58,13 @@ sub login : Local : Args( 0 ) {
                                                password => $password });
         if ( $authenticated ) {
             # If successful, bounce them back to the referring page or profile
-            if ( $c->request->param('redirect') and
-                 $c->request->param('redirect') !~ m{user/log(out|in)} ) {
-                $c->response->redirect( $c->request->param( 'redirect' ) );
+            if ( $c->request->param('redirect')
+		 and
+		 $c->request->param('redirect') !~ m{user/log(out|in)}
+		 and
+		 $c->request->param('redirect') !~ m{index}
+		) {
+		$c->response->redirect( $c->request->param( 'redirect' ) );
             } else {
                 $c->forward( '/user/dashboard' );
             }
