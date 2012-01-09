@@ -85,12 +85,23 @@ create table if not exists sprint (
 )  ENGINE=InnoDB;
 
 create table if not exists team_sprints (
-       team_id int not null references team(id),
-       sprint_id int not null references sprint(id),
+       team_id int not null,
+       sprint_id int not null,
        created_by			  int,
        created_date			  datetime,
        foreign key (created_by) 	  references users(id),
+       foreign key (team_id) references team(id),
+       foreign key (sprint_id) references sprint(id),
        primary key (team_id, sprint_id)
+) ENGINE=InnoDB;
+
+
+create table if not exists sprint_capacity (
+       sprint_id int not null,
+       sprint_day datetime not null,
+       day_capacity int not null default 0,
+       foreign key (sprint_id) references sprint(id),
+       primary key (sprint_id, sprint_day)
 ) ENGINE=InnoDB;
 
 
