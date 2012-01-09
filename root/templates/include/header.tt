@@ -5,8 +5,17 @@
 
 <head>
 <title> [% meta.title || 'Fly/Half Agile Development' %] </title>
+
+[% SET page_assets = get_fresh_file_assets() %]
+
+[% CALL page_assets.include("/javascript/jquery-1.7.1.min.js", -1) %]
+[% CALL page_assets.include("/javascript/bootstrap-alerts.js", 20) %]
+
+[% page_assets.export("js") %]
+
 [% CALL page_assets.include("/css/bootstrap.css") %]
 [% page_assets.export("css") %]
+
   <style type="text/css">
       /* Override some defaults */
       html, body {

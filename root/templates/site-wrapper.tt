@@ -19,6 +19,13 @@
     </div>
 
     <div class="container">
+      [% IF status_msg %]
+      <div class="alert-message info" data-alert="alert">
+         <a class="close" href="#">×</a>
+         <p>[% status_msg %] </p>
+      </div>
+      [% END %]
+
     [%- content %]
     <footer>
     <p>
