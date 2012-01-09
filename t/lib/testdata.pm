@@ -163,11 +163,11 @@ sub _add_sprints {
 						       created_by => $users->[4]->id,
 						       in_progress => 1,
 						      });
-    $teams[0]->current_sprint($sprint1->id);
-    $teams[0]->update();
+    $teams->[0]->current_sprint($sprint1->id);
+    $teams->[0]->update();
 
-    $teams[1]->current_sprint($sprint2->id);
-    $teams[1]->update();
+    $teams->[1]->current_sprint($sprint2->id);
+    $teams->[1]->update();
 
 
     return [$sprint1, $sprint2];
