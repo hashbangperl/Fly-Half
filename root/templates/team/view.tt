@@ -7,28 +7,24 @@
 
 	  <h2>Team Information</h2>
 	  <p>
-	  <b>[% team.name %]</b>
+	  <b>[% this_team.name %]</b>
 	  </p>
 	  <p>
-	  <i>[% profile_user.profile_description %]</i>
+	  <i>[% this_team.description %]</i>
 	  </p>
 
 	  <table class="condensed-table">
           <tbody>
-	  [% FOREACH field IN [ 'location','active','username' ] %]
           <tr>
-            <th>[% field %]</th>
-            <td>[% profile_user.$field %]</td>
-          </tr>
-          [% END %]
-          <tr>
-            <th>Image</th>
-            <td><img src=""></td>
+            <th>Planned Developer Capacity</th>
+            <td>[% this_team.daily_developer_capacity %] [% this_team.daily_developer_capacity_unit.name %] / Day </td>
           </tr>
           <tr>
-            <th>Team</th>
-            <td><a href="/team/view/[% profile_user.team.id %]">[% profile_user.team.name %]</a></td>
+            <th>Current Sprint</th>
+            <td><a href="/sprint/view/[% current_sprint.id %]">[% current_sprint.name %]</a></td>
           </tr>
+	  <tr><td> Created [% this_team.created_date %] </td><td> Last Updated [% this_team.updated_date %] </td></tr>
+
           </tbody>
       	  </table>
 
