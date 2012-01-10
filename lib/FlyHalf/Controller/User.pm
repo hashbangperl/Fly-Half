@@ -87,10 +87,17 @@ sub profile : Local : Args( 1 ) {
     my ($self, $c, $user_id) = @_;
     $c->stash->{template} = 'user/profile.tt';
 
-    $c->stash->{profile_user} = $c->model( 'DBIC::User' )->search(
+    my $profile_user  = $c->model( 'DBIC::User' )->search(
 	{'me.id' => $user_id},
 	{ prefetch => 'team'}
 	)->first;
+
+    unless ($profile_user) {
+	$c->forward('/default');
+	return 0;
+    }
+
+    $c->stash->{profile_user} = $profile_user;
 
     return 1;
 
@@ -101,12 +108,12 @@ sub profile : Local : Args( 1 ) {
 =cut
 
 sub dashboard : Local : Args( 0 ) {
-    my ($self, $c, $user_id) = @_;
+    my ($self, $c) = @_;
     $c->stash->{template} = 'user/dashboard.tt';
 
 
     $c->stash->{dashboard_user} = $c->model( 'DBIC::User' )->search(
-	{'me.id' => $user_id},
+	{'me.id' => $c->user->id},
 	{ prefetch => 'team'}
 	)->first;
 
@@ -114,6 +121,17 @@ sub dashboard : Local : Args( 0 ) {
 
 }
 
+=head2 current_team
+
+=cut
+
+sub current_team : Local : Args( 0 ) {
+    my ($self, $c) = @_;
+
+    $c->go('/team/view/'.$c->user->team->id);
+    
+    return 1;
+}
 
 =head2 logout
 
