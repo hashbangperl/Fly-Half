@@ -62,7 +62,7 @@ sub login : Local : Args( 0 ) {
 		 and
 		 $c->request->param('redirect') !~ m{user/log(out|in)}
 		 and
-		 $c->request->param('redirect') !~ m{index}
+		 $c->request->param('redirect') !~ m{(index|default)}
 		) {
 		$c->response->redirect( $c->request->param( 'redirect' ) );
             } else {
