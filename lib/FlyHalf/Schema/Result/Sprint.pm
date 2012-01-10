@@ -204,6 +204,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sprint_capacity_days
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::SprintCapacity>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sprint_capacity_days",
+  "FlyHalf::Schema::Result::SprintCapacity",
+  { "foreign.sprint_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 sprint_progresses
 
 Type: has_many
@@ -218,6 +233,8 @@ __PACKAGE__->has_many(
   { "foreign.sprint_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+
+
 
 =head2 stories
 
