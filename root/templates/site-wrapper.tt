@@ -7,6 +7,7 @@
             <li class="active"><a href="/">Home</a></li>
 	    [% IF c.user %]
             <li><a href="/user/current_sprint">Current Sprint</a></li>
+            <li><a href="/user/current_team">My Team</a></li>
             <li><a href="/user/journal">Journal</a></li>
 	    [% ELSE %]
             <li><a href="/content/about">About</a></li>
