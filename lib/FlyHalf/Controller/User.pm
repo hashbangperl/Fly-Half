@@ -112,11 +112,12 @@ sub dashboard : Local : Args( 0 ) {
     $c->stash->{template} = 'user/dashboard.tt';
 
 
-    $c->stash->{dashboard_user} = $c->model( 'DBIC::User' )->search(
+    my $dashboard_user = $c->model( 'DBIC::User' )->search(
 	{'me.id' => $c->user->id},
 	{ prefetch => 'team'}
 	)->first;
 
+    $c->stash->{dashboard_user} = $dashboard_user;
     return 1;
 
 }
