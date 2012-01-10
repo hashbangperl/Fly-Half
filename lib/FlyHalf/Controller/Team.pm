@@ -24,10 +24,18 @@ sub view : Local : Args( 1 ) {
     my ($self, $c, $team_id) = @_;
     $c->stash->{template} = 'team/view.tt';
 
-    $c->stash->{this_team} = $c->model( 'DBIC::Team' )->search(
+    my $this_team = $c->model( 'DBIC::Team' )->search(
 	{'me.id' => $team_id},
-	{ prefetch => ['sprints'] }
+	{ prefetch => ['sprints','daily_developer_capacity_unit'] }
 	)->first;
+
+    unless ($this_team) {
+	$c->forward('/default');
+	return 0;
+    }
+
+    $c->stash->{this_team} = $this_team;
+    ($c->stash->{current_sprint}) = grep { $_->id == $this_team->current_sprint } $this_team->sprints;
 
     return 1;
 
