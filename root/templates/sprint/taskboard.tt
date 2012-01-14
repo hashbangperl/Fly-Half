@@ -15,22 +15,16 @@ h2,p{
   font-weight:normal;
 }
 
-
-ul.story,li{
-  list-style:none;
-}
-ul.story{
+div.story{
   overflow:hidden;
-  padding:3em;
-}
-ul.story li a{
   text-decoration:none;
   color:#000;
-  background:#ffc;
+  background:#cfc;
   display:block;
   height:9em;
   width:14em;
   padding:1em;
+  float:left;
   -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
   -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
   box-shadow: 5px 5px 7px rgba(33,33,33,.7);
@@ -38,16 +32,13 @@ ul.story li a{
   -o-transition:-o-transform .15s linear;
   -webkit-transition:-webkit-transform .15s linear;
 }
-ul.story li{
-  margin:1em;
-  float:left;
-}
-ul.story li h2{
+
+div.story h2{
   font-size:110%;
   font-weight:bold;
   padding-bottom:10px;
 }
-ul.story li p{
+div.story p{
   font-family:"Reenie Beanie",arial,sans-serif;
   font-size:140%;
 }
@@ -57,145 +48,119 @@ ul.task,li{
 }
 ul.task{
   overflow:hidden;
-  padding:3em;
+  padding:1em;
 }
-ul.task li a{
-  text-decoration:none;
+ul.task li{
   color:#000;
   background:#ffc;
   display:block;
-  height:7em;
-  width:8em;
-  padding:1em;
-  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
-  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
-  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  height:9em;
+  width:12em;
+  padding:0.5em;
+  -moz-box-shadow:4px 4px 6px rgba(33,33,33,1);
+  -webkit-box-shadow: 4px 4px 6px rgba(33,33,33,.7);
+  box-shadow: 4px 4px 6px rgba(33,33,33,.7);
   -moz-transition:-moz-transform .15s linear;
   -o-transition:-o-transform .15s linear;
   -webkit-transition:-webkit-transform .15s linear;
 }
 ul.task li{
-  margin:1em;
+  margin:0.5em;
   float:left;
 }
-ul.task li h2{
-  font-size:102%;
+ul.task li b{
+  font-size:95%;
   font-weight:bold;
-  padding-bottom:10px;
 }
 ul.task li p{
   font-family:"Reenie Beanie",arial,sans-serif;
-  font-size:120%;
+  font-size:130%;
+  padding-top:3px;
 }
-ul.task li a{
+ul.task li{
   -webkit-transform: rotate(-6deg);
   -o-transform: rotate(-6deg);
   -moz-transform:rotate(-6deg);
 }
-ul.task li:nth-child(even) a{
+ul.task li:nth-child(even){
   -o-transform:rotate(4deg);
   -webkit-transform:rotate(4deg);
   -moz-transform:rotate(4deg);
   position:relative;
   top:5px;
-  background:#cfc;
 }
-ul.task li:nth-child(3n) a{
+ul.task li:nth-child(3n){
   -o-transform:rotate(-3deg);
   -webkit-transform:rotate(-3deg);
   -moz-transform:rotate(-3deg);
   position:relative;
   top:-5px;
-  background:#ccf;
 }
-ul.task li:nth-child(5n) a{
+ul.task li:nth-child(5n){
   -o-transform:rotate(5deg);
   -webkit-transform:rotate(5deg);
   -moz-transform:rotate(5deg);
   position:relative;
   top:-10px;
 }
-ul.task li a:hover,ul.task li a:focus{
-  box-shadow:10px 10px 7px rgba(0,0,0,.7);
-  -moz-box-shadow:10px 10px 7px rgba(0,0,0,.7);
-  -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
-  -webkit-transform: scale(1.25);
-  -moz-transform: scale(1.25);
-  -o-transform: scale(1.25);
+ul.task li:hover,ul.task li:focus{
+  box-shadow:8px 8px 6px rgba(0,0,0,.7);
+  -moz-box-shadow:8px 8px 6px rgba(0,0,0,.7);
+  -webkit-box-shadow: 8px 8px 6px rgba(0,0,0,.7);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
   position:relative;
   z-index:5;
 }
 
 </style>
 
-<table width="100%" cellspacing="0" cellpadding="0" border="2">
+<table width="96%" cellspacing="0" cellpadding="0" border="2">
   <thead bgcolor="white">
   <tr>
     <th><h1>Stories</h1></th>
-    <th><h1>Defined</h1></th>
-    <th><h1>In Progress</h1></th>
-    <th><h1>Complete</h1></th>
+    [% FOREACH state IN states%]
+    <th><h1>[% state.name %]</h1></th>
+    [% END %]
   </tr>
   </thead>
           <tbody bgcolor="black">
 
 [% FOREACH story IN this_sprint.stories %]
+[% SET story_id = story.id %]
           <tr>
 	  <td bgcolor="white">
 
-<ul class="story">
-    <li>
-      <a href="#">
-        <h2>#[% story.id %] [% story.name %]</h2>
-        <p>lorem ipsum blah blah bacon roll</p>
-      </a>
-    </li>
-</ul>
+<div class="story">
+        <h2>#[% story_id %] [% story.name %]</h2>
+        <p>[% story.summary %]</p>
+    <a href="#">link</a>
+</div>
 
 </td>
-<td bgcolor="white">
-No Tasks here
-</td>
 
+    [% FOREACH state IN states %]
 <td bgcolor="white">
 
 <ul class="task">
+    [% SET state_id = state.id %]
+    [% FOREACH task IN story_tasks.$story_id.$state_id %]
+    [% SET assigned = task.tasks_assigned_to %]
     <li>
-      <a href="#">
-        <h2>Task #1</h2>
-        <p>Text Content #1</p>
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <h2>Title #2</h2>
-        <p>Text Content #2</p>
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <h2>Title #3</h2>
-        <p>Text Content #3</p>
-      </a>
-    </li>
+        <b>#[% task.id%] [% task.name %]</b>
+	</br>
+        <p>
+	Assigned :[% FOREACH assigned_to IN assigned %] [% assigned_to.user.firstname %] [% assigned_to.user.surname %] [% END %]
+	</br>
+	[% task.remaining_work %] [% task.estimate_unit.abbreviation %] remaining
+	</p>
+	</br>
+        <a href="#">link</a>
+    [% END %]
 </ul>
 </td>
-<td bgcolor="white">
-<ul class="task">
-    <li>
-      <a href="#">
-        <h2>Title #5</h2>
-        <p>Text Content #5</p>
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <h2>Title #4</h2>
-        <p>Text Content #4</p>
-      </a>
-    </li>
-</ul>
-</td>
+[% END %]
 
 </tr>
 
