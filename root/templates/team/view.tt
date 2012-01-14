@@ -21,7 +21,7 @@
           </tr>
           <tr>
             <th>Current Sprint</th>
-            <td><a href="/sprint/view/[% current_sprint.id %]">[% current_sprint.name %]</a></td>
+            <td><a href="/sprint/[% current_sprint.id %]/taskboard">[% current_sprint.name %]</a></td>
           </tr>
 	  <tr><td> Created [% this_team.created_date %] </td><td> Last Updated [% this_team.updated_date %] </td></tr>
 
