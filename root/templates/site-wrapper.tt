@@ -13,13 +13,29 @@
             <li><a href="/content/about">About</a></li>
             <li><a href="/content/contact">Contact</a></li>
 	    [% END %]
+	    [% IF c.user %]
+    	    <li><a href="[%  c.uri_for( '/user', 'profile', c.user.id)%]">me ([% c.user.firstname %] [% c.user.surname %])</a></li>
+            <li><a href="[%  c.uri_for( '/user', 'logout')%]">logout</a></li>
+    	    [% ELSE %]
+    	    <li>Not logged in</li>
+    	    [% END %]
+	    </li>
           </ul>
 	  
         </div>
       </div>
     </div>
 
+    [% IF skip_container %]
+
+    <div class="fill">
+
+    [% ELSE %]
+
     <div class="container">
+
+    [% END %]
+
       [% IF status_msg %]
       <div class="alert-message info" data-alert="alert">
          <a class="close" href="#">×</a>
@@ -30,14 +46,9 @@
     [%- content %]
     <footer>
     <p>
-    [% IF c.user %]
-    Logged in as [% c.user.username %] (<a href="[%  c.uri_for( '/user', 'profile', c.user.id)%]">[% c.user.firstname %] [% c.user.surname %]</a>)
-    : <a href="[%  c.uri_for( '/user', 'logout')%]">logout</a>
-    [% ELSE %]
-    Not logged in
-    [% END %]
+
     </p>
-    <p>&copy; Aaron Trevena 2011</p>
+    <p align="center">&copy; Aaron Trevena 2011</p>
     </footer>
 
     </div>
