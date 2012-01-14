@@ -1,0 +1,7 @@
+References
+==========
+
+I've learnt from, borrowed, stolen and copied ideas from all sorts of places, this may help anybody developing this codebase and give credit where it's due.
+
+http://net.tutsplus.com/tutorials/html-css-techniques/create-a-sticky-note-effect-in-5-easy-steps-with-css3-and-html5/
+
