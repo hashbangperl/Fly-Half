@@ -45,6 +45,14 @@
   [% CASE 'hidden' %]
   <input type="hidden" name="[% field.html_name %]" id="[% field.id %]"
        value="[% field.fif %]" />
+  [% CASE 'date' %]
+  <script>
+	$(function() {
+		$( "#[% field.id %]" ).datepicker();
+	});
+  </script>
+  <input name="[% field.html_name %]" id="[% field.id %]"
+       value="[% field.fif %]" />
   [% END %]
   </div>
 [% END %]
