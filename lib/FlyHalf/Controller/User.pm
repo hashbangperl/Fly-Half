@@ -134,6 +134,20 @@ sub current_team : Local : Args( 0 ) {
     return 1;
 }
 
+
+=head2 current_sprint
+
+=cut
+
+sub current_sprint : Local : Args( 0 ) {
+    my ($self, $c) = @_;
+
+    $c->go($c->controller('Sprint')->action_for('taskboard'),[$c->user->team->current_sprint],[]); 
+    
+    return 1;
+}
+
+
 =head2 logout
 
 Logout logic.
