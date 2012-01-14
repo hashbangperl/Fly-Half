@@ -16,6 +16,8 @@
 [% CALL page_assets.include("/css/bootstrap.css") %]
 [% page_assets.export("css") %]
 
+<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular">
+
   <style type="text/css">
       /* Override some defaults */
       html, body {
