@@ -6,7 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-FlyHalf::Controller::User - Catalyst Controller
+FlyHalf::Controller::Team - Catalyst Controller
 
 =head1 DESCRIPTION
 
