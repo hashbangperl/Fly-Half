@@ -1,0 +1,207 @@
+      <div class="content">
+        <div class="container">
+        <div class="page-header">
+          <h1>Sprint #[% this_sprint.id %] : [% this_sprint.name %]</h1>
+	  <p>
+	  [% this_sprint.description %]
+	  </p>
+        </div>
+	</div>
+
+<style type="text/css">
+
+h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+
+
+ul.story,li{
+  list-style:none;
+}
+ul.story{
+  overflow:hidden;
+  padding:3em;
+}
+ul.story li a{
+  text-decoration:none;
+  color:#000;
+  background:#ffc;
+  display:block;
+  height:9em;
+  width:14em;
+  padding:1em;
+  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  -moz-transition:-moz-transform .15s linear;
+  -o-transition:-o-transform .15s linear;
+  -webkit-transition:-webkit-transform .15s linear;
+}
+ul.story li{
+  margin:1em;
+  float:left;
+}
+ul.story li h2{
+  font-size:110%;
+  font-weight:bold;
+  padding-bottom:10px;
+}
+ul.story li p{
+  font-family:"Reenie Beanie",arial,sans-serif;
+  font-size:140%;
+}
+
+ul.task,li{
+  list-style:none;
+}
+ul.task{
+  overflow:hidden;
+  padding:3em;
+}
+ul.task li a{
+  text-decoration:none;
+  color:#000;
+  background:#ffc;
+  display:block;
+  height:7em;
+  width:8em;
+  padding:1em;
+  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  -moz-transition:-moz-transform .15s linear;
+  -o-transition:-o-transform .15s linear;
+  -webkit-transition:-webkit-transform .15s linear;
+}
+ul.task li{
+  margin:1em;
+  float:left;
+}
+ul.task li h2{
+  font-size:102%;
+  font-weight:bold;
+  padding-bottom:10px;
+}
+ul.task li p{
+  font-family:"Reenie Beanie",arial,sans-serif;
+  font-size:120%;
+}
+ul.task li a{
+  -webkit-transform: rotate(-6deg);
+  -o-transform: rotate(-6deg);
+  -moz-transform:rotate(-6deg);
+}
+ul.task li:nth-child(even) a{
+  -o-transform:rotate(4deg);
+  -webkit-transform:rotate(4deg);
+  -moz-transform:rotate(4deg);
+  position:relative;
+  top:5px;
+  background:#cfc;
+}
+ul.task li:nth-child(3n) a{
+  -o-transform:rotate(-3deg);
+  -webkit-transform:rotate(-3deg);
+  -moz-transform:rotate(-3deg);
+  position:relative;
+  top:-5px;
+  background:#ccf;
+}
+ul.task li:nth-child(5n) a{
+  -o-transform:rotate(5deg);
+  -webkit-transform:rotate(5deg);
+  -moz-transform:rotate(5deg);
+  position:relative;
+  top:-10px;
+}
+ul.task li a:hover,ul.task li a:focus{
+  box-shadow:10px 10px 7px rgba(0,0,0,.7);
+  -moz-box-shadow:10px 10px 7px rgba(0,0,0,.7);
+  -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+  -webkit-transform: scale(1.25);
+  -moz-transform: scale(1.25);
+  -o-transform: scale(1.25);
+  position:relative;
+  z-index:5;
+}
+
+</style>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="2">
+  <thead bgcolor="white">
+  <tr>
+    <th><h1>Stories</h1></th>
+    <th><h1>Defined</h1></th>
+    <th><h1>In Progress</h1></th>
+    <th><h1>Complete</h1></th>
+  </tr>
+  </thead>
+          <tbody bgcolor="black">
+
+[% FOREACH story IN this_sprint.stories %]
+          <tr>
+	  <td bgcolor="white">
+
+<ul class="story">
+    <li>
+      <a href="#">
+        <h2>#[% story.id %] [% story.name %]</h2>
+        <p>lorem ipsum blah blah bacon roll</p>
+      </a>
+    </li>
+</ul>
+
+</td>
+<td bgcolor="white">
+No Tasks here
+</td>
+
+<td bgcolor="white">
+
+<ul class="task">
+    <li>
+      <a href="#">
+        <h2>Task #1</h2>
+        <p>Text Content #1</p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Title #2</h2>
+        <p>Text Content #2</p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Title #3</h2>
+        <p>Text Content #3</p>
+      </a>
+    </li>
+</ul>
+</td>
+<td bgcolor="white">
+<ul class="task">
+    <li>
+      <a href="#">
+        <h2>Title #5</h2>
+        <p>Text Content #5</p>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <h2>Title #4</h2>
+        <p>Text Content #4</p>
+      </a>
+    </li>
+</ul>
+</td>
+
+</tr>
+
+[% END %]
+
+</tbody>
+</table>
+
+</div>
