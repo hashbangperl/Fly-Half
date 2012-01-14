@@ -26,6 +26,7 @@ sub populate_db {
 }
 
 sub cleandown_db {
+    $schema->resultset('TaskAssignedTo')->delete;
     $schema->resultset('Task')->delete;
     $schema->resultset('Story')->delete;
     $schema->resultset('Sprint')->delete;
@@ -185,8 +186,47 @@ sub _add_stories_tasks {
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add users to project', summary => 'As a scrum master I need to be able to add users to the tool',
 				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
-				   created_by => $users->[2]
+				   created_by => $users->[2],
+				   tasks => [
+					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[3],
+					       description => $bacon_ipsum->[2],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[0]->id, } 
+						   ]
+					     },
+					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[2],
+					       description => $bacon_ipsum->[1],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, } 
+						   ]
+					     },
+					    ],
 				  });
+    $sprints->[0]->add_to_stories({
+				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
+				   name => 'add users to project', summary => 'As a scrum master I need to be able to get a burndown from the tool',
+				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
+				   created_by => $users->[1],
+				   tasks => [
+					     { name => 'track progress and capacoty', estimate => 3, estimate_unit => $unit->id,
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[2],
+					       description => $bacon_ipsum->[2],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, } 
+						   ]
+					     },
+					     { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
+					       description => $bacon_ipsum->[1],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[2]->id, } 
+						   ]
+					     },
+					    ],
+				  }
+	);
     $sprints->[1]->add_to_stories(
 				  {
 				   priority => 20, estimate => 7, estimate_unit => $unit->id, remaining_work => 6, completed_work => 2,
@@ -196,12 +236,21 @@ sub _add_stories_tasks {
 				   tasks => [
 					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[2], },
+					       description => $bacon_ipsum->[2],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, } 
+						   ]
+					     },
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[1], },
+					       description => $bacon_ipsum->[1],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, } 
+						   ]
+					     },
 					    ],
-				  },
+				  });
+    $sprints->[1]->add_to_stories(
 				  {
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add stories', summary => 'As a scrum master I need to be able to add stories to the backlog',
@@ -210,10 +259,20 @@ sub _add_stories_tasks {
 				   tasks => [
 					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[2], },
+					       description => $bacon_ipsum->[2],
+					       tasks_assigned_to => [
+						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, } 
+						   ]
+					     },
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[1], },
+					       description => $bacon_ipsum->[1],
+					       tasks_assigned_to => 
+						   [						   
+						   { assigned_from_date => \q{now()}, user_id => $users->[5]->id }, 
+						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, } 
+						   ]
+					     },
 					    ],
 				  },
 				 );
