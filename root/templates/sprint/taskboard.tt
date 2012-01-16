@@ -1,3 +1,12 @@
+<style>
+
+h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+
+</style>
+
       <div class="content">
         <div class="container">
         <div class="page-header">
@@ -7,114 +16,6 @@
 	  </p>
         </div>
 	</div>
-
-<style type="text/css">
-
-h2,p{
-  font-size:100%;
-  font-weight:normal;
-}
-
-div.story{
-  overflow:hidden;
-  text-decoration:none;
-  color:#000;
-  background:#cfc;
-  display:block;
-  height:9em;
-  width:14em;
-  padding:1em;
-  float:left;
-  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
-  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
-  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
-  -moz-transition:-moz-transform .15s linear;
-  -o-transition:-o-transform .15s linear;
-  -webkit-transition:-webkit-transform .15s linear;
-}
-
-div.story h2{
-  font-size:110%;
-  font-weight:bold;
-  padding-bottom:10px;
-}
-div.story p{
-  font-family:"Reenie Beanie",arial,sans-serif;
-  font-size:140%;
-}
-
-ul.task,li{
-  list-style:none;
-}
-ul.task{
-  overflow:hidden;
-  padding:1em;
-}
-ul.task li{
-  color:#000;
-  background:#ffc;
-  display:block;
-  height:9em;
-  width:12em;
-  padding:0.5em;
-  -moz-box-shadow:4px 4px 6px rgba(33,33,33,1);
-  -webkit-box-shadow: 4px 4px 6px rgba(33,33,33,.7);
-  box-shadow: 4px 4px 6px rgba(33,33,33,.7);
-  -moz-transition:-moz-transform .15s linear;
-  -o-transition:-o-transform .15s linear;
-  -webkit-transition:-webkit-transform .15s linear;
-}
-ul.task li{
-  margin:0.5em;
-  float:left;
-}
-ul.task li b{
-  font-size:95%;
-  font-weight:bold;
-}
-ul.task li p{
-  font-family:"Reenie Beanie",arial,sans-serif;
-  font-size:130%;
-  padding-top:3px;
-}
-ul.task li{
-  -webkit-transform: rotate(-6deg);
-  -o-transform: rotate(-6deg);
-  -moz-transform:rotate(-6deg);
-}
-ul.task li:nth-child(even){
-  -o-transform:rotate(4deg);
-  -webkit-transform:rotate(4deg);
-  -moz-transform:rotate(4deg);
-  position:relative;
-  top:5px;
-}
-ul.task li:nth-child(3n){
-  -o-transform:rotate(-3deg);
-  -webkit-transform:rotate(-3deg);
-  -moz-transform:rotate(-3deg);
-  position:relative;
-  top:-5px;
-}
-ul.task li:nth-child(5n){
-  -o-transform:rotate(5deg);
-  -webkit-transform:rotate(5deg);
-  -moz-transform:rotate(5deg);
-  position:relative;
-  top:-10px;
-}
-ul.task li:hover,ul.task li:focus{
-  box-shadow:8px 8px 6px rgba(0,0,0,.7);
-  -moz-box-shadow:8px 8px 6px rgba(0,0,0,.7);
-  -webkit-box-shadow: 8px 8px 6px rgba(0,0,0,.7);
-  -webkit-transform: scale(1.1);
-  -moz-transform: scale(1.1);
-  -o-transform: scale(1.1);
-  position:relative;
-  z-index:5;
-}
-
-</style>
 
 <table width="96%" cellspacing="0" cellpadding="0" border="2">
   <thead bgcolor="white">
