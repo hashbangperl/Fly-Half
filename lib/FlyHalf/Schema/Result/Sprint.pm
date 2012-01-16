@@ -1,8 +1,4 @@
-use utf8;
 package FlyHalf::Schema::Result::Sprint;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
@@ -27,7 +23,7 @@ use base 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
+__PACKAGE__->load_components(qw/DynamicDefault InflateColumn::DateTime TimeStamp/);
 
 =head1 TABLE: C<sprint>
 
@@ -42,6 +38,12 @@ __PACKAGE__->table("sprint");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
+
+=head2 ref_code
+
+  data_type: 'integer'
+  is_nullable: 0
+  dynamic default fall back to copy of id
 
 =head2 name
 
@@ -110,49 +112,40 @@ __PACKAGE__->table("sprint");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "name",
-  { data_type => "varchar", is_nullable => 0, size => 200 },
-  "description",
-  { data_type => "text", is_nullable => 1 },
-  "team_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "start_date",
-  {
+  "id" => { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  ref_code =>
+  { data_type => "varchar(100)", is_nullable => 0,
+    dynamic_default_on_create => \&fallback_to_id },
+  "name" => { data_type => "varchar", is_nullable => 0, size => 200 },
+  "description" => { data_type => "text", is_nullable => 1 },
+  "team_id" => { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "start_date" => {
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
   },
-  "sprint_length",
-  { data_type => "integer", default_value => 14, is_nullable => 0 },
-  "end_date",
-  {
+  "sprint_length" => { data_type => "integer", default_value => 14, is_nullable => 0 },
+  "end_date" => {
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
   },
-  "created_by",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "created_date",
-  {
+  "created_by" => { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "created_date" => {
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
     set_on_create => 1
   },
-  "updated_date",
-  {
+  "updated_date" => {
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
     set_on_create => 1,
     set_on_update => 1,
   },
-  "archived",
-  { data_type => "tinyint", is_nullable => 0 },
-  "in_progress",
-  { data_type => "tinyint", is_nullable => 0 },
+  "archived" => { data_type => "tinyint", is_nullable => 0 },
+  "in_progress" => { data_type => "tinyint", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -271,10 +264,8 @@ __PACKAGE__->belongs_to(
   },
 );
 
+sub fallback_to_id {
+    return shift->id;
+}
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1b9kCnIYndVNdLS7TK/DbQ
-
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

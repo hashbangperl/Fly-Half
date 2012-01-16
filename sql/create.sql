@@ -69,6 +69,7 @@ create table if not exists project (
 
 create table if not exists sprint (
   id                              int  not null auto_increment,
+  ref_code 			  varchar(100) not null,
   name				  varchar(200) not null,
   description			  text,
   team_id			  int,
@@ -135,6 +136,7 @@ create table if not exists sprint_unavailability (
 
 create table if not exists story (
   id                              int not null auto_increment,
+  ref_code                        varchar(100) not null,
   sprint 			  int not null,
   priority 			  int not null default 100,
   estimate 			  int,
@@ -159,6 +161,7 @@ create table if not exists story (
 
 create table if not exists task (
   id                              int  not null auto_increment,
+  ref_code                        varchar(100) not null,
   estimate 			  int,
   estimate_unit 		  int,
   remaining_work		  int,

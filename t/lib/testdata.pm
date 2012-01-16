@@ -1,6 +1,8 @@
 package testdata;
 use strict;
 
+use DateTime;
+use DateTime::Duration;
 use FlyHalf::Schema;
 
 my $schema = FlyHalf::Schema->connect(
@@ -14,6 +16,20 @@ my $sprints;
 my $tasks;
 my $states = [];
 
+my $dur = DateTime::Duration->new(
+    years       => 3,
+    months      => 5,
+    weeks       => 1,
+    days        => 1,
+    hours       => 6,
+    minutes     => 15,
+    seconds     => 45,
+    nanoseconds => 12000
+);
+
+my $current_sprints_days = ();
+
+my $historical_sprints;
 
 sub populate_db {
     $unit = _add_capacity_units();
@@ -147,23 +163,25 @@ sub _add_users_teams {
 sub _add_sprints {
     my ($teams, $users) = @_;
     my $sprint1 = $schema->resultset('Sprint')->create({
-						       name => 'initial prototype',
-						       description => 'initial prototype of flyhalf',
-						       team_id => $teams->[0]->id,
-						       start_date => \q{now()},
-						       created_by => $users->[0]->id,
-						       in_progress => 1,
+							ref_code => 'sp4',
+							name => 'initial prototype',
+							description => 'initial prototype of flyhalf',
+							team_id => $teams->[0]->id,
+							start_date => \q{now()},
+							created_by => $users->[0]->id,
+							in_progress => 1,
 						      });
 
 
     my $sprint2 = $schema->resultset('Sprint')->create({
-						       name => 'Research stuff',
-						       description => 'research stuff for other projects',
-						       team_id => $teams->[1]->id,
-						       start_date => \q{now()},
-						       created_by => $users->[4]->id,
-						       in_progress => 1,
-						      });
+							ref_code => 'sp5',
+							name => 'Research stuff',
+							description => 'research stuff for other projects',
+							team_id => $teams->[1]->id,
+							start_date => \q{now()},
+							created_by => $users->[4]->id,
+							in_progress => 1,
+						       });
     $teams->[0]->current_sprint($sprint1->id);
     $teams->[0]->update();
 
@@ -183,6 +201,7 @@ my $bacon_ipsum = [
 sub _add_stories_tasks {
     $sprints->[0]->add_to_stories(
 				  {
+				   ref_code => "s8",
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add users to project', summary => 'As a scrum master I need to be able to add users to the tool',
 				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
@@ -192,19 +211,20 @@ sub _add_stories_tasks {
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[3],
 					       description => $bacon_ipsum->[2],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[0]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[0]->id, }
 						   ]
 					     },
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[2],
 					       description => $bacon_ipsum->[1],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
 						   ]
 					     },
 					    ],
 				  });
     $sprints->[0]->add_to_stories({
+				   ref_code => "s9",
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add users to project', summary => 'As a scrum master I need to be able to get a burndown from the tool',
 				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
@@ -214,14 +234,14 @@ sub _add_stories_tasks {
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[2],
 					       description => $bacon_ipsum->[2],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
 						   ]
 					     },
 					     { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[1],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[2]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[2]->id, }
 						   ]
 					     },
 					    ],
@@ -229,6 +249,7 @@ sub _add_stories_tasks {
 	);
     $sprints->[1]->add_to_stories(
 				  {
+				   ref_code => "s12",
 				   priority => 20, estimate => 7, estimate_unit => $unit->id, remaining_work => 6, completed_work => 2,
 				   name => 'add tasks', summary => 'As a developer I need to be able to add tasks to stories',
 				   description => $bacon_ipsum->[2], start_date => \q{now()}, state => $states->[1],
@@ -238,20 +259,21 @@ sub _add_stories_tasks {
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[2],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
 						   ]
 					     },
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[1],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
 						   ]
 					     },
 					    ],
 				  });
     $sprints->[1]->add_to_stories(
 				  {
+				   ref_code => "s19",
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add stories', summary => 'As a scrum master I need to be able to add stories to the backlog',
 				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
@@ -261,16 +283,16 @@ sub _add_stories_tasks {
 					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[2],
 					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, } 
+						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
 						   ]
 					     },
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
 					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[1],
-					       tasks_assigned_to => 
-						   [						   
-						   { assigned_from_date => \q{now()}, user_id => $users->[5]->id }, 
-						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, } 
+					       tasks_assigned_to =>
+						   [
+						   { assigned_from_date => \q{now()}, user_id => $users->[5]->id },
+						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
 						   ]
 					     },
 					    ],
