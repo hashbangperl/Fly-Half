@@ -10,7 +10,7 @@ h2,p{
       <div class="content">
         <div class="container">
         <div class="page-header">
-          <h1>Sprint #[% this_sprint.id %] : [% this_sprint.name %]</h1>
+          <h1>Sprint #[% this_sprint.ref_code %] : [% this_sprint.name %]</h1>
 	  <p>
 	  [% this_sprint.description %]
 	  </p>
@@ -34,7 +34,7 @@ h2,p{
 	  <td bgcolor="white">
 
 <div class="story">
-        <h2>#[% story_id %] [% story.name %]</h2>
+        <h2>#[% story.ref_code %] [% story.name %]</h2>
         <p>[% story.summary %]</p>
     <a href="#">link</a>
 </div>
@@ -49,7 +49,7 @@ h2,p{
     [% FOREACH task IN story_tasks.$story_id.$state_id %]
     [% SET assigned = task.tasks_assigned_to %]
     <li>
-        <b>#[% task.id%] [% task.name %]</b>
+        <b>#[% task.ref_code% ] [% task.name %]</b>
 	</br>
         <p>
 	Assigned :[% FOREACH assigned_to IN assigned %] [% assigned_to.user.firstname %] [% assigned_to.user.surname %] [% END %]
