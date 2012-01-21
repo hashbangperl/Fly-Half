@@ -1,28 +1,31 @@
 # This Makefile is for the FlyHalf extension to perl.
 #
 # It was generated automatically by MakeMaker version
-# 6.54 (Revision: 65400) from the contents of
+# 6.62 (Revision: 66200) from the contents of
 # Makefile.PL. Don't edit this file, edit Makefile.PL instead.
 #
 #       ANY CHANGES MADE HERE WILL BE LOST!
 #
 #   MakeMaker ARGV: ()
 #
+
 #   MakeMaker Parameters:
 
 #     ABSTRACT => q[Simple DWIM Agile Tool]
-#     AUTHOR => q[Aaron Trevena]
+#     AUTHOR => [q[Aaron Trevena]]
+#     BUILD_REQUIRES => {  }
+#     CONFIGURE_REQUIRES => {  }
 #     DIR => []
 #     DISTNAME => q[FlyHalf]
 #     EXE_FILES => [q[script/flyhalf_cgi.pl], q[script/flyhalf_create.pl], q[script/flyhalf_fastcgi.pl], q[script/flyhalf_server.pl], q[script/flyhalf_test.pl]]
 #     NAME => q[FlyHalf]
 #     NO_META => q[1]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Catalyst::Plugin::ConfigLoader=>q[0], HTML::Restrict=>q[0], Catalyst::Plugin::Session::State::Cookie=>q[0], Catalyst::Plugin::Authorization::Roles=>q[0], Config::General=>q[0], Text::CSV::Simple=>q[0], DBIx::Class::EncodedColumn=>q[0], XML::Feed=>q[0], Method::Signatures::Simple=>q[0], ExtUtils::MakeMaker=>q[6.42], Captcha::reCAPTCHA=>q[0], Catalyst::TraitFor::Request::BrowserDetect=>q[0], Catalyst::Plugin::Session=>q[0], Test::More=>q[0.88], Net::Domain::TLD=>q[0], Catalyst::Authentication::Realm::SimpleDB=>q[0], File::Pid=>q[0], Email::Sender=>q[0.102360], Email::Valid=>q[0], CatalystX::RoleApplicator=>q[0], MooseX::NonMoose=>q[0], Catalyst::Plugin::Session::Store::DBIC=>q[0], DBIx::Class::Schema::Loader=>q[0], Moose=>q[0], namespace::autoclean=>q[0], Catalyst::View::Email=>q[0], Catalyst::Plugin::Static::Simple=>q[0], DBIx::Class::TimeStamp=>q[0], Catalyst::Action::RenderView=>q[0], Catalyst::Plugin::Authentication=>q[0], DBIx::Class::InflateColumn::FS=>q[0], Catalyst::Runtime=>q[5.80032] }
+#     PREREQ_PM => { DBIx::Class::DynamicDefault=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], CatalystX::RoleApplicator=>q[0], MooseX::NonMoose=>q[0], File::Assets=>q[0], Catalyst::Plugin::Session::State::Cookie=>q[0], Config::General=>q[0], Catalyst::Plugin::Session::Store::DBIC=>q[0], Moose=>q[0], DBIx::Class::EncodedColumn=>q[0], namespace::autoclean=>q[0], Method::Signatures::Simple=>q[0], Catalyst::Plugin::Static::Simple=>q[0], ExtUtils::MakeMaker=>q[6.42], DBIx::Class::TimeStamp=>q[0], Catalyst::Plugin::Session=>q[0], Catalyst::Action::RenderView=>q[0], Test::More=>q[0.88], HTML::FormHandler=>q[0], Catalyst::Plugin::Authentication=>q[0], DateTime::Duration=>q[0], DBIx::Class::InflateColumn::FS=>q[0], Catalyst::Authentication::Realm::SimpleDB=>q[0], DBIx::Class::InflateColumn::DateTime=>q[0], Catalyst::Runtime=>q[5.80032], File::Pid=>q[0] }
 #     VERSION => q[0.01]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/view_TT.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/model_DBIC.t t/populate.t t/view_TT.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -141,8 +144,8 @@ PERM_RW = 644
 PERM_RWX = 755
 
 MAKEMAKER   = /usr/local/lib/perl5/5.10.0/ExtUtils/MakeMaker.pm
-MM_VERSION  = 6.54
-MM_REVISION = 65400
+MM_VERSION  = 6.62
+MM_REVISION = 66200
 
 # FULLEXT = Pathname for extension directory (eg Foo/Bar/Oracle).
 # BASEEXT = Basename part of FULLEXT. May be just equal FULLEXT. (eg Oracle)
@@ -172,10 +175,33 @@ MAN1PODS = script/flyhalf_cgi.pl \
 MAN3PODS = lib/FlyHalf.pm \
 	lib/FlyHalf/Controller/Project.pm \
 	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Controller/Sprint.pm \
+	lib/FlyHalf/Controller/Team.pm \
 	lib/FlyHalf/Controller/User.pm \
 	lib/FlyHalf/Model/Authorisation.pm \
 	lib/FlyHalf/Model/Base.pm \
-	lib/FlyHalf/View/TT.pm
+	lib/FlyHalf/Model/DBIC.pm \
+	lib/FlyHalf/Schema/Result/Checklist.pm \
+	lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	lib/FlyHalf/Schema/Result/Project.pm \
+	lib/FlyHalf/Schema/Result/ProjectSprint.pm \
+	lib/FlyHalf/Schema/Result/Sprint.pm \
+	lib/FlyHalf/Schema/Result/SprintCapacity.pm \
+	lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	lib/FlyHalf/Schema/Result/State.pm \
+	lib/FlyHalf/Schema/Result/StateTransition.pm \
+	lib/FlyHalf/Schema/Result/Story.pm \
+	lib/FlyHalf/Schema/Result/Task.pm \
+	lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	lib/FlyHalf/Schema/Result/Team.pm \
+	lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	lib/FlyHalf/Schema/Result/User.pm \
+	lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	lib/FlyHalf/View/Web.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIB)$(DFSEP)Config.pm $(PERL_INC)$(DFSEP)config.h
@@ -200,29 +226,101 @@ PERL_ARCHIVE_AFTER =
 TO_INST_PM = lib/FlyHalf.pm \
 	lib/FlyHalf/Controller/Project.pm \
 	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Controller/Sprint.pm \
+	lib/FlyHalf/Controller/Team.pm \
 	lib/FlyHalf/Controller/User.pm \
 	lib/FlyHalf/Model/Authorisation.pm \
 	lib/FlyHalf/Model/Base.pm \
-	lib/FlyHalf/View/TT.pm
+	lib/FlyHalf/Model/DBIC.pm \
+	lib/FlyHalf/Schema.pm \
+	lib/FlyHalf/Schema/Result/Checklist.pm \
+	lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	lib/FlyHalf/Schema/Result/Project.pm \
+	lib/FlyHalf/Schema/Result/ProjectSprint.pm \
+	lib/FlyHalf/Schema/Result/Sprint.pm \
+	lib/FlyHalf/Schema/Result/SprintCapacity.pm \
+	lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	lib/FlyHalf/Schema/Result/State.pm \
+	lib/FlyHalf/Schema/Result/StateTransition.pm \
+	lib/FlyHalf/Schema/Result/Story.pm \
+	lib/FlyHalf/Schema/Result/Task.pm \
+	lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	lib/FlyHalf/Schema/Result/Team.pm \
+	lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	lib/FlyHalf/Schema/Result/User.pm \
+	lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	lib/FlyHalf/View/Web.pm
 
-PM_TO_BLIB = lib/FlyHalf/Model/Authorisation.pm \
-	blib/lib/FlyHalf/Model/Authorisation.pm \
-	lib/FlyHalf/View/TT.pm \
-	blib/lib/FlyHalf/View/TT.pm \
-	lib/FlyHalf/Controller/Root.pm \
-	blib/lib/FlyHalf/Controller/Root.pm \
+PM_TO_BLIB = lib/FlyHalf/Schema/Result/User.pm \
+	blib/lib/FlyHalf/Schema/Result/User.pm \
+	lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	blib/lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	blib/lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	lib/FlyHalf/Controller/Sprint.pm \
+	blib/lib/FlyHalf/Controller/Sprint.pm \
 	lib/FlyHalf/Controller/Project.pm \
 	blib/lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	blib/lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	lib/FlyHalf/Schema/Result/Checklist.pm \
+	blib/lib/FlyHalf/Schema/Result/Checklist.pm \
+	lib/FlyHalf/Schema/Result/Project.pm \
+	blib/lib/FlyHalf/Schema/Result/Project.pm \
+	lib/FlyHalf/Controller/Team.pm \
+	blib/lib/FlyHalf/Controller/Team.pm \
+	lib/FlyHalf/Model/Authorisation.pm \
+	blib/lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/Schema/Result/Story.pm \
+	blib/lib/FlyHalf/Schema/Result/Story.pm \
+	lib/FlyHalf/Schema/Result/StateTransition.pm \
+	blib/lib/FlyHalf/Schema/Result/StateTransition.pm \
+	lib/FlyHalf/Schema/Result/State.pm \
+	blib/lib/FlyHalf/Schema/Result/State.pm \
+	lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	blib/lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	lib/FlyHalf/Schema/Result/Task.pm \
+	blib/lib/FlyHalf/Schema/Result/Task.pm \
+	lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	blib/lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	lib/FlyHalf/Schema/Result/SprintCapacity.pm \
+	blib/lib/FlyHalf/Schema/Result/SprintCapacity.pm \
 	lib/FlyHalf/Controller/User.pm \
 	blib/lib/FlyHalf/Controller/User.pm \
 	lib/FlyHalf.pm \
 	blib/lib/FlyHalf.pm \
+	lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	blib/lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	blib/lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	lib/FlyHalf/Schema/Result/Team.pm \
+	blib/lib/FlyHalf/Schema/Result/Team.pm \
+	lib/FlyHalf/View/Web.pm \
+	blib/lib/FlyHalf/View/Web.pm \
+	lib/FlyHalf/Model/DBIC.pm \
+	blib/lib/FlyHalf/Model/DBIC.pm \
+	lib/FlyHalf/Controller/Root.pm \
+	blib/lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	blib/lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	lib/FlyHalf/Schema.pm \
+	blib/lib/FlyHalf/Schema.pm \
+	lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	blib/lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	lib/FlyHalf/Schema/Result/Sprint.pm \
+	blib/lib/FlyHalf/Schema/Result/Sprint.pm \
 	lib/FlyHalf/Model/Base.pm \
-	blib/lib/FlyHalf/Model/Base.pm
+	blib/lib/FlyHalf/Model/Base.pm \
+	lib/FlyHalf/Schema/Result/ProjectSprint.pm \
+	blib/lib/FlyHalf/Schema/Result/ProjectSprint.pm
 
 
 # --- MakeMaker platform_constants section:
-MM_Unix_VERSION = 6.54
+MM_Unix_VERSION = 6.62
 PERL_MALLOC_DEF = -DPERL_EXTMALLOC_DEF -Dmalloc=Perl_malloc -Dfree=Perl_mfree -Drealloc=Perl_realloc -Dcalloc=Perl_calloc
 
 
@@ -445,13 +543,36 @@ manifypods : pure_all  \
 	script/flyhalf_server.pl \
 	script/flyhalf_create.pl \
 	script/flyhalf_cgi.pl \
-	lib/FlyHalf/Model/Authorisation.pm \
-	lib/FlyHalf/View/TT.pm \
-	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Schema/Result/User.pm \
+	lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	lib/FlyHalf/Controller/Sprint.pm \
 	lib/FlyHalf/Controller/Project.pm \
+	lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	lib/FlyHalf/Schema/Result/Checklist.pm \
+	lib/FlyHalf/Schema/Result/Project.pm \
+	lib/FlyHalf/Controller/Team.pm \
+	lib/FlyHalf/Model/Authorisation.pm \
+	lib/FlyHalf/Schema/Result/Story.pm \
+	lib/FlyHalf/Schema/Result/StateTransition.pm \
+	lib/FlyHalf/Schema/Result/State.pm \
+	lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	lib/FlyHalf/Schema/Result/Task.pm \
+	lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	lib/FlyHalf/Schema/Result/SprintCapacity.pm \
 	lib/FlyHalf/Controller/User.pm \
 	lib/FlyHalf.pm \
-	lib/FlyHalf/Model/Base.pm
+	lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	lib/FlyHalf/Schema/Result/Team.pm \
+	lib/FlyHalf/View/Web.pm \
+	lib/FlyHalf/Model/DBIC.pm \
+	lib/FlyHalf/Controller/Root.pm \
+	lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	lib/FlyHalf/Schema/Result/Sprint.pm \
+	lib/FlyHalf/Model/Base.pm \
+	lib/FlyHalf/Schema/Result/ProjectSprint.pm
 	$(NOECHO) $(POD2MAN) --section=1 --perm_rw=$(PERM_RW) \
 	  script/flyhalf_fastcgi.pl $(INST_MAN1DIR)/flyhalf_fastcgi.pl.$(MAN1EXT) \
 	  script/flyhalf_test.pl $(INST_MAN1DIR)/flyhalf_test.pl.$(MAN1EXT) \
@@ -459,13 +580,36 @@ manifypods : pure_all  \
 	  script/flyhalf_create.pl $(INST_MAN1DIR)/flyhalf_create.pl.$(MAN1EXT) \
 	  script/flyhalf_cgi.pl $(INST_MAN1DIR)/flyhalf_cgi.pl.$(MAN1EXT) 
 	$(NOECHO) $(POD2MAN) --section=3 --perm_rw=$(PERM_RW) \
-	  lib/FlyHalf/Model/Authorisation.pm $(INST_MAN3DIR)/FlyHalf::Model::Authorisation.$(MAN3EXT) \
-	  lib/FlyHalf/View/TT.pm $(INST_MAN3DIR)/FlyHalf::View::TT.$(MAN3EXT) \
-	  lib/FlyHalf/Controller/Root.pm $(INST_MAN3DIR)/FlyHalf::Controller::Root.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/User.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::User.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/SprintUnavailability.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::SprintUnavailability.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/TaskAssignedTo.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::TaskAssignedTo.$(MAN3EXT) \
+	  lib/FlyHalf/Controller/Sprint.pm $(INST_MAN3DIR)/FlyHalf::Controller::Sprint.$(MAN3EXT) \
 	  lib/FlyHalf/Controller/Project.pm $(INST_MAN3DIR)/FlyHalf::Controller::Project.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/UserAssignedTask.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::UserAssignedTask.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Checklist.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Checklist.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Project.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Project.$(MAN3EXT) \
+	  lib/FlyHalf/Controller/Team.pm $(INST_MAN3DIR)/FlyHalf::Controller::Team.$(MAN3EXT) \
+	  lib/FlyHalf/Model/Authorisation.pm $(INST_MAN3DIR)/FlyHalf::Model::Authorisation.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Story.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Story.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/StateTransition.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::StateTransition.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/State.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::State.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/EstimateUnit.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::EstimateUnit.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Task.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Task.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/SprintProgress.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::SprintProgress.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/SprintCapacity.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::SprintCapacity.$(MAN3EXT) \
 	  lib/FlyHalf/Controller/User.pm $(INST_MAN3DIR)/FlyHalf::Controller::User.$(MAN3EXT) \
 	  lib/FlyHalf.pm $(INST_MAN3DIR)/FlyHalf.$(MAN3EXT) \
-	  lib/FlyHalf/Model/Base.pm $(INST_MAN3DIR)/FlyHalf::Model::Base.$(MAN3EXT) 
+	  lib/FlyHalf/Schema/Result/TeamSprint.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::TeamSprint.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/TaskProgress.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::TaskProgress.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Team.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Team.$(MAN3EXT) \
+	  lib/FlyHalf/View/Web.pm $(INST_MAN3DIR)/FlyHalf::View::Web.$(MAN3EXT) \
+	  lib/FlyHalf/Model/DBIC.pm $(INST_MAN3DIR)/FlyHalf::Model::DBIC.$(MAN3EXT) \
+	  lib/FlyHalf/Controller/Root.pm $(INST_MAN3DIR)/FlyHalf::Controller::Root.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/ChecklistItem.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::ChecklistItem.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/TaskDependancy.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::TaskDependancy.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/Sprint.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::Sprint.$(MAN3EXT) \
+	  lib/FlyHalf/Model/Base.pm $(INST_MAN3DIR)/FlyHalf::Model::Base.$(MAN3EXT) \
+	  lib/FlyHalf/Schema/Result/ProjectSprint.pm $(INST_MAN3DIR)/FlyHalf::Schema::Result::ProjectSprint.$(MAN3EXT) 
 
 
 
@@ -537,14 +681,15 @@ clean :: clean_subdirs
 	  *$(LIB_EXT) core \
 	  core.[0-9] $(INST_ARCHAUTODIR)/extralibs.all \
 	  core.[0-9][0-9] $(BASEEXT).bso \
-	  pm_to_blib.ts core.[0-9][0-9][0-9][0-9] \
+	  pm_to_blib.ts MYMETA.json \
+	  core.[0-9][0-9][0-9][0-9] MYMETA.yml \
 	  $(BASEEXT).x $(BOOTSTRAP) \
 	  perl$(EXE_EXT) tmon.out \
 	  *$(OBJ_EXT) pm_to_blib \
 	  $(INST_ARCHAUTODIR)/extralibs.ld blibdirs.ts \
 	  core.[0-9][0-9][0-9][0-9][0-9] *perl.core \
 	  core.*perl.*.? $(MAKE_APERL_FILE) \
-	  perl $(BASEEXT).def \
+	  $(BASEEXT).def perl \
 	  core.[0-9][0-9][0-9] mon.out \
 	  lib$(BASEEXT).def perlmain.c \
 	  perl.exe so_locations \
@@ -662,8 +807,12 @@ ci :
 
 # --- MakeMaker distmeta section:
 distmeta : create_distdir metafile
-	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'eval { maniadd({q{META.yml} => q{Module meta-data (added by MakeMaker)}}) } ' \
+	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -e q{META.yml};' \
+	  -e 'eval { maniadd({q{META.yml} => q{Module YAML meta-data (added by MakeMaker)}}) }' \
 	  -e '    or print "Could not add META.yml to MANIFEST: $${'\''@'\''}\n"' --
+	$(NOECHO) cd $(DISTVNAME) && $(ABSPERLRUN) -MExtUtils::Manifest=maniadd -e 'exit unless -f q{META.json};' \
+	  -e 'eval { maniadd({q{META.json} => q{Module JSON meta-data (added by MakeMaker)}}) }' \
+	  -e '    or print "Could not add META.json to MANIFEST: $${'\''@'\''}\n"' --
 
 
 
@@ -834,7 +983,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/view_TT.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_Project.t t/controller_User.t t/model_Authorisation.t t/model_DBIC.t t/populate.t t/view_TT.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -864,37 +1013,31 @@ ppd :
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Simple DWIM Agile Tool</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Aaron Trevena</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Captcha::reCAPTCHA" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Action::RenderView" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Authentication::Realm::SimpleDB" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authentication" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Authorization::Roles" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::ConfigLoader" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::State::Cookie" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Session::Store::DBIC" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Plugin::Static::Simple" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::Runtime" VERSION="5.80032" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::TraitFor::Request::BrowserDetect" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Catalyst::View::Email" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="CatalystX::RoleApplicator" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Config::General" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::DynamicDefault" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::EncodedColumn" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::InflateColumn::DateTime" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::InflateColumn::FS" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::Schema::Loader" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBIx::Class::TimeStamp" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Email::Sender" VERSION="0.10236" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Email::Valid" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DateTime::Duration" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="ExtUtils::MakeMaker" VERSION="6.42" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="File::Assets" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="File::Pid" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="HTML::Restrict" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="HTML::FormHandler" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Method::Signatures::Simple" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moose::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="MooseX::NonMoose" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Net::Domain::TLD" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::More" VERSION="0.88" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Text::CSV::Simple" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="XML::Feed" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="namespace::autoclean" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-5.10" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
@@ -906,13 +1049,37 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  lib/FlyHalf/Model/Authorisation.pm blib/lib/FlyHalf/Model/Authorisation.pm \
-	  lib/FlyHalf/View/TT.pm blib/lib/FlyHalf/View/TT.pm \
-	  lib/FlyHalf/Controller/Root.pm blib/lib/FlyHalf/Controller/Root.pm \
+	  lib/FlyHalf/Schema/Result/User.pm blib/lib/FlyHalf/Schema/Result/User.pm \
+	  lib/FlyHalf/Schema/Result/SprintUnavailability.pm blib/lib/FlyHalf/Schema/Result/SprintUnavailability.pm \
+	  lib/FlyHalf/Schema/Result/TaskAssignedTo.pm blib/lib/FlyHalf/Schema/Result/TaskAssignedTo.pm \
+	  lib/FlyHalf/Controller/Sprint.pm blib/lib/FlyHalf/Controller/Sprint.pm \
 	  lib/FlyHalf/Controller/Project.pm blib/lib/FlyHalf/Controller/Project.pm \
+	  lib/FlyHalf/Schema/Result/UserAssignedTask.pm blib/lib/FlyHalf/Schema/Result/UserAssignedTask.pm \
+	  lib/FlyHalf/Schema/Result/Checklist.pm blib/lib/FlyHalf/Schema/Result/Checklist.pm \
+	  lib/FlyHalf/Schema/Result/Project.pm blib/lib/FlyHalf/Schema/Result/Project.pm \
+	  lib/FlyHalf/Controller/Team.pm blib/lib/FlyHalf/Controller/Team.pm \
+	  lib/FlyHalf/Model/Authorisation.pm blib/lib/FlyHalf/Model/Authorisation.pm \
+	  lib/FlyHalf/Schema/Result/Story.pm blib/lib/FlyHalf/Schema/Result/Story.pm \
+	  lib/FlyHalf/Schema/Result/StateTransition.pm blib/lib/FlyHalf/Schema/Result/StateTransition.pm \
+	  lib/FlyHalf/Schema/Result/State.pm blib/lib/FlyHalf/Schema/Result/State.pm \
+	  lib/FlyHalf/Schema/Result/EstimateUnit.pm blib/lib/FlyHalf/Schema/Result/EstimateUnit.pm \
+	  lib/FlyHalf/Schema/Result/Task.pm blib/lib/FlyHalf/Schema/Result/Task.pm \
+	  lib/FlyHalf/Schema/Result/SprintProgress.pm blib/lib/FlyHalf/Schema/Result/SprintProgress.pm \
+	  lib/FlyHalf/Schema/Result/SprintCapacity.pm blib/lib/FlyHalf/Schema/Result/SprintCapacity.pm \
 	  lib/FlyHalf/Controller/User.pm blib/lib/FlyHalf/Controller/User.pm \
 	  lib/FlyHalf.pm blib/lib/FlyHalf.pm \
-	  lib/FlyHalf/Model/Base.pm blib/lib/FlyHalf/Model/Base.pm 
+	  lib/FlyHalf/Schema/Result/TeamSprint.pm blib/lib/FlyHalf/Schema/Result/TeamSprint.pm \
+	  lib/FlyHalf/Schema/Result/TaskProgress.pm blib/lib/FlyHalf/Schema/Result/TaskProgress.pm \
+	  lib/FlyHalf/Schema/Result/Team.pm blib/lib/FlyHalf/Schema/Result/Team.pm \
+	  lib/FlyHalf/View/Web.pm blib/lib/FlyHalf/View/Web.pm \
+	  lib/FlyHalf/Model/DBIC.pm blib/lib/FlyHalf/Model/DBIC.pm \
+	  lib/FlyHalf/Controller/Root.pm blib/lib/FlyHalf/Controller/Root.pm \
+	  lib/FlyHalf/Schema/Result/ChecklistItem.pm blib/lib/FlyHalf/Schema/Result/ChecklistItem.pm \
+	  lib/FlyHalf/Schema.pm blib/lib/FlyHalf/Schema.pm \
+	  lib/FlyHalf/Schema/Result/TaskDependancy.pm blib/lib/FlyHalf/Schema/Result/TaskDependancy.pm \
+	  lib/FlyHalf/Schema/Result/Sprint.pm blib/lib/FlyHalf/Schema/Result/Sprint.pm \
+	  lib/FlyHalf/Model/Base.pm blib/lib/FlyHalf/Model/Base.pm \
+	  lib/FlyHalf/Schema/Result/ProjectSprint.pm blib/lib/FlyHalf/Schema/Result/ProjectSprint.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
 
@@ -954,5 +1121,5 @@ checkdeps ::
 	$(PERL) Makefile.PL --checkdeps
 
 installdeps ::
-	$(PERL) Makefile.PL --config= --installdeps=DBIx::Class::InflateColumn::FS,0
+	$(NOECHO) $(NOOP)
 
