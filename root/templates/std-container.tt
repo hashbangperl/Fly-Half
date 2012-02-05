@@ -5,8 +5,8 @@
         <div class="row">
           <div class="span10">
             <h2>Main content</h2>
-            [%- IF error_msg  %]<div class="alert-message error" >[% error_msg  %]</div>[% END %]
-            [%- IF status_msg %]<div class="alert-message info">[% status_msg %]</div>[% END %]
+            [%- IF error_msg  %]<div class="alert error" >[% error_msg  %]</div>[% END %]
+            [%- IF status_msg %]<div class="alert info">[% status_msg %]</div>[% END %]
 	    [%- content %]
           </div>
           <div class="span4">

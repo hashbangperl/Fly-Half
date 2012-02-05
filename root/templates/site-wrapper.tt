@@ -1,5 +1,5 @@
 [% INCLUDE "include/header.tt" %]
-  <div class="topbar">
+  <div class="navbar">
       <div class="fill">
         <div class="container">
           <a class="brand" href="#">Fly/Half Agile Development</a>
@@ -37,7 +37,7 @@
     [% END %]
 
       [% IF status_msg %]
-      <div class="alert-message info" data-alert="alert">
+      <div class="alert info" data-alert="alert">
          <a class="close" href="#">×</a>
          <p>[% status_msg %] </p>
       </div>
