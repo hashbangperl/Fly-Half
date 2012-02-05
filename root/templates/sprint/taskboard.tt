@@ -49,7 +49,7 @@ h2,p{
     [% FOREACH task IN story_tasks.$story_id.$state_id %]
     [% SET assigned = task.tasks_assigned_to %]
     <li>
-        <b>#[% task.ref_code% ] [% task.name %]</b>
+        <b>#[% task.ref_code %] [% task.name %]</b>
 	</br>
         <p>
 	Assigned :[% FOREACH assigned_to IN assigned %] [% assigned_to.user.firstname %] [% assigned_to.user.surname %] [% END %]
