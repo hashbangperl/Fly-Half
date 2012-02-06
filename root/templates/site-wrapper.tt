@@ -1,9 +1,16 @@
 [% INCLUDE "include/header.tt" %]
-  <div class="navbar">
-      <div class="fill">
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
         <div class="container">
+          <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
           <a class="brand" href="#">Fly/Half Agile Development</a>
-          <ul class="nav">
+
+          <div class="nav-collapse">
+            <ul class="nav">
             <li class="active"><a href="/">Home</a></li>
 	    [% IF c.user %]
             <li><a href="/user/current_sprint">Current Sprint</a></li>
@@ -20,8 +27,8 @@
     	    <li>Not logged in</li>
     	    [% END %]
 	    </li>
-          </ul>
-	  
+            </ul>
+          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
