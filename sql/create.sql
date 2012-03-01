@@ -159,6 +159,16 @@ create table if not exists story (
   primary key ( id )  
 )  ENGINE=InnoDB;
 
+create table if not exists stories_tree (
+    story                INT NOT NULL, 
+    ancestor            INT,
+    depth               INT NOT NULL default 0,
+    PRIMARY KEY ( story, ancestor ),
+    foreign key (story)            REFERENCES story(id),
+    foreign key (ancestor)        references story(id)
+)  ENGINE=InnoDB;
+
+
 create table if not exists task (
   id                              int  not null auto_increment,
   ref_code                        varchar(100) not null,
@@ -185,7 +195,14 @@ create table if not exists task (
   primary key ( id )                
 )  ENGINE=InnoDB;
 
-
+create table if not exists tasks_tree (
+    task                INT NOT NULL,
+    ancestor            INT,
+    depth               INT NOT NULL default 0,
+    PRIMARY KEY ( task, ancestor ),
+    foreign key (task)            REFERENCES task(id),
+    foreign key (ancestor)        references task(id)
+)  ENGINE=InnoDB;
 
 create table if not exists task_dependancies ( 
    task      	    	   int not null,
