@@ -10,6 +10,7 @@
 
 [% CALL page_assets.include("/javascript/jquery-1.7.1.min.js", -1) %]
 [% CALL page_assets.include("/javascript/bootstrap-alerts.js", 20) %]
+[% CALL page_assets.include("/javascript/bootstrap-dropdown.js", 21) %]
 
 [% page_assets.export("js") %]
 
@@ -17,6 +18,10 @@
 [% CALL page_assets.include("/css/flyhalf.css") %]
 [% CALL page_assets.include("/css/taskboard.css") %]
 [% page_assets.export("css") %]
+
+<script>
+$('.dropdown-toggle').dropdown()
+</script>
 
 </head>
 
