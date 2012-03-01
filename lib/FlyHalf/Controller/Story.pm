@@ -21,7 +21,7 @@ Catalyst Controller.
 
 =cut
 
-sub backlog :Path :Args(0) {
+sub backlog : Local :Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash->{template} = 'story/backlog.tt';
@@ -37,10 +37,13 @@ sub backlog :Path :Args(0) {
     }
     $c->stash->{states} = $states;
 
-    $c->stash->{stories} = $c->model("DBIC::Story")->search(
+    $c->stash->{stories} = [ $c->model("DBIC::Story")->search(
 							    {},
-							    {prefetch => [] }
-							   );
+							    {prefetch => [qw/sprint created_by estimate_unit state/ ] }
+							   )];
+
+    $c->stash->{skip_container} = 1;
+
     return 1;
 }
 
