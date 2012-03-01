@@ -16,11 +16,13 @@ h2,p{
 	  </p>
         </div>
 	</div>
+     </div>
 
-<table width="96%" cellspacing="0" cellpadding="0" border="2">
+<center>
+<table width="98%" cellspacing="0" cellpadding="0" border="2">
   <thead bgcolor="white">
   <tr>
-    <th><h1>Stories</h1></th>
+    <th width="15em"><h1>Stories</h1></th>
     [% FOREACH state IN states%]
     <th><h1>[% state.name %]</h1></th>
     [% END %]
@@ -31,7 +33,7 @@ h2,p{
 [% FOREACH story IN this_sprint.stories %]
 [% SET story_id = story.id %]
           <tr>
-	  <td bgcolor="white">
+	  <td bgcolor="white" width="15em">
 
 <div class="story">
         <h2>#[% story.ref_code %] [% story.name %]</h2>
@@ -70,4 +72,4 @@ h2,p{
 </tbody>
 </table>
 
-</div>
+</center>
