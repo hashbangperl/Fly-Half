@@ -1,0 +1,42 @@
+
+      <div class="content">
+        <div class="container">
+        <div class="page-header">
+	<h1>Backlog [% this_project.name %]</h1>
+        </div>
+	</div>
+     </div>
+
+
+<center>
+<table width="98%" cellspacing="0" cellpadding="0" border="2">
+  <thead bgcolor="white">
+  <tr>
+    [% FOREACH state IN states%]
+    <th><h1>[% state.name %]</h1></th>
+    [% END %]
+  </tr>
+  </thead>
+  <tbody bgcolor="black">
+
+  [% FOREACH story IN stories %]
+  <tr>
+[% FOREACH state IN states %]
+   <td bgcolor="white" width="15em">
+  [% IF state.id == story.state_id %]
+        <b>#[% story.ref_code %] [% story.name %]</b>
+        <p>[% story.summary %]</p>
+  [% ELSE %]
+&nbsp;
+  [% END %]
+  </td>
+ [% END %]
+ </tr>
+
+ [% END %]
+  </tbody>
+</table>
+</center>
+
+
+
