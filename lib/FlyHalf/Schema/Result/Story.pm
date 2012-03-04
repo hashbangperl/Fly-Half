@@ -273,6 +273,40 @@ __PACKAGE__->has_many(
 );
 
 
+=head2 tree_ancestors
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::StoriesTree>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tree_ancestors",
+  "FlyHalf::Schema::Result::StoriesTree",
+  { "foreign.story" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->many_to_many( all_substories => 'tree_substories', 'story' );
+
+=head2 tree_substories
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::StoriesTree>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tree_substories",
+  "FlyHalf::Schema::Result::StoriesTree",
+  { "foreign.ancestor" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->many_to_many( all_substories => 'tree_substories', 'story' );
+
 sub fallback_to_id {
     return shift->id;
 }
