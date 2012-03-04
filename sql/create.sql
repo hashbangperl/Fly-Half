@@ -269,3 +269,22 @@ create table if not exists checklist_items (
    primary key ( id )
 )  ENGINE=InnoDB;
 
+create table if not exists category (
+   id                              int not null auto_increment,
+   name                            varchar(200) not null,
+   description                     text,
+   created_by                      int,
+   created_date                    datetime,
+   primary key (id)
+)  ENGINE=InnoDB;
+
+create table if not exists categorisation (
+   object			   varchar(255) not null,
+   object_id			   int not null,
+   relation_name                   varchar(255),
+   category			   int not null,
+   added_by                        int not null,
+   added_date                      datetime,
+   primary key (object, object_id, category),
+   foreign key (category)	   references category(id)
+)  ENGINE=InnoDB;
