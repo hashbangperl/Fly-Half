@@ -332,6 +332,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tree_ancestors
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::TasksTree>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tree_ancestors",
+  "FlyHalf::Schema::Result::TasksTree",
+  { "foreign.task" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 tree_children
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::TasksTree>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tree_children",
+  "FlyHalf::Schema::Result::TasksTree",
+  { "foreign.ancestor" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 
 ######
 
