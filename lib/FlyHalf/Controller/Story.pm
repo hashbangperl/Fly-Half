@@ -16,6 +16,7 @@ Catalyst Controller.
 
 =cut
 
+use HTML::FormHandler;
 
 =head2 index
 
@@ -42,11 +43,19 @@ sub backlog : Local :Args(0) {
 							    {prefetch => [qw/sprint created_by estimate_unit state/ ] }
 							   )];
 
-    $c->stash->{skip_container} = 1;
-
     return 1;
 }
 
+sub add : Local : Args(0) {
+    $c->stash->{template} = 'story/add.tt';
+
+    my $form = HTML::FormHandler->new( field_list => [
+						      'username' => { type => 'Text' },
+						      'selections' => { type => 'Select' },
+						     ]
+				     );
+    return 1;
+}
 
 =head1 AUTHOR
 
