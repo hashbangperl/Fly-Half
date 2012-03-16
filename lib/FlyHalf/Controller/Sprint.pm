@@ -67,8 +67,6 @@ sub taskboard :Chained('by_id') :Args(0) {
 
     $c->stash->{story_tasks} = $story_tasks;
 
-    $c->stash->{skip_container} = 1;
-
     return 1;
 
 }
@@ -102,6 +100,21 @@ sub by_id : PathPart('sprint') :Chained('/') :CaptureArgs(1) {
     $c->stash->{sprint_id} = $sprint_id;
 
     return;
+}
+
+
+=head2 add_story
+
+=cut
+
+sub add_story :Chained('by_id') :Args(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{add_to_object} = {type=>'sprint', object => $c->stash->{this_sprint}};
+
+    $c->go($c->controller('Story')->action_for('add'));
+
+    return 1;
 }
 
 
