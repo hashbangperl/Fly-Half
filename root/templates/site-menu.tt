@@ -1,0 +1,37 @@
+          <div class="nav-collapse">
+            <ul class="nav">
+            <li class="active"><a href="/">Home</a></li>
+	    [% IF c.user %]
+	    <ul class="nav">
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Stories<b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li><a href="/user/current_sprint">Taskboard</a></li>
+<li><a href="/story/backlog">Backlog</a></li>
+<li class="divider"></li>
+<li><a href="/sprint/current/add_story">add Story</a></li>
+</ul>
+</li>
+
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Team<b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li><a href="/user/current_team">My Team</a></li>
+<li><a href="/user/current_sprint">This Sprint</a></li>
+</ul>
+</li>
+            <li><a href="/user/journal">Journal</a></li>
+	    [% ELSE %]
+            <li><a href="/content/about">About</a></li>
+            <li><a href="/content/contact">Contact</a></li>
+	    [% END %]
+	    [% IF c.user %]
+    	    <li><a href="[%  c.uri_for( '/user', 'profile', c.user.id)%]">me ([% c.user.firstname %] [% c.user.surname %])</a></li>
+            <li><a href="[%  c.uri_for( '/user', 'logout')%]">logout</a></li>
+    	    [% ELSE %]
+    	    <li>Not logged in</li>
+    	    [% END %]
+	    </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
