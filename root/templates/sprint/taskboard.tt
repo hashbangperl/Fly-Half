@@ -1,3 +1,5 @@
+[% META no_container = 1 %]
+
 <style>
 
 h2,p{
