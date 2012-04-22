@@ -1,13 +1,5 @@
 [% META no_container = 1 %]
-
-<style>
-
-h2,p{
-  font-size:100%;
-  font-weight:normal;
-}
-
-</style>
+[% META assets_include = "include/taskboard_assets.tt" %]
 
       <div class="content">
         <div class="container">
