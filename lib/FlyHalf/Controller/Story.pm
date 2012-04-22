@@ -47,6 +47,7 @@ sub backlog : Local :Args(0) {
 }
 
 sub add : Local : Args(0) {
+    my ( $self, $c ) = @_;
     $c->stash->{template} = 'story/add.tt';
 
     my $form = HTML::FormHandler->new( field_list => [
