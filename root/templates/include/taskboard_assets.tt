@@ -1,0 +1,9 @@
+[% CALL page_assets.include("/css/taskboard.css") %]
+
+<style>
+h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+</style>
+
