@@ -84,16 +84,20 @@ sub by_id : PathPart('sprint') :Chained('/') :CaptureArgs(1) {
     my ($self, $c, $sprint_id) = @_;
 
 
+    if ($sprint_id eq 'current') {
+        $sprint_id = $c->user->team->current_sprint;
+    }
+
     my $this_sprint = $c->model( 'DBIC::Sprint' )->search(
-	{'me.id' => $sprint_id},
-	{ prefetch => ['stories'] }
+        {'me.id' => $sprint_id},
+        { prefetch => ['stories'] }
 	)->first;
 
     unless ($this_sprint) {
-	$c->forward('/default');
-	$c->stash->{area} = 'sprint';
+        $c->forward('/default');
+        $c->stash->{area} = 'sprint';
         $c->stash->{message} = 'sprint ' . $sprint_id . 'not found';
-	return 0;
+        return 0;
     }
 
     $c->stash->{this_sprint} = $this_sprint;
@@ -110,11 +114,9 @@ sub by_id : PathPart('sprint') :Chained('/') :CaptureArgs(1) {
 sub add_story :Chained('by_id') :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{add_to_object} = {type=>'sprint', object => $c->stash->{this_sprint}};
+    $c->stash->{add_to_object} = {type=>'sprint', object => $c->stash->{this_sprint}, label => 'Sprint'};
 
-    $c->go($c->controller('Story')->action_for('add'));
-
-    return 1;
+    $c->detach($c->controller('Story')->action_for('add'));
 }
 
 

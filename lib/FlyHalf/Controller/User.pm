@@ -130,7 +130,7 @@ sub current_team : Local : Args( 0 ) {
     my ($self, $c) = @_;
 
     $c->go('/team/view/'.$c->user->team->id);
-    
+
     return 1;
 }
 
@@ -142,8 +142,8 @@ sub current_team : Local : Args( 0 ) {
 sub current_sprint : Local : Args( 0 ) {
     my ($self, $c) = @_;
 
-    $c->go($c->controller('Sprint')->action_for('taskboard'),[$c->user->team->current_sprint],[]); 
-    
+    $c->go($c->controller('Sprint')->action_for('taskboard'),[$c->user->team->current_sprint],[]);
+
     return 1;
 }
 

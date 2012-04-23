@@ -48,13 +48,17 @@ sub backlog : Local :Args(0) {
 
 sub add : Local : Args(0) {
     my ( $self, $c ) = @_;
+
     $c->stash->{template} = 'story/add.tt';
 
-    my $form = HTML::FormHandler->new( field_list => [
-						      'username' => { type => 'Text' },
-						      'selections' => { type => 'Select' },
-						     ]
-				     );
+    warn "you are here!!";
+
+    my $form = HTML::FormHandler->new(
+        field_list => [
+            'username' => { type => 'Text' },
+            'selections' => { type => 'Select' },
+        ]
+    );
     return 1;
 }
 

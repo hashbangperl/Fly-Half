@@ -6,15 +6,20 @@
           <div class="span14">
 
     <!-- Login form -->
-    <form method="post" action="/story/add">
+    <form method="post" action="/story/add" class="form-horizontal">
     <fieldset>
         <legend>Add Story</legend>
 	
 	[% IF add_to_object %]
-	<div class="controls">
-              <span class="input-xlarge uneditable-input">[% add_to_object.object.to_string %]</span>
+    [%- SET field_id = add_to_object.type _ '_' _ add_to_object.object.id %]
+     <div class="control-group">
+     <label class="control-label" for="[% field_id %]">[% add_to_object.label %]</label>
+       <div class="controls">
+              <span class="input-xlarge uneditable-input" id="[% field_id %]">[% add_to_object.object.name %]</span>
     	      <input type="hidden" name="[% add_to_object.type %]" value="[% add_to_object.object.id %]"/>
-        </div>
+              <p class="help-block">(add to Current sprint)</p>
+       </div>
+     </div>
 	[% END %]
 
    <input type="hidden" name="submitted" value="1"/>
