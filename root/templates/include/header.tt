@@ -9,7 +9,7 @@
 [% SET page_assets = get_fresh_file_assets() %]
 
 [% CALL page_assets.include("/javascript/jquery-1.7.1.min.js", -1) %]
-[% CALL page_assets.include("/javascript/bootstrap-alerts.js", 20) %]
+[% CALL page_assets.include("/javascript/bootstrap-alert.js", 20) %]
 [% CALL page_assets.include("/javascript/bootstrap-dropdown.js", 21) %]
 
 

@@ -6,8 +6,8 @@
           <div class="span14">
 
    [% IF errors %]
-   <div class="alert warning" data-alert="alert">
-    <a class="close" href="#" onClick>×</a>
+    <div class="alert warning">
+     <a class="close" data-dismiss="alert">×</a>
     <p>
       <strong>Unable to login</strong> please check the following errors and correct them or contact support :
       <ul>
