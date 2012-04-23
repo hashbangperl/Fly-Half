@@ -1,4 +1,4 @@
-[% META no_container = 1 %]
+[% META layout_include = "include/taskboard_layout.tt" %]
 [% META assets_include = "include/taskboard_assets.tt" %]
 
       <div class="content">

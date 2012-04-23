@@ -13,24 +13,26 @@
       </div>
     </div>
 
-    [% IF template.skip_container %]
+    [% SET layout_include = template.layout_include %]
+    [% IF layout_include %]
 
-    <div class="fill">
+    [% PROCESS $layout_include %]
 
     [% ELSE %]
 
     <div class="container">
 
-    [% END %]
-
       [% IF status_msg %]
-      <div class="alert info" data-alert="alert">
-         <a class="close" href="#">×</a>
+      <div class="alert info">
+         <a class="close" data-dismiss="alert">×</a>
          <p>[% status_msg %] </p>
       </div>
       [% END %]
 
     [%- content %]
+
+    [% END %]
+
     <footer>
     <p>
 

@@ -1,0 +1,15 @@
+   [% IF status_msg %]
+     <div class="alert info">
+       <a class="close" data-dismiss="alert">×</a>
+       <p>[% status_msg %] </p>
+     </div>
+   [% END %]
+
+   <div class="container-fluid">
+     <div class="row-fluid">
+      <div class="span12">
+      <!--Body content-->
+      [% content %]
+   </div>
+   </div>
+  </div>
