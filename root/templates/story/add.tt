@@ -1,0 +1,26 @@
+      <div class="content">
+        <div class="page-header">
+          <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
+        </div>
+        <div class="row">
+          <div class="span14">
+
+    <!-- Login form -->
+    <form method="post" action="/story/add">
+    <fieldset>
+        <legend>Add Story</legend>
+	
+	[% IF add_to_object %]
+	<div class="controls">
+              <span class="input-xlarge uneditable-input">[% add_to_object.object.to_string %]</span>
+    	      <input type="hidden" name="[% add_to_object.type %]" value="[% add_to_object.object.id %]"/>
+        </div>
+	[% END %]
+
+   <input type="hidden" name="submitted" value="1"/>
+   <input type="submit" value="Login" class="btn btn-primary"/>
+   </fieldset>
+  </form>
+
+          </div>
+        </div>
