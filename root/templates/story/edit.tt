@@ -1,0 +1,35 @@
+[% PROCESS "include/field.tt" %]
+      <div class="content">
+        <div class="page-header">
+          <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
+        </div>
+        <div class="row">
+          <div class="span14">
+
+    <!-- Login form -->
+    <form method="post" action="/story/add" class="form-horizontal">
+    <fieldset>
+        <legend>Add Story</legend>
+	     <div class="control-group">
+	[% IF add_to_object %]
+    [%- SET field_id = add_to_object.type _ '_' _ add_to_object.object.id %]
+     <label class="control-label" for="[% field_id %]">[% add_to_object.label %]</label>
+       <div class="controls">
+              <span class="input-xlarge uneditable-input" id="[% field_id %]">[% add_to_object.object.name %]</span>
+    	      <input type="hidden" name="[% add_to_object.type %]" value="[% add_to_object.object.id %]"/>
+              <p class="help-block">(add to Current sprint)</p>
+       </div>
+	[% END %]
+
+    [% FOREACH this_field IN form.sorted_fields %]
+    [% NEXT IF this_field.html_name == add_to_object.type %]
+    [% form_field(field=this_field) %]
+    [% END %]
+     </div>
+   <input type="hidden" name="submitted" value="1"/>
+   <input type="submit" value="Add" class="btn btn-primary"/>
+   </fieldset>
+  </form>
+
+          </div>
+        </div>
