@@ -1,9 +1,9 @@
+[% MACRO form_field BLOCK %]
 <!-- widget : [% field.widget %] -->
 [%- IF field.has_errors; SET error_class = 'error'; END; %]
-<div class="clearfix [% error_class %]">
-[% IF field.widget == "radiobox" %]
-  <label for="[% field.id %]">[% field.label %]</label>
-  <div class="input">
+[% IF field.widget == "Radiobox" %]
+  <label class="control-label" for="[% field.id %]">[% field.label %]</label>
+  <div class="controls [% error_class %]">
   <ul class="inputs-list">
   [% FOR option IN field.options %]
     <li>
@@ -19,12 +19,11 @@
     </li>
    [% END %]
    </ul>
-   </div>
 [% ELSE %]
-  <label for="[% field.id %]">[% field.label %]</label>
-   <div class="input">
+  <label class="control-label" for="[% field.id %]">[% field.label %]</label>
+  <div class="controls">
   [% SWITCH field.widget %]
-  [% CASE 'text' %]
+  [% CASE 'Text' %]
   <input type="text" name="[% field.html_name %]" id="[% field.id %]" value="[% field.fif %]" class="[%error_class%]"/>
   [% CASE 'select' %]
   <select name="[% field.html_name %]" class="medium" id="[% field.id %]" class="[%error_class%]">
@@ -37,15 +36,15 @@
        </option>
      [% END %]
    </select>
-  [% CASE 'checkbox' %]
+  [% CASE 'Checkbox' %]
   <input type="checkbox" name="[% field.html_name %]" id="[% field.id %]" value="1" class="[%error_class%]" />
-  [% CASE 'textarea' %]
+  [% CASE 'Textarea' %]
   <textarea name="[% field.html_name %]" id="[% field.id %]" class="xlarge [% error_class %]"
         rows="[% field.rows %]" cols="[% field.cols %]">[% field.fif %]</textarea>
-  [% CASE 'hidden' %]
+  [% CASE 'Hidden' %]
   <input type="hidden" name="[% field.html_name %]" id="[% field.id %]"
        value="[% field.fif %]" />
-  [% CASE 'date' %]
+  [% CASE 'Date' %]
   <script>
 	$(function() {
 		$( "#[% field.id %]" ).datepicker();
@@ -54,7 +53,7 @@
   <input name="[% field.html_name %]" id="[% field.id %]"
        value="[% field.fif %]" />
   [% END %]
-  </div>
 [% END %]
 [% IF field.error %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
-</div>
+   </div>
+[% END %]

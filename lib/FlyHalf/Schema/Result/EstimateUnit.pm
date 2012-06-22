@@ -125,6 +125,14 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 to_string
+
+=cut
+
+sub to_string {
+    my $self = shift;
+    return $self->name . ' ('. $self-> abbreviation .' )';
+}
 
 # Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dm9VVXhuE2+3kkfEETY5hw

@@ -17,8 +17,9 @@ Catalyst Controller.
 =cut
 
 use HTML::FormHandler;
+use FlyHalf::Form::Story;
 
-=head2 index
+=head2 backlog
 
 =cut
 
@@ -46,20 +47,77 @@ sub backlog : Local :Args(0) {
     return 1;
 }
 
+=head2 add
+
+=cut
+
 sub add : Local : Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->stash->{template} = 'story/add.tt';
+    return $c->forward('save');
+}
 
-    warn "you are here!!";
+=head2 edit
 
-    my $form = HTML::FormHandler->new(
-        field_list => [
-            'username' => { type => 'Text' },
-            'selections' => { type => 'Select' },
-        ]
-    );
-    return 1;
+=cut
+
+sub edit : Chained('by_id') :Args(0) {
+    my ( $self, $c ) = @_;
+
+    return $c->forward('save');
+}
+
+
+=head2 by_id
+
+chained action handler for /sprint, populates sprint being modifed/viewed
+
+checks authorisation
+
+=cut
+
+sub by_id : PathPart('story') :Chained('/') :CaptureArgs(1) {
+    my ($self, $c, $story_id) = @_;
+
+    my $this_story = $c->model( 'DBIC::Story' )->search(
+        {'me.id' => $story_id},
+        { prefetch => [qw/state tasks estimate_unit/] }
+	)->first;
+
+    unless ($this_story) {
+        $c->forward('/default');
+        $c->stash->{area} = 'story';
+        $c->stash->{message} = 'story ' . $story_id . 'not found';
+        return 0;
+    }
+
+    $c->stash->{this_story} = $this_story;
+    $c->stash->{story_id} = $story_id;
+
+    return;
+}
+
+
+####
+
+
+# both creation and editing happens here
+sub save : Private {
+    my ($self, $c) = @_;
+
+    # if the item doesn't exist, we'll just create a new result
+    my $item = $c->stash->{item} || $c->model('DBIC::Story')->new_result({});
+    my $form = FlyHalf::Form::Story->new( item => $item );
+
+    $c->stash( form => $form, template => 'story/edit.tt' );
+
+    # the "process" call has all the saving logic,
+    #   if it returns False, then a validation error happened
+    return unless $form->process( params => $c->req->params  );
+
+    $c->stash->{status_msg} = "Story saved!";
+    $c->redirect_to_action('Story', 'view', [$item->story_id]);
+    return;
 }
 
 =head1 AUTHOR
