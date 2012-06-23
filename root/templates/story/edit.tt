@@ -20,14 +20,19 @@
               <p class="help-block">(add to Current sprint)</p>
        </div>
 	[% END %]
+    </div>
 
     [% FOREACH this_field IN form.sorted_fields %]
     [% NEXT IF this_field.html_name == add_to_object.type %]
+	     <div class="control-group">
     [% form_field(field=this_field) %]
+         </div>
     [% END %]
+	     <div class="control-group">
+              <input type="hidden" name="submitted" value="1"/>
+              <input type="submit" value="Add" class="btn btn-primary"/>
+         </div>              
      </div>
-   <input type="hidden" name="submitted" value="1"/>
-   <input type="submit" value="Add" class="btn btn-primary"/>
    </fieldset>
   </form>
 
