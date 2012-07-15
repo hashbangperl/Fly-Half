@@ -44,16 +44,28 @@
   [% CASE 'Hidden' %]
   <input type="hidden" name="[% field.html_name %]" id="[% field.id %]"
        value="[% field.fif %]" />
-  [% CASE 'Date' %]
-  <script>
-	$(function() {
-		$( "#[% field.id %]" ).datepicker();
-	});
-  </script>
-  <input name="[% field.html_name %]" id="[% field.id %]"
-       value="[% field.fif %]" />
   [% END %]
+  <p class="help-block">[% IF field.required %](required)[% END %]</p>
 [% END %]
 [% IF field.error %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
    </div>
+[% END %]
+
+[% MACRO estimate_field BLOCK %]
+  <label class="control-label" for="[% estimate_field.id %]">[% estimate_field.label %]</label>
+  <div class="controls">
+
+    <input type="text" name="[% estimate_field.html_name %]" id="[% estimate_field.id %]" value="[% estimate_field.fif %]" class="span1 [%error_class%]"/>
+    &nbsp;
+    <select name="[% unit_field.html_name %]" class="span2 medium" id="[% unit_field.id %]" class="[%error_class%]">
+     [% FOR option IN unit_field.options %]
+       <option value="[% option.value %]"
+       [% IF option.value == unit_field.fif %]
+          selected="selected"
+       [% END %]>
+       [% option.label %]
+       </option>
+     [% END %]
+   </select>
+  </div>
 [% END %]

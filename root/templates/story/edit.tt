@@ -1,4 +1,10 @@
 [% PROCESS "include/field.tt" %]
+  <script>
+	$(function() {
+		$( "#start_date" ).datepicker({format: 'dd-mm-yyyy'});
+	});
+  </script>
+
       <div class="content">
         <div class="page-header">
           <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
@@ -24,10 +30,15 @@
 
     [% FOREACH this_field IN form.sorted_fields %]
     [% NEXT IF this_field.html_name == add_to_object.type %]
+    [% NEXT IF this_field.html_name.match('estimate') %] 
 	     <div class="control-group">
     [% form_field(field=this_field) %]
          </div>
     [% END %]
+	     <div class="control-group">
+    [% estimate_field(estimate_field = form.field('estimate'), unit_field = form.field('estimate_unit') ) %]
+         </div>
+
 	     <div class="control-group">
               <input type="hidden" name="submitted" value="1"/>
               <input type="submit" value="Add" class="btn btn-primary"/>
