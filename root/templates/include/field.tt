@@ -1,6 +1,37 @@
+[% MACRO form_header BLOCK %]
+    <form method="post" action="[% action %]" class="form-horizontal">
+    <fieldset>
+        <legend>[% legend %]</legend>
+      [% IF form.errors %]
+          <div class="alert alert-error">
+            <a class="close" data-dismiss="alert">×</a>
+          <p>
+          <b>Please correct the errors below :</b>
+            <ul>
+            [% FOREACH error IN form.errors %]<li><i>[% error %]</i></li> [% END %]
+            </ul>
+          </p>
+        </div>
+      [% END %]
+	     <div class="control-group">
+[% END %]
+
+[% MACRO form_footer BLOCK %]
+	     <div class="control-group">
+              <input type="hidden" name="submitted" value="1"/>
+              <input type="submit" value="[% submit_label %]" class="btn btn-primary"/>
+         </div>              
+     </div>
+   </fieldset>
+  </form>
+[% END %]
+
+
+
 [% MACRO form_field BLOCK %]
-<!-- widget : [% field.widget %] -->
+<!-- widget : [% field.widget %], has errors ? [% field.has_errors %] -->
 [%- IF field.has_errors; SET error_class = 'error'; END; %]
+<div class="control-group  [% error_class %]">
 [% IF field.widget == "Radiobox" %]
   <label class="control-label" for="[% field.id %]">[% field.label %]</label>
   <div class="controls [% error_class %]">
@@ -47,11 +78,14 @@
   [% END %]
   <p class="help-block">[% IF field.required %](required)[% END %]</p>
 [% END %]
-[% IF field.error %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
+[% IF field.has_errors %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
    </div>
+</div>
 [% END %]
 
 [% MACRO estimate_field BLOCK %]
+  [%- IF field.has_errors; SET error_class = 'error'; END; %]
+  <div class="control-group [% error_class %]">
   <label class="control-label" for="[% estimate_field.id %]">[% estimate_field.label %]</label>
   <div class="controls">
 
@@ -67,5 +101,6 @@
        </option>
      [% END %]
    </select>
+  </div>
   </div>
 [% END %]

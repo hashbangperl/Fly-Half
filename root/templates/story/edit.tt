@@ -12,11 +12,7 @@
         <div class="row">
           <div class="span14">
 
-    <!-- Login form -->
-    <form method="post" action="/story/add" class="form-horizontal">
-    <fieldset>
-        <legend>Add Story</legend>
-	     <div class="control-group">
+    [% form_header(legend='Add Story', form=form, action="" ) %]
 	[% IF add_to_object %]
     [%- SET field_id = add_to_object.type _ '_' _ add_to_object.object.id %]
      <label class="control-label" for="[% field_id %]">[% add_to_object.label %]</label>
@@ -31,21 +27,14 @@
     [% FOREACH this_field IN form.sorted_fields %]
     [% NEXT IF this_field.html_name == add_to_object.type %]
     [% NEXT IF this_field.html_name.match('estimate') %] 
-	     <div class="control-group">
-    [% form_field(field=this_field) %]
-         </div>
-    [% END %]
-	     <div class="control-group">
-    [% estimate_field(estimate_field = form.field('estimate'), unit_field = form.field('estimate_unit') ) %]
-         </div>
 
-	     <div class="control-group">
-              <input type="hidden" name="submitted" value="1"/>
-              <input type="submit" value="Add" class="btn btn-primary"/>
-         </div>              
-     </div>
-   </fieldset>
-  </form>
+    [% form_field(field=this_field) %]
+
+    [% END %]
+
+    [% estimate_field(estimate_field = form.field('estimate'), unit_field = form.field('estimate_unit') ) %]
+
+    [% form_footer(submit_label="Add" ) %]
 
           </div>
         </div>

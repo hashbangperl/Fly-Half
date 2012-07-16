@@ -16,6 +16,9 @@ Catalyst Controller.
 
 =cut
 
+use Carp qw(carp cluck confess);
+use Data::Dumper;
+
 use HTML::FormHandler;
 use FlyHalf::Form::Story;
 
@@ -111,12 +114,20 @@ sub save : Private {
 
     $c->stash( form => $form, template => 'story/edit.tt' );
 
-    # the "process" call has all the saving logic,
-    #   if it returns False, then a validation error happened
-    return unless $form->process( params => $c->req->params  );
+    if($c->req->param('submitted')) {
 
-    $c->stash->{status_msg} = "Story saved!";
-    $c->redirect_to_action('Story', 'view', [$item->story_id]);
+        # the "process" call has all the saving logic,
+        #   if it returns False, then a validation error happened
+        my $ok = $form->process( params => $c->req->params,   );
+        carp Dumper(form => $form);
+        unless ($ok) {
+            carp Dumper (errors=>$form->errors);
+            return;
+        }
+
+        $c->stash->{status_msg} = "Story saved!";
+        $c->res->redirect('/story/view/'. $item->id);
+    }
     return;
 }
 
