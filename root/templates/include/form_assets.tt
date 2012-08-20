@@ -1,0 +1,3 @@
+[% CALL page_assets.include("/javascript/bootstrap-datepicker.js", 1) %]
+[% CALL page_assets.include("/javascript/jquery.validate.min.js") %]
+[% CALL page_assets.include("/javascript/form_validation.js") %]

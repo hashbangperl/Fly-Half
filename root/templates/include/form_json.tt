@@ -1,0 +1,3 @@
+<form name="validaton_data_stash" id="validaton_data_stash" action="">
+<input type="hidden" name="validation_json" value="[% form.as_escaped_json %]" id="validation_json">
+</form>
