@@ -37,6 +37,7 @@ requires (
         'File::Pid'                                  => '0',
 	'File::Assets'                               => 0,
 	'DateTime::Duration'                         => 0,
+	'HTML::FormHandlerX::Form::JQueryValidator'  => 0,
 );
 
 
