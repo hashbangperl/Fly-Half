@@ -1,16 +1,12 @@
 [% MACRO form_header BLOCK %]
-    <form method="post" action="[% action %]" class="form-horizontal">
+    <form name="[% id %]" id="[% id %]" method="post" action="[% action %]" class="form-horizontal">
     <fieldset>
         <legend>[% legend %]</legend>
       [% IF form.errors %]
           <div class="alert alert-error">
             <a class="close" data-dismiss="alert">×</a>
           <p>
-          <b>Please correct the errors below :</b>
-            <ul>
-            [% FOREACH error IN form.errors %]<li><i>[% error %]</i></li> [% END %]
-            </ul>
-          </p>
+          <b>There was a problem, please check the highlighted fields in the form below</b>
         </div>
       [% END %]
 	     <div class="control-group">
@@ -39,7 +35,8 @@
   [% FOR option IN field.options %]
     <li>
      <label>
-     <input type="radio" value="[% option.value %]"
+[% name.replace('\W+', '_') %]
+     <input type="radio" value="[% option.value.replace('"', '\"') %]"
         name="[% field.name %]"
      [% IF option.value == field.fif %]
         checked="checked"
@@ -55,11 +52,11 @@
   <div class="controls">
   [% SWITCH field.widget %]
   [% CASE 'Text' %]
-  <input type="text" name="[% field.html_name %]" id="[% field.id %]" value="[% field.fif %]" class="[%error_class%]"/>
+  <input type="text" name="[% field.html_name %]" id="[% field.id %]" value="[% field.fif.replace('"', '\"') %]" class="[%error_class%]" [% IF field.required %]class="required"[% END %]>
   [% CASE 'select' %]
-  <select name="[% field.html_name %]" class="medium" id="[% field.id %]" class="[%error_class%]">
+  <select name="[% field.html_name %]" class="medium" id="[% field.id %]" class="[%error_class%]" [% IF field.required %]class="required"[% END %]>
      [% FOR option IN field.options %]
-       <option value="[% option.value %]"
+       <option value="[% option.value.replace('"', '\"') %]"
        [% IF option.value == field.fif %]
           selected="selected"
        [% END %]>
@@ -71,12 +68,12 @@
   <input type="checkbox" name="[% field.html_name %]" id="[% field.id %]" value="1" class="[%error_class%]" />
   [% CASE 'Textarea' %]
   <textarea name="[% field.html_name %]" id="[% field.id %]" class="xlarge [% error_class %]"
-        rows="[% field.rows %]" cols="[% field.cols %]">[% field.fif %]</textarea>
+        rows="[% field.rows %]" cols="[% field.cols %]" [% IF field.required %]class="required"[% END %]>[% field.fif %]</textarea>
   [% CASE 'Hidden' %]
   <input type="hidden" name="[% field.html_name %]" id="[% field.id %]"
-       value="[% field.fif %]" />
+       value="[% field.fif %]" [% IF field.required %]class="required"[% END %] />
   [% END %]
-  <p class="help-block">[% IF field.required %](required)[% END %]</p>
+  [% IF field.required %]*[% END %]
 [% END %]
 [% IF field.has_errors %]<span class="help-inline">[% field.errors.join(',') %]</span>[% END %]
    </div>
@@ -89,11 +86,11 @@
   <label class="control-label" for="[% estimate_field.id %]">[% estimate_field.label %]</label>
   <div class="controls">
 
-    <input type="text" name="[% estimate_field.html_name %]" id="[% estimate_field.id %]" value="[% estimate_field.fif %]" class="span1 [%error_class%]"/>
+    <input type="text" name="[% estimate_field.html_name %]" id="[% estimate_field.id %]" value="[% estimate_field.fif.replace('"', '\"') %]" class="span1 [%error_class%]"/>
     &nbsp;
     <select name="[% unit_field.html_name %]" class="span2 medium" id="[% unit_field.id %]" class="[%error_class%]">
      [% FOR option IN unit_field.options %]
-       <option value="[% option.value %]"
+       <option value="[% option.value.replace('"', '\"') %]"
        [% IF option.value == unit_field.fif %]
           selected="selected"
        [% END %]>
