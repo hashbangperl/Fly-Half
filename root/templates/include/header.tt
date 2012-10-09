@@ -10,13 +10,14 @@
 
 [% CALL page_assets.include("/javascript/jquery-1.7.1.min.js", -1) %]
 [%# CALL page_assets.include("/javascript/jquery-ui-1.8.21.custom.min.js", 1) %]
-[% CALL page_assets.include("/javascript/bootstrap-datepicker.js", 1) %]
-[% CALL page_assets.include("/javascript/bootstrap-alert.js", 20) %]
 [% CALL page_assets.include("/javascript/bootstrap-dropdown.js", 21) %]
+[% CALL page_assets.include("/javascript/bootstrap-alert.js", 20) %]
 
 
 [% CALL page_assets.include("/css/bootstrap.css") %]
 [% CALL page_assets.include("/css/flyhalf.css") %]
+
+<!-- // assets include : [% template.assets_include %]  //  -->
 
 [% SET additional_assets_include = template.assets_include %]
 [% IF additional_assets_include %]
