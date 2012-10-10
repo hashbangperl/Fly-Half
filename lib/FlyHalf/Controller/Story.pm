@@ -118,7 +118,11 @@ sub save : Private {
 
         # the "process" call has all the saving logic,
         #   if it returns False, then a validation error happened
-        my $ok = $form->process( params => $c->req->params,   );
+        my $params = $c->req->params;
+
+        # get current sprint, state, etc and put in params
+
+        my $ok = $form->process( params => $params,   );
         carp Dumper(form => $form);
         unless ($ok) {
             carp Dumper (errors=>$form->errors);

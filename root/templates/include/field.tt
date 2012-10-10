@@ -1,5 +1,5 @@
 [% MACRO form_header BLOCK %]
-    <form name="[% id %]" id="[% id %]" method="post" action="[% action %]" class="form-horizontal">
+    <form name="[% id %]" id="[% id %]" method="post" action="[% action %]" class="form-horizontal[% IF jquery_validate %] jquery-validate-form[% END %]">
     <fieldset>
         <legend>[% legend %]</legend>
       [% IF form.errors %]

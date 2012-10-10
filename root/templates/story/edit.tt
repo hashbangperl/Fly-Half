@@ -6,22 +6,6 @@
 	$(function() {
 		$( "#start_date" ).datepicker({format: 'dd-mm-yyyy'});
 	});
-    $(document).ready(function(){
-    console.log(validationJSON);
-    $("#story_form").validate({
-                rules: validationJSON.rules,
-                   highlight: function(label) {
-                    $(label).closest('.control-group').addClass('error');
-                },
-                messages: validationJSON.messages,
-                success: function(label) {
-                    label
-                        .text('OK!').addClass('valid')
-                        .closest('.control-group').addClass('success');
-                }
-            });
-     });
-
   </script>
 
       <div class="content">
@@ -31,7 +15,7 @@
         <div class="row">
           <div class="span14">
 
-    [% form_header(legend='Add Story', form=form, action="", id="story_form" ) %]
+    [% form_header(legend='Add Story', form=form, action="", id="story_form", jquery_validate=1 ) %]
 	[% IF add_to_object %]
     [%- SET field_id = add_to_object.type _ '_' _ add_to_object.object.id %]
      <label class="control-label" for="[% field_id %]">[% add_to_object.label %]</label>
