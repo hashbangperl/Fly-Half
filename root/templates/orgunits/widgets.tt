@@ -1,0 +1,29 @@
+[% MACRO person_listing BLOCK %]
+     <div class="span1">
+       <a href="#" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a>
+     </div>
+     <div class="span6">
+       <p>admin</p>
+       <strong><p>[% item.fullname %]</p></strong>
+       <span class=" badge badge-warning">8 messages</span> <span class=" badge badge-info">15 followers</span>
+     </div>
+[% END %]
+
+[% MACRO person_actions BLOCK %]
+<ul>
+        <li>something</li>
+</ul>
+[% END %]
+
+[% MACRO group_listing BLOCK %]
+     <div class="span7">
+       <p>Group type here</p>
+       <strong><p>group Name</p></strong>
+       <span class=" badge badge-warning">8 messages</span> <span class=" badge badge-info">15 followers</span>
+     </div>
+[% END %]
+
+
+[% MACRO group_actions BLOCK %]
+<b>actions go here</b>
+[% END %]

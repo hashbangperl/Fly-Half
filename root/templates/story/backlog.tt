@@ -25,7 +25,7 @@
 [% FOREACH state IN states %]
    <td bgcolor="white" width="15em">
   [% IF state.id == story.state_id %]
-        <b>#[% story.ref_code %] [% story.name | html %]</b>
+        <b>#[% story.ref_code %] [% story.name | html %] (<a href="/story/[% story.id %]/view">view</a>)</b>
         <p>[% story.summary | html | html_line_break %]</p>
   [% ELSE %]
 &nbsp;

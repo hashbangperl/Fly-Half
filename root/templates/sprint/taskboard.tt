@@ -32,7 +32,7 @@
 <div class="story">
         <h2>#[% story.ref_code %] [% story.name %]</h2>
         <p>[% story.summary %]</p>
-    <a href="#">link</a>
+        <a href="/story/[% story.id %]/view">view</a>
 </div>
 
 </td>

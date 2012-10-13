@@ -18,6 +18,53 @@ Catalyst Controller.
 
 use HTML::FormHandler;
 
+
+=head2 list
+
+=cut
+
+sub list : Local : Args( 0 ) {
+    my ($self, $c, $user_id) = @_;
+    $c->stash->{template} = 'orgunits/list.tt';
+
+    my $users_list  = [ $c->model( 'DBIC::User' )->search(
+							    {},
+							    {prefetch => [qw/team/ ] }
+							   )];
+
+    $c->stash->{items} = $users_list;
+    $c->stash->{items_type} = 'person';
+
+    return 1;
+
+}
+
+
+=head2 profile
+
+=cut
+
+sub profile : Local : Args( 1 ) {
+    my ($self, $c, $user_id) = @_;
+    $c->stash->{template} = 'user/profile.tt';
+
+    my $profile_user  = $c->model( 'DBIC::User' )->search(
+	{'me.id' => $user_id},
+	{ prefetch => 'team'}
+	)->first;
+
+    unless ($profile_user) {
+	$c->forward('/default');
+	return 0;
+    }
+
+    $c->stash->{profile_user} = $profile_user;
+
+    return 1;
+
+}
+
+
 =head2 login
 
 Login logic.
@@ -77,30 +124,6 @@ sub login : Local : Args( 0 ) {
     }
 
     return 1;
-}
-
-=head2 profile
-
-=cut
-
-sub profile : Local : Args( 1 ) {
-    my ($self, $c, $user_id) = @_;
-    $c->stash->{template} = 'user/profile.tt';
-
-    my $profile_user  = $c->model( 'DBIC::User' )->search(
-	{'me.id' => $user_id},
-	{ prefetch => 'team'}
-	)->first;
-
-    unless ($profile_user) {
-	$c->forward('/default');
-	return 0;
-    }
-
-    $c->stash->{profile_user} = $profile_user;
-
-    return 1;
-
 }
 
 =head2 dashboard
