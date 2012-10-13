@@ -70,6 +70,16 @@ sub edit : Chained('by_id') :Args(0) {
     return $c->forward('save');
 }
 
+sub view : Chained('by_id') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'workitem/view.tt';
+    $c->stash->{title} = {
+        title => 'View story',
+    };
+
+    return 1;
+}
+
 
 =head2 by_id
 
@@ -96,6 +106,8 @@ sub by_id : PathPart('story') :Chained('/') :CaptureArgs(1) {
 
     $c->stash->{this_story} = $this_story;
     $c->stash->{story_id} = $story_id;
+    $c->stash->{this_item} = $this_story;
+    $c->stash->{item_id} = $story_id;
 
     return;
 }
@@ -122,7 +134,7 @@ sub save : Private {
 
         # get current sprint, state, etc and put in params
 
-        my $ok = $form->process( params => $params,   );
+        my $ok = $form->process( item => $item, params => $params,   );
         carp Dumper(form => $form);
         unless ($ok) {
             carp Dumper (errors=>$form->errors);
@@ -130,7 +142,7 @@ sub save : Private {
         }
 
         $c->stash->{status_msg} = "Story saved!";
-        $c->res->redirect('/story/view/'. $item->id);
+        $c->res->redirect('/story/' . $item->id . '/view');
     }
     return;
 }

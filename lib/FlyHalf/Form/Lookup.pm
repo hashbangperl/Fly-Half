@@ -21,5 +21,13 @@ sub options_sprint {
    return [ map { $_->id, $_->name } @rows ];
 }
 
+sub options_state {
+   my $self = shift;
+   return unless $self->schema;
+   my @rows =
+      $self->schema->resultset( 'State' )->
+         search( {}, { order_by => ['name'] } )->all;
+   return [ map { $_->id, $_->name } @rows ];
+}
 
 1;

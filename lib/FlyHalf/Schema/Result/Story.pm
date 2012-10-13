@@ -288,7 +288,7 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-__PACKAGE__->many_to_many( all_substories => 'tree_substories', 'story' );
+__PACKAGE__->many_to_many( all_parent_stories => 'tree_ancestors', 'story' );
 
 =head2 tree_substories
 

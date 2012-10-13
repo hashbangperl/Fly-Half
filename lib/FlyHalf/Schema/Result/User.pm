@@ -155,6 +155,17 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->add_unique_constraint("username", ["username"]);
 
+=head1 METHODS
+
+=head2 fullname
+
+=cut
+
+sub fullname {
+    my $self = shift;
+    return join (' ', $self->firstname, $self->surname);
+}
+
 =head1 RELATIONS
 
 =head2 created_checklist_items

@@ -26,4 +26,6 @@ has_field 'priority'    => ( type => 'Text', required => 1 );
 has_field 'estimate'    => ( type => 'Text', required => 0 );
 has_field 'estimate_unit' => ( type=> 'Select' );
 
+has_field 'state'  => ( type=> 'Select' );
+
 1;

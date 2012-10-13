@@ -3,7 +3,7 @@
       <div class="content">
         <div class="container">
         <div class="page-header">
-	<h1>Backlog [% this_project.name %]</h1>
+	<h1>Backlog [% this_project.name | html %]</h1>
         </div>
 	</div>
      </div>
@@ -14,7 +14,7 @@
   <thead bgcolor="white">
   <tr>
     [% FOREACH state IN states%]
-    <th><h1>[% state.name %]</h1></th>
+    <th><h1>[% state.name | html %]</h1></th>
     [% END %]
   </tr>
   </thead>
@@ -25,8 +25,8 @@
 [% FOREACH state IN states %]
    <td bgcolor="white" width="15em">
   [% IF state.id == story.state_id %]
-        <b>#[% story.ref_code %] [% story.name %]</b>
-        <p>[% story.summary %]</p>
+        <b>#[% story.ref_code %] [% story.name | html %]</b>
+        <p>[% story.summary | html | html_line_break %]</p>
   [% ELSE %]
 &nbsp;
   [% END %]

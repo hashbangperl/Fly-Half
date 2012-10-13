@@ -47,3 +47,28 @@ border-left: 1px solid #eee;
 .topbar .btn {
 border: 0;
 }
+
+div.overlay-wrapper{
+	float:left; /* important */
+	position:relative; /* important(so we can absolutely position the description div */
+	margin:8px;
+}
+
+div.overlay-description{
+	position:absolute; /* absolute position (so we can position it where we want)*/
+	bottom:0px; /* position will be on bottom */
+	left:0px;
+	width:100%;
+	/* styling bellow */
+	background-color:white;
+	font-family: 'tahoma';
+	font-size:8px;
+	color:black;
+	opacity:0.3; /* transparency */
+	filter:alpha(opacity=30); /* IE transparency */
+}
+
+p.overlay-description_content{
+	padding:1px;
+	margin:1px;
+}

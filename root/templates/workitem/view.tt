@@ -1,0 +1,68 @@
+<div class="content">
+        <div class="page-header">
+          <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
+        </div>
+
+<div class="row">
+ <div class="span7">
+     <h1>#[% this_item.ref_code %] : [% this_item.name | html%]</h1>
+     <p> <i>[% this_item.summary | html | html_line_break %] </i></p>
+     <p> [% this_item.description | html | html_line_break %]</p>
+     <div>
+     <span> <b>Priority [% this_item.priority %]</b></span>
+     <div class="pull-right">
+     <b>Tags</b>
+     <span class="label">foo</span> <span class="label">bar</span> <span class="label">baz</span> <span class="label">quuz</span>
+     <a href="#">add more tags</a>
+     </div>
+     </div>
+ </div>
+ <div class="span3">
+    <h3 class="muted">Status</h3>
+    <ul>
+    <b>Current Estimate</b> : [% this_item.estimate %] [% this_item.estimate_unit.abbreviation %]<br>
+    <b>Current Status</b> : [% this_item.state.name %]<br>
+    [% SET sprint = this_item.sprint %]
+    [% IF sprint %] 
+    <b>Sprint</b> : [% sprint.name %] 
+    [% END %]
+    <br>
+    </ul>
+    <h3 class="muted">History</h3>
+    <ul>
+       <li> Created [% this_item.created_date %] by [% this_item.created_by.fullname %] </li>
+    </ul>
+ </div>
+</div>
+<hr>
+<div class="row-fluid">
+ <div class="span9">
+ <h3 class="muted">Assigned resources</h3>
+   <a href="#">
+    <div class="overlay-wrapper">
+    <img src="http://placehold.it/60x60" class="img-circle" width="60" height="60">
+    <div class="overlay-description">  
+        <p class="overlay-description_content">firstname lastname</p>  
+    </div>
+    </div> 
+   </a>
+   
+   <a href="#">
+   <div class="overlay-wrapper">
+   <img src="http://placehold.it/60x60" class="img-circle" width="60" height="60">
+   <!-- description div -->  
+    <div class="overlay-description">  
+        <!-- description content -->  
+        <p class="overlay-description_content">firstname lastname</p>  
+        <!-- end description content -->  
+    </div>
+    <!-- end description div -->
+    </div> 
+   </a>
+   [% FOREACH assigned_to IN assigned %]
+   <a href="#"><img src="http://placehold.it/60x60" class="img-circle">[% assigned_to.user.firstname %] [% assigned_to.user.surname %]</a>
+   [% END %]
+ </div>
+</div>
+
+</div>
