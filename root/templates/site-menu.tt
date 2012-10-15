@@ -24,8 +24,8 @@
         <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
         <ul class="dropdown-menu">
-        <li><a href="/user/list">List Users</a></li>
-        <li><a href="/team/list">List Teams</a></li>
+        <li><a href="/user/list"><i class="icon-user"></i> Users</a></li>
+        <li><a href="/team/list"><i class="icon-globe"></i> Teams</a></li>
         </ul>
         </li>
 

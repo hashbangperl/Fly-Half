@@ -1,11 +1,28 @@
+[% MACRO navbar BLOCK %]
+   <div class="navbar">
+   2. <div class="navbar-inner">
+   3. <a class="brand" href="#">Title</a>
+   4. <ul class="nav">
+   5. <li class="active"><a href="#">Home</a></li>
+   6. <li><a href="#">Link</a></li>
+   7. <li><a href="#">Link</a></li>
+   8. </ul>
+   9. </div>
+  10. </div>
+
+[% END %]
+
 [% MACRO person_listing BLOCK %]
      <div class="span1">
        <a href="#" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a>
      </div>
      <div class="span6">
-       <p>admin</p>
-       <strong><p>[% item.fullname %]</p></strong>
-       <span class=" badge badge-warning">8 messages</span> <span class=" badge badge-info">15 followers</span>
+       <strong><p>[% item.fullname | html %]</p></strong>
+       <p>
+       [% item.profile_description | html %]
+       </p>
+       Roles :<span class="label label-warning">User role</span> | 
+       Teams : <span class="label label-info">[% item.team.name | html %]</span>
      </div>
 [% END %]
 
@@ -19,7 +36,6 @@
      <div class="span7">
        <p>Group type here</p>
        <strong><p>group Name</p></strong>
-       <span class=" badge badge-warning">8 messages</span> <span class=" badge badge-info">15 followers</span>
      </div>
 [% END %]
 

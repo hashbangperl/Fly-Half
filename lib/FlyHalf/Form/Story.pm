@@ -5,9 +5,6 @@ use strict;
 use warnings;
 use HTML::FormHandler::Moose;
 
-use JSON;
-use URI::Escape;
-
 extends 'HTML::FormHandler::Model::DBIC';
 with 'HTML::FormHandler::Render::Simple';
 with 'FlyHalf::Form::Lookup';

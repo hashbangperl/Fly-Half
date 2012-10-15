@@ -30,4 +30,13 @@ sub options_state {
    return [ map { $_->id, $_->name } @rows ];
 }
 
+sub options_team {
+   my $self = shift;
+   return unless $self->schema;
+   my @rows =
+      $self->schema->resultset( 'Team' )->
+         search( {}, { order_by => ['name'] } )->all;
+   return [ map { $_->id, $_->name } @rows ];
+}
+
 1;

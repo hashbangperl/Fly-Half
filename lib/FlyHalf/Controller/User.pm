@@ -17,7 +17,9 @@ Catalyst Controller.
 =cut
 
 use HTML::FormHandler;
-
+use FlyHalf::Form::User;
+use Data::Dumper;
+use Carp qw(carp);
 
 =head2 list
 
@@ -170,7 +172,6 @@ sub current_sprint : Local : Args( 0 ) {
     return 1;
 }
 
-
 =head2 logout
 
 Logout logic.
@@ -189,6 +190,58 @@ sub logout : Local : Args( 0 ) {
     # Send the user to the site's homepage
     $c->forward( '/user/login' );
     return 1;
+}
+
+
+=head2 add
+
+=cut
+
+sub add : Local : Args(0) {
+    my ( $self, $c ) = @_;
+
+    return $c->forward('save');
+}
+
+=head2 edit
+
+=cut
+
+sub edit : Chained('by_id') :Args(0) {
+    my ( $self, $c ) = @_;
+
+    return $c->forward('save');
+}
+
+# both creation and editing happens here
+sub save : Private {
+    my ($self, $c) = @_;
+
+    # if the item doesn't exist, we'll just create a new result
+    my $item = $c->stash->{item} || $c->model('DBIC::User')->new_result({});
+    my $form = FlyHalf::Form::User->new( item => $item );
+
+    $c->stash( form => $form, template => 'user/edit.tt' );
+
+    if($c->req->param('submitted')) {
+
+        # the "process" call has all the saving logic,
+        #   if it returns False, then a validation error happened
+        my $params = $c->req->params;
+
+        # get current sprint, state, etc and put in params
+
+        my $ok = $form->process( item => $item, params => $params,   );
+        carp Dumper(form => $form);
+        unless ($ok) {
+            carp Dumper (errors=>$form->errors);
+            return;
+        }
+
+        $c->stash->{status_msg} = "User saved!";
+        $c->res->redirect('/user/profile/' . $item->id);
+    }
+    return;
 }
 
 

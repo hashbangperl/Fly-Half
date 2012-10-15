@@ -4,6 +4,8 @@
           <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
         </div>
 
+[% IF items_type == 'person' %]<a href="/user/add">Add user</a>[% END %]
+
 [% FOREACH this_item IN items %]
 <div class="row">
  <div class="span7 well">

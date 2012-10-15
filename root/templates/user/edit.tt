@@ -1,0 +1,24 @@
+[% PROCESS "include/field.tt" %]
+[% INCLUDE "include/form_json.tt" %]
+[% META assets_include = "include/form_assets.tt" %]
+
+      <div class="content">
+        <div class="page-header">
+          <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
+        </div>
+        <div class="row">
+          <div class="span14">
+
+          [% form_header(legend='Add user', form=form, action="", id="user_form", jquery_validate=1 ) %]
+       </div>
+
+    [% FOREACH this_field IN form.sorted_fields %]
+
+    [% form_field(field=this_field) %]
+
+    [% END %]
+
+    [% form_footer(submit_label="Add" ) %]
+
+          </div>
+        </div>
