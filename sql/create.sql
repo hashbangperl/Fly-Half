@@ -288,3 +288,22 @@ create table if not exists categorisation (
    primary key (object, object_id, category),
    foreign key (category)	   references category(id)
 )  ENGINE=InnoDB;
+
+create table if not exists role (
+   id                              int not null auto_increment,
+   name                            varchar(200) not null,
+   token			   varchar(20) not null,
+   description                     text,
+   created_by                      int,
+   created_date                    datetime,
+   primary key (id)
+);
+
+
+create table if not exists users_roles (
+   user_id int not null,
+   role_id int not null,
+   primary key (user_id, role_id),
+   foreign key (role_id) references role(id),
+   foreign key (user_id) references user(id)
+);
