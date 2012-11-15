@@ -1,6 +1,6 @@
 var validationJSON;
 $(document).ready(function(){
-        validationJSON = JSON.parse(unescape($("#validation_json").val() ) );
+        validationJSON = JSON.parse(decodeURIComponent($("#validation_json").val() ) );
         $("form.jquery-validate-form").each(function(index) {
                 $(this).submit(function(){
                         $(this).validate();
