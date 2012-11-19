@@ -53,7 +53,7 @@
 	[% task.remaining_work %] [% task.estimate_unit.abbreviation %] remaining
 	</p>
 	</br>
-        <a href="#">link</a>
+        <a href="/task/[% task.id %]/view">details</a>
     [% END %]
 </ul>
 </td>
