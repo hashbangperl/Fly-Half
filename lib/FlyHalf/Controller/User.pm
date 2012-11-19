@@ -31,7 +31,6 @@ sub list : Local : Args( 0 ) {
 
     my $users_list  = [ $c->model( 'DBIC::User' )->search(
 							    {},
-							    {prefetch => [qw/team/ ] }
 							   )];
 
     $c->stash->{items} = $users_list;
@@ -52,7 +51,6 @@ sub profile : Local : Args( 1 ) {
 
     my $profile_user  = $c->model( 'DBIC::User' )->search(
 	{'me.id' => $user_id},
-	{ prefetch => 'team'}
 	)->first;
 
     unless ($profile_user) {
@@ -139,7 +137,6 @@ sub dashboard : Local : Args( 0 ) {
 
     my $dashboard_user = $c->model( 'DBIC::User' )->search(
 	{'me.id' => $c->user->id},
-	{ prefetch => 'team'}
 	)->first;
 
     $c->stash->{dashboard_user} = $dashboard_user;
@@ -154,7 +151,8 @@ sub dashboard : Local : Args( 0 ) {
 sub current_team : Local : Args( 0 ) {
     my ($self, $c) = @_;
 
-    $c->go('/team/view/'.$c->user->team->id);
+
+    $c->go('/team/view/'.$c->user->teams->first->id);
 
     return 1;
 }
@@ -167,7 +165,7 @@ sub current_team : Local : Args( 0 ) {
 sub current_sprint : Local : Args( 0 ) {
     my ($self, $c) = @_;
 
-    $c->go($c->controller('Sprint')->action_for('taskboard'),[$c->user->team->current_sprint],[]);
+    $c->go($c->controller('Sprint')->action_for('taskboard'),[$c->user->teams->first->current_sprint],[]);
 
     return 1;
 }
@@ -241,6 +239,28 @@ sub save : Private {
         $c->stash->{status_msg} = "User saved!";
         $c->res->redirect('/user/profile/' . $item->id);
     }
+    return;
+}
+
+
+=head2 by_id
+
+chained action handler for /user, populates user being modifed/viewed
+
+checks authorisation
+
+=cut
+
+sub by_id : PathPart('user') :Chained('/') :CaptureArgs(1) {
+    my ($self, $c, $user_id) = @_;
+
+    my $this_user = $c->model( 'DBIC::User' )->search(
+        {'me.id' => $user_id},
+	)->first;
+
+    $c->stash->{this_user} = $c->stash->{this_item} = $this_user;
+    $c->stash->{user_id} = $c->stash->{item_id} = $user_id;
+
     return;
 }
 
