@@ -1,17 +1,3 @@
-[% MACRO navbar BLOCK %]
-   <div class="navbar">
-   2. <div class="navbar-inner">
-   3. <a class="brand" href="#">Title</a>
-   4. <ul class="nav">
-   5. <li class="active"><a href="#">Home</a></li>
-   6. <li><a href="#">Link</a></li>
-   7. <li><a href="#">Link</a></li>
-   8. </ul>
-   9. </div>
-  10. </div>
-
-[% END %]
-
 [% MACRO person_listing BLOCK %]
      <div class="span1">
        <a href="#" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a>
@@ -22,7 +8,7 @@
        [% item.profile_description | html %]
        </p>
        Roles :<span class="label label-warning">User role</span> | 
-       Teams : <span class="label label-info">[% item.team.name | html %]</span>
+       Teams : [% FOREACH team IN item.teams %]<span class="label label-info">[% team.name | html %]</span> [% END %]
      </div>
 [% END %]
 

@@ -1,17 +1,12 @@
-use utf8;
 package FlyHalf::Schema::Result::User;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
+use strict;
+use warnings;
 
 =head1 NAME
 
 FlyHalf::Schema::Result::User
 
 =cut
-
-use strict;
-use warnings;
 
 use base 'DBIx::Class::Core';
 
@@ -34,6 +29,85 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 =cut
 
 __PACKAGE__->table("users");
+
+=head1 METHODS
+
+=head2 has_role
+
+Object method providing a check that a user has appropriate role, checking
+roles against a given object, i.e. a Team if provided
+
+Takes hashref of arguments role is arrayref, object and object id are optional
+
+my $ok = $user->has_object_role({ role => [ ROLE_TOKEN, .. ], object => 'team', object_id => $team_id });
+
+=cut
+
+my $roles;
+sub has_object_role {
+    my ( $self, $args ) = @_;
+    my $roles = $args->{roles};
+
+    $self->_check_roles($roles);
+
+    my $schema = $self->result_source->schema;
+
+#     my $has_role = $schema->resultset( $table )->search(
+#         {
+#             -and => {
+#                 'me.id' => $args->{object_id},
+#                 -or => [
+#                     'me.user_id' => $c->user->id,
+#                     'users_groups.user_id' => $c->user->id,
+#                 ]
+#             },
+#         },
+#         { join => { 'groups' => 'users_groups' } },
+#     )->count;
+
+#     unless ($authorised) {
+#         return $self->user_authorised_for_action({
+#             roles => [$args->{role}],
+#             action => $args->{permission},
+#             redirect => $args->{redirect}
+#         });
+#     }
+
+#     return $authorised;
+    return 1;
+}
+
+sub _check_roles {
+    my ($self, $roles) = @_;
+    $self->_get_valid_roles;
+    foreach my $role (@$roles) {
+        unless ($roles->{ $role }) {
+            die "[ERROR] tried to check with unrecognised role ($role)." ;
+        }
+    }
+    return 1;
+}
+
+sub _get_valid_roles {
+    my $self = shift;
+    unless ( $roles ) {
+        my $schema = $self->result_source->schema;
+        my @roles = $schema->resultset( 'Role' )->all;
+        $roles = { map { $_->name => 1 } @roles };
+    }
+    return $roles;
+}
+
+sub roles {
+    my $self = shift;
+    my $schema = $self->result_source->schema;
+    return $schema->resultset( 'UsersRole' )->search(
+        { user_id => $self->id},
+        {
+            prefetch => [qw/role/],
+        }
+    );
+}
 
 =head1 ACCESSORS
 
@@ -125,8 +199,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "active",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
-  "team",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -348,45 +420,17 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 team
 
-Type: belongs_to
+=head2 teams
+
+Type: has many
 
 Related object: L<FlyHalf::Schema::Result::Team>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "team",
-  "FlyHalf::Schema::Result::Team",
-  { id => "team" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
-
-=head2 team_sprints
-
-Type: has_many
-
-Related object: L<FlyHalf::Schema::Result::TeamSprint>
-
-=cut
-
-__PACKAGE__->has_many(
-  "team_sprints",
-  "FlyHalf::Schema::Result::TeamSprint",
-  { "foreign.created_by" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+__PACKAGE__->has_many('user_teams' => 'FlyHalf::Schema::Result::TeamUser', 'user_id');
+__PACKAGE__->many_to_many('teams' => 'user_teams', 'team');
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:egz8tza/4MtmHQgy3XARKQ
-
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -1,37 +1,33 @@
+[% PROCESS "orgunits/widgets.tt" %]
       <div class="content">
         <div class="page-header">
           <h1>[% meta.title %] [% IF meta.subtitle %]<small>[% meta.subtitle %]</small>[% END %]</h1>
         </div>
+
+
         <div class="row">
-          <div class="span14">
+         <div class="span10 well">
+            <div class="row">
 
 	  <h2>Profile</h2>
-	  <p>
-	  <b>[% profile_user.firstname %] [% profile_user.surname %]</b>
-	  </p>
-	  <p>
-	  <i>[% profile_user.profile_description %]</i>
-	  </p>
 
-	  <table class="condensed-table">
-          <tbody>
-	  [% FOREACH field IN [ 'location','active','username' ] %]
-          <tr>
-            <th>[% field %]</th>
-            <td>[% profile_user.$field %]</td>
-          </tr>
-          [% END %]
-          <tr>
-            <th>Image</th>
-            <td><img src=""></td>
-          </tr>
-          <tr>
-            <th>Team</th>
-            <td><a href="/team/view/[% profile_user.team.id %]">[% profile_user.team.name %]</a></td>
-          </tr>
-          </tbody>
-      	  </table>
+     <div class="span1">
+       <a href="#" class="thumbnail"><img src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a>
+     </div>
+     <div class="span9">
+       <p><strong>[% profile_user.fullname | html %]</strong>[% UNLESS profile_user.active %]<i>(inactive)</i>[% END %]</p>
+       <p> Location : [% profile_user.location %] </p>
+       <p>
+       [% profile_user.profile_description | html %]
+       </p>
+       Roles : <span class="label label-warning">User role</span> | 
+       Teams : 
+               <a href="/team/view/[% profile_user.team.id %]"><span class="label label-info">[% profile_user.team.name | html %]</span></a>
 
+     </div>
+
+
+          </div>
 	  </div>
 	</div>
-       </div>
+   </div>

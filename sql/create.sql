@@ -34,9 +34,16 @@ create table if not exists users (
         location                varchar(100),
         active                  int not null default 1,
 	team			int,
-	foreign key (team)	references team(id),
         unique  key username ( username ),
         primary key ( id )
+)  ENGINE=InnoDB;
+
+create table if not exists team_users (
+   team_id int not null,
+   user_id int not null,
+   foreign key (team_id) references team(id),
+   foreign key (user_id) references users(id),
+   primary key (user_id, team_id)
 )  ENGINE=InnoDB;
 
 create table if not exists state (
@@ -291,11 +298,13 @@ create table if not exists categorisation (
 
 create table if not exists role (
    id                              int not null auto_increment,
+   parent_id			   int,
    name                            varchar(200) not null,
    token			   varchar(20) not null,
    description                     text,
    created_by                      int,
    created_date                    datetime,
+   foreign key parent ( parent_id ) references role,
    primary key (id)
 );
 
@@ -305,5 +314,17 @@ create table if not exists users_roles (
    role_id int not null,
    primary key (user_id, role_id),
    foreign key (role_id) references role(id),
-   foreign key (user_id) references user(id)
+   foreign key (user_id) references users(id)
+);
+
+create table if not exists user_object_roles (
+   user_id int not null,
+   role_id int not null,
+   object                          varchar(255) not null,
+   object_id                       int not null,
+   foreign key (role_id) references role(sid),
+   foreign key (user_id) references users(id),
+   created_by                      int,
+   created_date                    datetime,
+   primary key (user_id, role_id, object, object_id)
 );

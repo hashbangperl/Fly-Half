@@ -178,20 +178,17 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+
 =head2 users
 
-Type: has_many
+Type: many to many
 
 Related object: L<FlyHalf::Schema::Result::User>
 
 =cut
 
-__PACKAGE__->has_many(
-  "users",
-  "FlyHalf::Schema::Result::User",
-  { "foreign.team" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+__PACKAGE__->has_many('team_users' => 'FlyHalf::Schema::Result::TeamUser', 'team_id');
+__PACKAGE__->many_to_many('users' => 'team_users', 'user');
 
 
 # Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:40
