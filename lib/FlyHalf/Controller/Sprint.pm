@@ -47,9 +47,15 @@ sub taskboard :Chained('by_id') :Args(0) {
 
     my $this_state = $c->model("DBIC::State")->find({name => 'defined'});
     my $states = [ $this_state ];
+    my $seen = {};
     while (my $next_state = $this_state->next_state) {
-	$this_state = $next_state;
-	push (@$states, $this_state);
+        $this_state = $next_state;
+        push (@$states, $this_state);
+        if ($seen->{$this_state}) {
+            warn "circular state links! $this_state already seen";
+            last;
+        }
+        $seen->{$this_state}++;
     }
     $c->stash->{states} = $states;
 
@@ -85,13 +91,16 @@ sub by_id : PathPart('sprint') :Chained('/') :CaptureArgs(1) {
 
 
     if ($sprint_id eq 'current') {
-        $sprint_id = $c->user->team->current_sprint;
+        $sprint_id = $c->user->teams->[0]->current_sprint;
     }
 
-    my $this_sprint = $c->model( 'DBIC::Sprint' )->search(
-        {'me.id' => $sprint_id},
-        { prefetch => ['stories'] }
-	)->first;
+    my $this_sprint;
+    if ( $sprint_id ) {
+        $this_sprint = $c->model( 'DBIC::Sprint' )->search(
+            {'me.id' => $sprint_id},
+            { prefetch => ['stories'] }
+        )->first;
+    }
 
     unless ($this_sprint) {
         $c->forward('/default');

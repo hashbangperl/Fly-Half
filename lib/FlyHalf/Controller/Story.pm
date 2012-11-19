@@ -22,34 +22,6 @@ use Data::Dumper;
 use HTML::FormHandler;
 use FlyHalf::Form::Story;
 
-=head2 backlog
-
-=cut
-
-sub backlog : Local :Args(0) {
-    my ( $self, $c ) = @_;
-
-    $c->stash->{template} = 'story/backlog.tt';
-    $c->stash->{title} = {
-        title => 'Backlog',
-    };
-
-    my $this_state = $c->model("DBIC::State")->find({name => 'captured'});
-    my $states = [ $this_state ];
-    while (my $next_state = $this_state->next_state) {
-	$this_state = $next_state;
-	push (@$states, $this_state);
-    }
-    $c->stash->{states} = $states;
-
-    $c->stash->{stories} = [ $c->model("DBIC::Story")->search(
-							    {},
-							    {prefetch => [qw/sprint created_by estimate_unit state/ ] }
-							   )];
-
-    return 1;
-}
-
 =head2 add
 
 =cut
@@ -83,7 +55,7 @@ sub view : Chained('by_id') :Args(0) {
 
 =head2 by_id
 
-chained action handler for /sprint, populates sprint being modifed/viewed
+chained action handler for /story, populates story being modifed/viewed
 
 checks authorisation
 
@@ -135,7 +107,6 @@ sub save : Private {
         # get current sprint, state, etc and put in params
 
         my $ok = $form->process( item => $item, params => $params,   );
-        carp Dumper(form => $form);
         unless ($ok) {
             carp Dumper (errors=>$form->errors);
             return;
