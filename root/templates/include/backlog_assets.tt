@@ -1,0 +1,4 @@
+[% CALL page_assets.include("datatables/js/jquery.dataTables.js") %]
+[% CALL page.assets.include("javascript/backlog_init.js") %]
+[% CALL page.assets.include("datatables/css/jquery.dataTables.css") %]
+[% CALL page.assets.include("datatables/css/demo_table.css") %]
