@@ -32,12 +32,14 @@ requires (
         'DBIx::Class::InflateColumn::DateTime'       => 0,
         'DBIx::Class::DynamicDefault'                => 0,
         'HTML::FormHandler'                           => '0',
+	'HTML::FormHandler::Model::DBIC'	     => '0',
         'Method::Signatures::Simple'                 => '0',
         'MooseX::NonMoose'                           => '0',
         'File::Pid'                                  => '0',
 	'File::Assets'                               => 0,
 	'DateTime::Duration'                         => 0,
 	'HTML::FormHandlerX::Form::JQueryValidator'  => 0,
+	'Catalyst::Plugin::Session::Store::FastMmap' => 0,
 );
 
 
