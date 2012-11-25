@@ -43,6 +43,12 @@ __PACKAGE__->table("role");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 parent_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 name
 
   data_type: 'varchar'
@@ -76,6 +82,8 @@ __PACKAGE__->table("role");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "parent_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 200 },
   "token",
@@ -104,9 +112,76 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2012-10-29 07:21:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yIGqkflTklvb3aPx1P8/sg
+=head2 parent
+
+Type: belongs_to
+
+Related object: L<FlyHalf::Schema::Result::Role>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "parent",
+  "FlyHalf::Schema::Result::Role",
+  { id => "parent_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 sub_roles
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::Role>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sub_roles",
+  "FlyHalf::Schema::Result::Role",
+  { "foreign.parent_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 user_object_roles
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::UserObjectRole>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_object_roles",
+  "FlyHalf::Schema::Result::UserObjectRole",
+  { "foreign.role_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 users_roles
+
+Type: has_many
+
+Related object: L<FlyHalf::Schema::Result::UsersRole>
+
+=cut
+
+__PACKAGE__->has_many(
+  "users_roles",
+  "FlyHalf::Schema::Result::UsersRole",
+  { "foreign.role_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2012-11-23 17:14:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q8ItQR1k31sfyForAJg++w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

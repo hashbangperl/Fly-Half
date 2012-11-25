@@ -50,11 +50,19 @@ create table if not exists state (
    id                             int not null auto_increment,
    name				  varchar(200) not null,
    description			  text,
-   next_state			  int,
-   next_state_requirement	  text,
-   foreign key (next_state) 	  references state(id),
    primary key ( id )                
 )  ENGINE=InnoDB;
+
+create table state_transition (
+   id                             int not null auto_increment,
+   name                           varchar(200) not null,
+   from_state			  int not null,
+   to_state			  int not null,
+   requirement			  text,
+   primary key ( id ),
+   foreign key (from_state)	  references state(id),
+   foreign key (to_state)       references state(id)
+) ENGINE=InnoDB;
 
 create table if not exists project (
   id                              int not null auto_increment,
@@ -144,7 +152,6 @@ create table if not exists sprint_unavailability (
 create table if not exists story (
   id                              int not null auto_increment,
   ref_code                        varchar(100) not null,
-  sprint 			  int not null,
   priority 			  int not null default 100,
   estimate 			  int,
   estimate_unit 		  int,
@@ -166,6 +173,16 @@ create table if not exists story (
   primary key ( id )  
 )  ENGINE=InnoDB;
 
+create table object_stories (
+   story_id                    int not null,
+   object_id                       int not null,
+   foreign key (story_id)           references task(id),
+   object_type                     varchar(128),
+   primary key (story_id, object_id, object_type)
+)  ENGINE=InnoDB;
+
+
+
 create table if not exists stories_tree (
     story                INT NOT NULL, 
     ancestor            INT,
@@ -183,7 +200,6 @@ create table if not exists task (
   estimate_unit 		  int,
   remaining_work		  int,
   completed_work		  int,
-  story_id 			  int,
   reviewed_by 			  int,
   name				  varchar(200) not null,
   summary			  text,  
@@ -195,8 +211,6 @@ create table if not exists task (
   created_date			  datetime,
   updated_date			  datetime,
   foreign key (estimate_unit) 	  references estimate_unit(id),
-  foreign key (story_id)	  references story(id),
-  foreign key (reviewed_by) 	  references users(id),
   foreign key (created_by) 	  references users(id),
   foreign key (state_id)	  references state(id),
   primary key ( id )                
@@ -223,17 +237,23 @@ create table if not exists task_dependancies (
    primary key(task, blocking_task)
 )  ENGINE=InnoDB;
 
+create table object_tasks (
+   task_id                    int not null,
+   object_id                       int not null,
+   foreign key (task_id)           references task(id),
+   object_type                     varchar(128),
+   primary key (task_id, object_id, object_type)
+)  ENGINE=InnoDB;
 
-create table if not exists task_assigned_to (
+create table if not exists assigned_to_user (
    id                              int not null auto_increment,
    assigned_from_date 		   datetime not null,
    assigned_to_date 		   datetime,
-   current_task			   tinyint(1) not null default 0,
    user_id 			   int not null,
-   task_id 			   int not null,
+   object_id 			   int not null,
    foreign key (user_id) 	   references users(id),
-   foreign key (task_id) 	   references task(id),
-   key (user_id, task_id),
+   object_type                     varchar(128),
+   key (user_id, object_id, object_type),
    primary key ( id )                
 )  ENGINE=InnoDB;
 
@@ -247,20 +267,13 @@ create table if not exists sprint_progress (
    primary key (sprint_id, progress_date)                
 )  ENGINE=InnoDB;
 
-create table if not exists state_transitions (
-   id                             int not null auto_increment,
-   name				  varchar(200) not null,
-   primary key ( id )                       
-) ENGINE=InnoDB;
 
 create table if not exists checklist (
    id                              int not null auto_increment,
    name				   varchar(200) not null,
-   task				   int,
    created_by			   int,
    created_date			   datetime,
    updated_date			   datetime,
-   foreign key (task)  		   references task(id), 
    foreign key (created_by) 	   references users(id),
    primary key ( id )
 )  ENGINE=InnoDB;
@@ -304,9 +317,9 @@ create table if not exists role (
    description                     text,
    created_by                      int,
    created_date                    datetime,
-   foreign key parent ( parent_id ) references role,
+   foreign key parent ( parent_id ) references role(id),
    primary key (id)
-);
+) ENGINE=InnoDB;
 
 
 create table if not exists users_roles (
@@ -315,16 +328,74 @@ create table if not exists users_roles (
    primary key (user_id, role_id),
    foreign key (role_id) references role(id),
    foreign key (user_id) references users(id)
-);
+) ENGINE=InnoDB;
 
 create table if not exists user_object_roles (
    user_id int not null,
    role_id int not null,
    object                          varchar(255) not null,
    object_id                       int not null,
-   foreign key (role_id) references role(sid),
+   foreign key (role_id) references role(id),
    foreign key (user_id) references users(id),
-   created_by                      int,
+   created_by 			   int not null,
+   foreign key (created_by) references users(id),
    created_date                    datetime,
    primary key (user_id, role_id, object, object_id)
-);
+) ENGINE=InnoDB;
+
+create table if not exists actions (
+   id                              int not null auto_increment,
+   name				   varchar(255) not null,
+   description			   text,
+   primary key (id)
+) ENGINE=InnoDB;
+
+create table if not exists actions_objects (
+   id                              int not null auto_increment,
+   action_id                          int not null,
+   foreign key (action_id) references actions(id),
+   object                          varchar(255) not null,
+   object_id                       int not null,
+   comment			   text,
+   action_by 		           int not null,
+   foreign key (action_by) references users(id),
+   action_time datetime,
+   primary key (id)
+) ENGINE=InnoDB;
+
+create table board (
+   id                              int not null auto_increment,
+   name                            varchar(200) not null,
+   board_type                      ENUM('KANBAN', 'SCRUM', 'OTHER'),
+   description                     text,
+   updated_date			   datetime,
+   updated_by			   int,
+   created_by                      int,
+   created_date                    datetime,
+   foreign key (created_by) references users(id),
+   foreign key (updated_by) references users(id),
+   primary key (id)
+) ENGINE=InnoDB;
+
+create table board_column (
+   id                              int not null auto_increment,
+   name                            varchar(200) not null,
+   updated_date                    datetime,
+   board_id                        int not null,
+   updated_by                      int,
+   created_by                      int,
+   created_date                    datetime,
+   foreign key (created_by) references users(id),
+   foreign key (updated_by) references users(id),
+   foreign key (board_id) references board(id),
+   primary key (id)
+) ENGINE=InnoDB;
+
+create table board_column_states (
+  state_id    int not null,
+  board_column_id int not null,
+  foreign key (state_id) references state(id),
+  foreign key (board_column_id) references board_column(id),
+  primary key (state_id, board_column_id) 
+) ENGINE=InnoDB;
+

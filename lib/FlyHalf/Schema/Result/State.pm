@@ -1,17 +1,12 @@
-use utf8;
 package FlyHalf::Schema::Result::State;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
+use strict;
+use warnings;
 
 =head1 NAME
 
 FlyHalf::Schema::Result::State
 
 =cut
-
-use strict;
-use warnings;
 
 use base 'DBIx::Class::Core';
 
@@ -54,17 +49,6 @@ __PACKAGE__->table("state");
   data_type: 'text'
   is_nullable: 1
 
-=head2 next_state
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
-=head2 next_state_requirement
-
-  data_type: 'text'
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -74,10 +58,7 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 200 },
   "description",
   { data_type => "text", is_nullable => 1 },
-  "next_state",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "next_state_requirement",
-  { data_type => "text", is_nullable => 1 },
+
 );
 
 =head1 PRIMARY KEY
@@ -129,55 +110,20 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 states
+=head2 transitions
 
 Type: has_many
 
-Related object: L<FlyHalf::Schema::Result::State>
+Related object: L<FlyHalf::Schema::Result::StateTransition>
 
 =cut
 
 __PACKAGE__->has_many(
-  "states",
-  "FlyHalf::Schema::Result::State",
-  { "foreign.next_state" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 stories
-
-Type: has_many
-
-Related object: L<FlyHalf::Schema::Result::Story>
-
-=cut
-
-__PACKAGE__->has_many(
-  "stories",
-  "FlyHalf::Schema::Result::Story",
-  { "foreign.state_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 tasks
-
-Type: has_many
-
-Related object: L<FlyHalf::Schema::Result::Task>
-
-=cut
-
-__PACKAGE__->has_many(
-  "tasks",
-  "FlyHalf::Schema::Result::Task",
-  { "foreign.state_id" => "self.id" },
+  "transitions",
+  "FlyHalf::Schema::Result::StateTransition",
+  { "foreign.from_state" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R5q+EC+5sPbqwYom5Qeaiw
-
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

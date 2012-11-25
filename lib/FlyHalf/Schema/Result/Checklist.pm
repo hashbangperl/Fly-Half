@@ -46,12 +46,6 @@ __PACKAGE__->table("checklist");
   is_nullable: 0
   size: 200
 
-=head2 task
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 created_by
 
   data_type: 'integer'
@@ -77,8 +71,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 200 },
-  "task",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "created_by",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "created_date",
@@ -138,26 +130,6 @@ __PACKAGE__->belongs_to(
   "created_by",
   "FlyHalf::Schema::Result::User",
   { id => "created_by" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
-
-=head2 task
-
-Type: belongs_to
-
-Related object: L<FlyHalf::Schema::Result::Task>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "task",
-  "FlyHalf::Schema::Result::Task",
-  { id => "task" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",

@@ -1,12 +1,12 @@
 use utf8;
-package FlyHalf::Schema::Result::StateTransition;
+package FlyHalf::Schema::Result::AssignedToUser;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-FlyHalf::Schema::Result::StateTransition
+FlyHalf::Schema::Result::AssignedToUser
 
 =cut
 
@@ -29,11 +29,11 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
-=head1 TABLE: C<state_transition>
+=head1 TABLE: C<assigned_to_user>
 
 =cut
 
-__PACKAGE__->table("state_transition");
+__PACKAGE__->table("assigned_to_user");
 
 =head1 ACCESSORS
 
@@ -43,42 +43,58 @@ __PACKAGE__->table("state_transition");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 name
+=head2 assigned_from_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 0
+
+=head2 assigned_to_date
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 user_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 object_id
+
+  data_type: 'integer'
+  is_nullable: 0
+
+=head2 object_type
 
   data_type: 'varchar'
-  is_nullable: 0
-  size: 200
-
-=head2 from_state
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 to_state
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 requirement
-
-  data_type: 'text'
   is_nullable: 1
+  size: 128
 
 =cut
 
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "name",
-  { data_type => "varchar", is_nullable => 0, size => 200 },
-  "from_state",
+  "assigned_from_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 0,
+  },
+  "assigned_to_date",
+  {
+    data_type => "datetime",
+    "datetime_undef_if_invalid" => 1,
+    is_nullable => 1,
+  },
+  "user_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "to_state",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "requirement",
-  { data_type => "text", is_nullable => 1 },
+  "object_id",
+  { data_type => "integer", is_nullable => 0 },
+  "object_type",
+  { data_type => "varchar", is_nullable => 1, size => 128 },
 );
 
 =head1 PRIMARY KEY
@@ -95,39 +111,24 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
-=head2 from_state
+=head2 user
 
 Type: belongs_to
 
-Related object: L<FlyHalf::Schema::Result::State>
+Related object: L<FlyHalf::Schema::Result::User>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "from_state",
-  "FlyHalf::Schema::Result::State",
-  { id => "from_state" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 to_state
-
-Type: belongs_to
-
-Related object: L<FlyHalf::Schema::Result::State>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "to_state",
-  "FlyHalf::Schema::Result::State",
-  { id => "to_state" },
+  "user",
+  "FlyHalf::Schema::Result::User",
+  { id => "user_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
 # Created by DBIx::Class::Schema::Loader v0.07014 @ 2012-11-23 17:14:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VxNEmCIYOYDyTfOKRoLczA
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OdbY438sR6MFbkz2W5G3Fg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

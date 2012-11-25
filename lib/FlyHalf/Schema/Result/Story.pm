@@ -45,12 +45,6 @@ __PACKAGE__->table("story");
   is_nullable: 0
   dynamic default fall back to copy of id
 
-=head2 sprint
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
 =head2 priority
 
   data_type: 'integer'
@@ -227,21 +221,6 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 sprint
-
-Type: belongs_to
-
-Related object: L<FlyHalf::Schema::Result::Sprint>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "sprint",
-  "FlyHalf::Schema::Result::Sprint",
-  { id => "sprint" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
 =head2 state
 
 Type: belongs_to
@@ -265,10 +244,25 @@ Related object: L<FlyHalf::Schema::Result::Task>
 
 =cut
 
+__PACKAGE__->many_to_many( tasks => 'story_tasks', 'story' );
+
 __PACKAGE__->has_many(
-  "tasks",
-  "FlyHalf::Schema::Result::Task",
-  { "foreign.story_id" => "self.id" },
+  "story_tasks",
+  "FlyHalf::Schema::Result::ObjectTask",
+  { "foreign.object_id" => "self.id", 'foreign.object_type' =>  'story' },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 assigned_users
+
+=cut
+
+__PACKAGE__->many_to_many( assigned_users => 'assigned_to_users', 'user' );
+
+__PACKAGE__->has_many(
+  "assigned_to_users",
+  "FlyHalf::Schema::Result::AssignedToUser",
+  { "foreign.object_id" => "self.id", 'foreign.object_type' =>  'story' },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
