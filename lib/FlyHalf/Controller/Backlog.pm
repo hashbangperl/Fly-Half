@@ -28,7 +28,7 @@ use HTML::FormHandler;
 sub default : Path {
     my ( $self, $c ) = @_;
 
-    $c->stash->{template} = 'story/backlog.tt';
+    $c->stash->{template} = 'backlog/backlog.tt';
     $c->stash->{title} = {
         title => 'Backlog',
     };
