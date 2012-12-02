@@ -27,6 +27,8 @@ my $dur = DateTime::Duration->new(
     nanoseconds => 12000
 );
 
+my $now = DateTime->now();
+
 my $current_sprints_days = ();
 
 my $historical_sprints;
@@ -42,14 +44,16 @@ sub populate_db {
 }
 
 sub cleandown_db {
-    $schema->resultset('TaskAssignedTo')->delete;
+    $schema->resultset('AssignedToUser')->delete;
+    $schema->resultset('ObjectTask')->delete;
     $schema->resultset('Task')->delete;
+    $schema->resultset('ObjectStory')->delete;
     $schema->resultset('Story')->delete;
     $schema->resultset('Sprint')->delete;
-    $schema->resultset('User')->delete;
+    $schema->resultset('TeamUser')->delete;
     $schema->resultset('Team')->delete;
+    $schema->resultset('User')->delete;
     $schema->resultset('EstimateUnit')->delete;
-    $schema->resultset('State')->update_all({next_state => undef});
     $schema->resultset('State')->delete_all;
 }
 
@@ -66,13 +70,10 @@ sub _add_states {
     my $rs = $schema->resultset('State');
 
     my $complete = $rs->create({ name => 'complete', description => 'Story completed and signed off' });
-    my $qa = $rs->create({ name => 'quality assurance', description => 'Story is in QA',
-			   next_state => $complete->id, next_state_requirement => 'Story signed off by QA team and Product owner'});
-    my $started = $rs->create({ name => 'started', description => 'Story in progress',
-				next_state => $qa->id, next_state_requirement => 'Code complete, tested and reviewed' });
-    my $defined = $rs->create({ name => 'defined', description => 'Story ready to start',
-				next_state => $started->id, next_state_requirement => 'capacity is available to take on this work' });
-    my $captured => $rs->create({ name => 'captured', description => 'Story not complete, needs to be defined', next_state => $defined->id });
+    my $qa = $rs->create({ name => 'quality assurance', description => 'Story is in QA' });
+    my $started = $rs->create({ name => 'started', description => 'Story in progress',});
+    my $defined = $rs->create({ name => 'defined', description => 'Story ready to start',});
+    my $captured => $rs->create({ name => 'captured', description => 'Story not complete, needs to be defined'});
 
     return [$captured, $defined, $started, $qa, $complete];
 }
@@ -93,8 +94,10 @@ sub _add_users_teams {
 
     my $users_rs = $schema->resultset('User');
 
-    my $users = [
-		 $users_rs->create({
+
+
+    my $users = [ ];
+	my $user = $users_rs->create({
 				   username => 'test_user',
 				   password => 'test_password',
 				   email    => 'foo@bar.tld',
@@ -102,10 +105,12 @@ sub _add_users_teams {
 				   firstname => 'Test',
 				   surname  => 'User',
 				   active => 1,
-				   team => $teams->[0]->id
-				  }),
+				  });
+    $user->create_related('user_teams' => {team_id =>  $teams->[0]->id} );
+    push (@$users, $user);
+    # you are here
 
-		 $users_rs->create({
+    $user = $users_rs->create({
 				   username => 'test_user2',
 				   password => 'test_password',
 				   email    => 'foo2@bar.tld',
@@ -113,9 +118,11 @@ sub _add_users_teams {
 				   firstname => 'Anne-Other',
 				   surname  => 'User',
 				   active => 1,
-				   team => $teams->[0]->id
-				   }),
-		 $users_rs->create({
+				   });
+    $user->create_related('user_teams' => {team_id =>  $teams->[0]->id} );
+    push (@$users, $user);
+
+    $user = $users_rs->create({
 				   username => 'test_user3',
 				   password => 'test_password',
 				   email    => 'foo3@bar.tld',
@@ -123,9 +130,11 @@ sub _add_users_teams {
 				   firstname => 'Aaron-Other',
 				   surname  => 'User',
 				   active => 1,
-				   team => $teams->[0]->id
-				  }),
-		 $users_rs->create({
+				  });
+    $user->create_related('user_teams' => {team_id =>  $teams->[0]->id} );
+    push (@$users, $user);
+
+    $user = $users_rs->create({
 				   username => 'test1',
 				   password => 'test_password',
 				   email    => 'foo1a@bar.tld',
@@ -133,9 +142,11 @@ sub _add_users_teams {
 				   firstname => 'Fred',
 				   surname  => 'Ubbba',
 				   active => 1,
-				   team => $teams->[1]->id
-				  }),
-		 $users_rs->create({
+				  });
+    $user->create_related('user_teams' => {team_id =>  $teams->[0]->id} );
+    push (@$users, $user);
+
+    $user = $users_rs->create({
 				   username => 'test2',
 				   password => 'test_password',
 				   email    => 'foo2b@bar.tld',
@@ -143,19 +154,21 @@ sub _add_users_teams {
 				   firstname => 'Irma',
 				   surname  => 'Wanna',
 				   active => 1,
-				   team => $teams->[1]->id
-				  }),
-		 $users_rs->create({
-				   username => 'test3',
-				   password => 'test_password',
-				   email    => 'foo3a@bar.tld',
-				   location => 'London',
-				   firstname => 'Ian',
-				   surname  => 'Drury',
-				   active => 1,
-				   team => $teams->[1]->id
-				  })
-		];
+				  });
+    $user->create_related('user_teams' => {team_id =>  $teams->[1]->id} );
+    push (@$users, $user);
+
+    $user = $users_rs->create({
+        username => 'test3',
+        password => 'test_password',
+        email    => 'foo3a@bar.tld',
+        location => 'London',
+        firstname => 'Ian',
+        surname  => 'Drury',
+        active => 1,
+    });
+    $user->create_related('user_teams' => {team_id =>  $teams->[1]->id} );
+    push (@$users, $user);
 
     return ($teams, $users);
 }
@@ -198,106 +211,115 @@ my $bacon_ipsum = [
     'Rump ribeye bresaola flank cow. Bresaola turducken leberkäse fatback ham hock, meatloaf boudin brisket shoulder. Bresaola short loin short ribs prosciutto chuck, shoulder corned beef brisket meatball pork turkey fatback. Strip steak spare ribs drumstick capicola, flank short loin chuck filet mignon andouille. Tri-tip capicola shoulder, pastrami chicken fatback pork belly filet mignon bacon. Frankfurter meatball swine filet mignon hamburger. Pork chop t-bone ball tip drumstick chicken, ham hock beef ribs hamburger andouille tongue shoulder pork belly short ribs pork turkey.'
     ];
 
+
+
 sub _add_stories_tasks {
     $sprints->[0]->add_to_stories(
 				  {
 				   ref_code => "s8",
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add users to project', summary => 'As a scrum master I need to be able to add users to the tool',
-				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
+				   description => $bacon_ipsum->[0], start_date => $now, state => $states->[1],
 				   created_by => $users->[2],
-				   tasks => [
-					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[3],
-					       description => $bacon_ipsum->[2],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[0]->id, }
-						   ]
-					     },
-					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[2],
-					       description => $bacon_ipsum->[1],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
-						   ]
-					     },
-					    ],
 				  });
+
+    my $task = $schema->resultset('Task')->create(
+					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[3],
+					       description => $bacon_ipsum->[2], ref_code => 't1'
+					     });
+    $schema->resultset('ObjectTask')->create({
+        task_id => $task->id, object_id => $sprints->[0]->id, object_type => 'story'
+    });
+    $schema->resultset('AssignedToUser')->create(
+						   { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[0]->id, }
+                       );
+
+    $task = $schema->resultset('Task')->create(
+					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[2],
+					       description => $bacon_ipsum->[1], , ref_code => 't2'
+                       });
+
+    $schema->resultset('ObjectTask')->create({
+        task_id => $task->id, object_id => $sprints->[0]->id, object_type => 'story'
+    });
+    $schema->resultset('AssignedToUser')->create(
+						   { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
+                       );
+
+
     $sprints->[0]->add_to_stories({
 				   ref_code => "s9",
 				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
 				   name => 'add users to project', summary => 'As a scrum master I need to be able to get a burndown from the tool',
-				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
+				   description => $bacon_ipsum->[0], start_date => $now, state => $states->[1],
 				   created_by => $users->[1],
-				   tasks => [
-					     { name => 'track progress and capacoty', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[2],
-					       description => $bacon_ipsum->[2],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
-						   ]
-					     },
-					     { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[1],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[2]->id, }
-						   ]
-					     },
-					    ],
-				  }
-	);
-    $sprints->[1]->add_to_stories(
-				  {
-				   ref_code => "s12",
-				   priority => 20, estimate => 7, estimate_unit => $unit->id, remaining_work => 6, completed_work => 2,
-				   name => 'add tasks', summary => 'As a developer I need to be able to add tasks to stories',
-				   description => $bacon_ipsum->[2], start_date => \q{now()}, state => $states->[1],
-				   created_by => $users->[2],
-				   tasks => [
+               });
+
+
+    $task = $schema->resultset('Task')->create(
+        { name => 'track progress and capacoty', estimate => 3, estimate_unit => $unit->id,
+          remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[2],
+          description => $bacon_ipsum->[2], , ref_code => 't3'
+      });
+
+    $schema->resultset('ObjectTask')->create({
+        task_id => $task->id, object_id => $sprints->[0]->id, object_type => 'story'
+    });
+
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
+    );
+
+    $task = $schema->resultset('Task')->create(
+        { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
+          remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[0],
+          description => $bacon_ipsum->[1],
+      });
+
+
+
+    my $story = $schema->resultset('Story')->create(
+        {
+            ref_code => "s19",
+            priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
+            name => 'add stories', summary => 'As a scrum master I need to be able to add stories to the backlog',
+            description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
+            created_by => $users->[2]
+        });
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $story->id, object_type => 'story', assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
+    );
+
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $story->id, object_type => 'story', assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
+    );
+
+    $task = $schema->resultset('Task')->create(
+
 					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[2],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
-						   ]
-					     },
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[1],
+					       description => $bacon_ipsum->[2], , ref_code => 't4'
+					     });
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
+    );
+
+    $task = $schema->resultset('Task')->create(
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[1],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
-						   ]
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[1],
+					       description => $bacon_ipsum->[1], ref_code => 't5'
+
 					     },
-					    ],
-				  });
-    $sprints->[1]->add_to_stories(
-				  {
-				   ref_code => "s19",
-				   priority => 10, estimate => 5, estimate_unit => $unit->id, remaining_work => 5, completed_work => 0,
-				   name => 'add stories', summary => 'As a scrum master I need to be able to add stories to the backlog',
-				   description => $bacon_ipsum->[0], start_date => \q{now()}, state => $states->[1],
-				   created_by => $users->[2],
-				   tasks => [
-					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[2],
-					       tasks_assigned_to => [
-						   { assigned_from_date => \q{now()}, user_id => $users->[4]->id, }
-						   ]
-					     },
-					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
-					       description => $bacon_ipsum->[1],
-					       tasks_assigned_to =>
-						   [
-						   { assigned_from_date => \q{now()}, user_id => $users->[5]->id },
-						   { assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
-						   ]
-					     },
-					    ],
-				  },
 				 );
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[5]->id, }
+    );
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
+    );
+
     return;
 }
 

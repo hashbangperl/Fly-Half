@@ -176,7 +176,7 @@ create table if not exists story (
 create table object_stories (
    story_id                    int not null,
    object_id                       int not null,
-   foreign key (story_id)           references task(id),
+   foreign key (story_id)           references story(id),
    object_type                     varchar(128),
    primary key (story_id, object_id, object_type)
 )  ENGINE=InnoDB;
@@ -399,3 +399,5 @@ create table board_column_states (
   primary key (state_id, board_column_id) 
 ) ENGINE=InnoDB;
 
+ALTER TABLE team add column board_id int;
+ALTER TABLE team add foreign key (board_id) references board(id);

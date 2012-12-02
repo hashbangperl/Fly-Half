@@ -238,11 +238,14 @@ Related object: L<FlyHalf::Schema::Result::Story>
 =cut
 
 __PACKAGE__->has_many(
-  "stories",
-  "FlyHalf::Schema::Result::Story",
-  { "foreign.sprint" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "sprint_stories",
+  "FlyHalf::Schema::Result::SprintStory",
+  { "foreign.object_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0, where => {'foreign.object_type' => 'sprint'} },
 );
+
+__PACKAGE__->many_to_many('stories', 'sprint_stories', 'story');
+
 
 =head2 team
 

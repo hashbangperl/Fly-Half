@@ -1,8 +1,4 @@
-use utf8;
 package FlyHalf::Schema::Result::ObjectStory;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
@@ -48,13 +44,6 @@ __PACKAGE__->table("object_stories");
   data_type: 'integer'
   is_nullable: 0
 
-=head2 object_type
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 128
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -88,21 +77,26 @@ __PACKAGE__->set_primary_key("story_id", "object_id", "object_type");
 
 Type: belongs_to
 
-Related object: L<FlyHalf::Schema::Result::Task>
+Related object: L<FlyHalf::Schema::Result::Story>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "story",
-  "FlyHalf::Schema::Result::Task",
+  "FlyHalf::Schema::Result::Story",
   { id => "story_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+sub inflate_result {
+    my $self = shift;
+    my $ret = $self->next::method(@_);
+    my $subclass = 'FlyHalf::Schema::Result::'.ucfirst($ret->object_type).'Story';
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2012-11-24 07:22:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+ZagrV1WpnNhp/FhuA9EIg
+    $self->ensure_class_loaded( $subclass );
+    bless $ret, $subclass;
+    return $ret;
+}
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

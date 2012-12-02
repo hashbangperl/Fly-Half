@@ -131,7 +131,6 @@ __PACKAGE__->add_columns(
   ref_code =>
   { data_type => "varchar(100)", is_nullable => 0,
     dynamic_default_on_create => \&fallback_to_id },
-  "sprint" => { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "priority" => { data_type => "integer", default_value => 100, is_nullable => 0 },
   "estimate" => { data_type => "integer", is_nullable => 1 },
   "estimate_unit" => { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
