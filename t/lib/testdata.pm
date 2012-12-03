@@ -225,7 +225,7 @@ sub _add_stories_tasks {
 
     my $task = $schema->resultset('Task')->create(
 					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[3],
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[3],
 					       description => $bacon_ipsum->[2], ref_code => 't1'
 					     });
     $schema->resultset('ObjectTask')->create({
@@ -237,7 +237,7 @@ sub _add_stories_tasks {
 
     $task = $schema->resultset('Task')->create(
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[2],
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[2],
 					       description => $bacon_ipsum->[1], , ref_code => 't2'
                        });
 
@@ -260,7 +260,7 @@ sub _add_stories_tasks {
 
     $task = $schema->resultset('Task')->create(
         { name => 'track progress and capacoty', estimate => 3, estimate_unit => $unit->id,
-          remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[2],
+          remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[2],
           description => $bacon_ipsum->[2], , ref_code => 't3'
       });
 
@@ -272,11 +272,11 @@ sub _add_stories_tasks {
         { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
     );
 
-    $task = $schema->resultset('Task')->create(
-        { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
-          remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[0],
-          description => $bacon_ipsum->[1],
-      });
+#     $task = $schema->resultset('Task')->create(
+#         { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
+#           remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[0],
+#           description => $bacon_ipsum->[1],
+#       });
 
 
 
@@ -299,7 +299,7 @@ sub _add_stories_tasks {
     $task = $schema->resultset('Task')->create(
 
 					     { name => 'basic form/action', estimate => 3, estimate_unit => $unit->id,
-					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state_id => $states->[1],
+					       remaining_work => 3, completed_work => 1, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[2], , ref_code => 't4'
 					     });
     $schema->resultset('AssignedToUser')->create(
@@ -308,7 +308,7 @@ sub _add_stories_tasks {
 
     $task = $schema->resultset('Task')->create(
 					     { name => 'form validation, updated metrics', estimate => 4, estimate_unit => $unit->id,
-					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state_id => $states->[1],
+					       remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[1],
 					       description => $bacon_ipsum->[1], ref_code => 't5'
 
 					     },
