@@ -27,13 +27,6 @@ __PACKAGE__->table("object_stories");
   data_type: 'integer'
   is_nullable: 0
 
-=cut
-
-__PACKAGE__->add_columns(  "object_type",
-                           { data_type => "varchar", default_value => "sprint", is_nullable => 0, size => 128 },
-);
-
-=head1 PRIMARY KEY
 
 =over 4
 
@@ -66,19 +59,6 @@ __PACKAGE__->belongs_to(
   "FlyHalf::Schema::Result::Sprint",
   { id => "object_id" },
 );
-
-sub deflate_result {
-    my $self = shift;
-    $self->object_type('sprint');
-    return $self->next::method(@_);
-}
-
-sub create {
-    my $self = shift;
-    $self->next::method(@_);
-    $self->object_type('sprint');
-    return $self;
-}
 
 sub insert {
     my $self = shift;
