@@ -4,6 +4,7 @@ use strict;
 use DateTime;
 use DateTime::Duration;
 use FlyHalf::Schema;
+use Data::Dumper;
 
 my $schema = FlyHalf::Schema->connect(
     "dbi:mysql:dbname=flyhalf",
@@ -15,6 +16,7 @@ my ($teams,$users);
 my $sprints;
 my $tasks;
 my $states = [];
+my $boards = { };
 
 my $dur = DateTime::Duration->new(
     years       => 3,
@@ -35,7 +37,9 @@ my $historical_sprints;
 
 sub populate_db {
     $unit = _add_capacity_units();
-    $states = _add_states();
+    _add_states();
+    warn "states : ", map {$_->name . $_->id} @$states;
+    $boards = _add_boards();
     ($teams,$users) = _add_users_teams($unit);
     $sprints = _add_sprints($teams, $users);
      _add_stories_tasks();
@@ -54,6 +58,9 @@ sub cleandown_db {
     $schema->resultset('Team')->delete;
     $schema->resultset('User')->delete;
     $schema->resultset('EstimateUnit')->delete;
+    $schema->resultset('BoardColumnState')->delete;
+    $schema->resultset('BoardColumn')->delete;
+    $schema->resultset('Board')->delete;
     $schema->resultset('State')->delete_all;
 }
 
@@ -69,13 +76,45 @@ sub _add_capacity_units {
 sub _add_states {
     my $rs = $schema->resultset('State');
 
+    my $captured = $rs->create({ name => 'captured', description => 'Story not complete, needs to be defined'});
     my $complete = $rs->create({ name => 'complete', description => 'Story completed and signed off' });
     my $qa = $rs->create({ name => 'quality assurance', description => 'Story is in QA' });
     my $started = $rs->create({ name => 'started', description => 'Story in progress',});
     my $defined = $rs->create({ name => 'defined', description => 'Story ready to start',});
-    my $captured => $rs->create({ name => 'captured', description => 'Story not complete, needs to be defined'});
 
-    return [$captured, $defined, $started, $qa, $complete];
+    $states = [ $captured, $defined, $started, $qa, $complete];
+}
+
+
+sub _add_boards {
+    my $scrum_board = $schema->resultset('Board')->create({
+        name => 'Scrum Taskboard 1',
+        board_type => 'SCRUM',
+        description => 'Scrum taskboard',
+        board_columns => [
+            { name => 'Planned', display_order => 1, board_column_states => [ { state_id => $states->[0]->id}, { state_id => $states->[1]->id} ]},
+            { name => 'Design/Development', display_order => 2, board_column_states => [ { state_id => $states->[2]->id} ]},
+            { name => 'QA', display_order => 3, board_column_states => [ { state_id => $states->[3]->id } ]},
+            { name => 'Delivered', display_order => 4, board_column_states => [ { state_id => $states->[4]->id} ]},
+        ],
+    });
+
+    my $kanban_board =  $schema->resultset('Board')->create({
+        name => 'Kanban 1',
+        board_type => 'KANBAN',
+        description => 'Kanban limited WIP',
+        board_columns => [
+            { name => 'Queued',  display_order => 1, board_column_states => [ { state_id => $states->[0]->id}, { state_id => $states->[1]->id} ]},
+            { name => 'In Progress', display_order => 2, board_column_states => [ { state_id => $states->[2]->id }]},
+            { name => 'QA', display_order => 3, board_column_states => [ { state_id =>  $states->[3]->id} ]},
+            { name => 'Delivered', display_order => 4, board_column_states => [ { state_id => $states->[4]->id } ]},
+        ],
+    });
+
+    $boards = [kanban => $kanban_board, scrum => $scrum_board];
+
+
+    return;
 }
 
 sub _add_users_teams {
