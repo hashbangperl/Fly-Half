@@ -1,17 +1,12 @@
-use utf8;
 package FlyHalf::Schema::Result::BoardColumn;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
+use strict;
+use warnings;
 
 =head1 NAME
 
 FlyHalf::Schema::Result::BoardColumn
 
 =cut
-
-use strict;
-use warnings;
 
 use base 'DBIx::Class::Core';
 
@@ -91,9 +86,12 @@ __PACKAGE__->add_columns(
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
+    set_on_create => 1,
+    set_on_update => 1,
   },
   "board_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  display_order => { data_type => "integer",  is_nullable => 1, default => 1 },
   "updated_by",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "created_by",
@@ -103,6 +101,7 @@ __PACKAGE__->add_columns(
     data_type => "datetime",
     "datetime_undef_if_invalid" => 1,
     is_nullable => 1,
+    set_on_create => 1,
   },
 );
 

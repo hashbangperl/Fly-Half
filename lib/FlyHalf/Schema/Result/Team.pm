@@ -1,17 +1,12 @@
-use utf8;
 package FlyHalf::Schema::Result::Team;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
+use strict;
+use warnings;
 
 =head1 NAME
 
 FlyHalf::Schema::Result::Team
 
 =cut
-
-use strict;
-use warnings;
 
 use base 'DBIx::Class::Core';
 
@@ -83,6 +78,12 @@ __PACKAGE__->table("team");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 board_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -113,6 +114,8 @@ __PACKAGE__->add_columns(
     set_on_create => 1,
     set_on_update => 1,
   },
+  "board_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0, default => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -191,9 +194,18 @@ __PACKAGE__->has_many('team_users' => 'FlyHalf::Schema::Result::TeamUser', 'team
 __PACKAGE__->many_to_many('users' => 'team_users', 'user');
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2011-12-16 07:54:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:heeV/fO5H0HJaASVao3d+w
+=head2 board
 
+Type: belongs_to
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+Related object: L<FlyHalf::Schema::Result::Board>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "board",
+  "FlyHalf::Schema::Result::Board",
+  { id => "board_id" }
+);
+
 1;
