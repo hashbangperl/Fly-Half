@@ -82,7 +82,7 @@ sub _add_states {
     my $started = $rs->create({ name => 'started', description => 'Story in progress',});
     my $defined = $rs->create({ name => 'defined', description => 'Story ready to start',});
 
-    $states = [ $captured, $defined, $started, $qa, $complete];
+    $states = [ $captured, $defined, $started, $qa, $complete ];
 }
 
 
