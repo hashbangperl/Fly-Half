@@ -382,6 +382,7 @@ create table board_column (
    name                            varchar(200) not null,
    updated_date                    datetime,
    board_id                        int not null,
+   display_order		   int default 0,
    updated_by                      int,
    created_by                      int,
    created_date                    datetime,
@@ -397,6 +398,26 @@ create table board_column_states (
   foreign key (state_id) references state(id),
   foreign key (board_column_id) references board_column(id),
   primary key (state_id, board_column_id) 
+) ENGINE=InnoDB;
+
+create table planning_dates (
+   id                              int not null auto_increment,
+   name                            varchar(200) not null,
+   priority			   int not null default 999,
+   created_by                      int,
+   created_date                    datetime,
+   foreign key (created_by) references users(id),
+   primary key (id)
+) ENGINE=InnoDB;
+
+
+create table object_planning_dates (
+   planning_date_id                int not null,
+   object_id                       int not null,
+   foreign key (planning_date_id)  references planning_dates(id),
+   object_type                     varchar(128),
+   primary key (planning_date_id, object_id, object_type)
+
 ) ENGINE=InnoDB;
 
 ALTER TABLE team add column board_id int;
