@@ -1,17 +1,12 @@
-use utf8;
 package FlyHalf::Schema::Result::ObjectPlanningDate;
-
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
+use strict;
+use warnings;
 
 =head1 NAME
 
 FlyHalf::Schema::Result::ObjectPlanningDate
 
 =cut
-
-use strict;
-use warnings;
 
 use base 'DBIx::Class::Core';
 
@@ -99,10 +94,14 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+sub inflate_result {
+    my $self = shift;
+    my $ret = $self->next::method(@_);
+    my $subclass = 'FlyHalf::Schema::Result::'.ucfirst($ret->object_type).'PlanningDate';
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2012-12-16 19:25:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KFH4o8ZEFUeUEKy8s3QV/w
+    $self->ensure_class_loaded( $subclass );
+    bless $ret, $subclass;
+    return $ret;
+}
 
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
