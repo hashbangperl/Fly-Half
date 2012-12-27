@@ -21,7 +21,7 @@ use Data::Dumper;
 
 use HTML::FormHandler;
 
-=head2 backlog
+=head2 default
 
 =cut
 
