@@ -311,14 +311,6 @@ sub _add_stories_tasks {
         { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[1]->id, }
     );
 
-#     $task = $schema->resultset('Task')->create(
-#         { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
-#           remaining_work => 4, completed_work => 0, start_date => \q{now()}, state => $states->[0],
-#           description => $bacon_ipsum->[1],
-#       });
-
-
-
     my $story = $schema->resultset('Story')->create(
         {
             ref_code => "s19",
@@ -358,6 +350,18 @@ sub _add_stories_tasks {
     $schema->resultset('AssignedToUser')->create(
         { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[3]->id, }
     );
+
+    $task = $schema->resultset('Task')->create(
+        { name => 'draw graph', estimate => 4, estimate_unit => $unit->id,
+          remaining_work => 4, completed_work => 0, state => $states->[0],
+          description => $bacon_ipsum->[1],
+      });
+
+    $schema->resultset('AssignedToUser')->create(
+        { object_id => $task->id, object_type => 'task', assigned_from_date => \q{now()}, user_id => $users->[0]->id, }
+    );
+
+    $schema->resultset('TaskPlanningDate')->create({task => $task, planning_date => 1});
 
     return;
 }

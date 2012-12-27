@@ -410,6 +410,15 @@ create table planning_dates (
    primary key (id)
 ) ENGINE=InnoDB;
 
+insert into planning_dates values
+( null, 'Today', 1, null, now()),
+( null, 'Tomorrow', 2, null, now()),
+( null, 'This Week', 3, null, now()),
+( null, 'Next Week', 4, null, now()),
+( null, 'This Month', 4, null, now()),
+( null, 'Next Month', 5, null, now()),
+( null, 'This Quarter', 5, null, now()),
+( null, 'Next Quarter', 6, null, now());
 
 create table object_planning_dates (
    planning_date_id                int not null,
