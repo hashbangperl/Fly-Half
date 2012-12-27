@@ -12,6 +12,7 @@
 	  [% INCLUDE "site-menu.tt" %]
       </div>
     </div>
+</div>
 
     [% SET layout_include = template.layout_include %]
     [% IF layout_include %]
@@ -31,6 +32,9 @@
 
     [%- content %]
 
+    </div>
+    <!-- /container -->
+
     [% END %]
 
     <footer>
@@ -40,8 +44,4 @@
     <p align="center">&copy; Aaron Trevena 2011, 2012</p>
     </footer>
 
-    </div>
-    <!-- /container -->
-
-</div>
 [% INCLUDE "include/footer.tt" %]
